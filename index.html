@@ -27,15 +27,23 @@ img{max-width:100%;display:block}
 .wrap{max-width:1160px;margin:0 auto;padding:0 22px}
 h1,h2,h3{line-height:1.22}
 
-/* ── Promo bar (static, no marquee) ─────────────────────── */
+/* ── Cropped image panes ─────────────────────────────────
+   .bim shows ONE photo from collage shots via background
+   size + position. Quadrant cheat sheet (size ≈ 212%):
+   top-left "0% 0%" · top-right "100% 0%"
+   bottom-left "0% 100%" · bottom-right "100% 100%"     */
+.bim{width:100%;height:100%;background-repeat:no-repeat;background-color:#fff;
+  transition:transform .35s ease}
+
+/* ── Promo bar ──────────────────────────────────────────── */
 .promo{background:var(--black);color:#fff;text-align:center;
-  font-weight:600;font-size:12.5px;letter-spacing:.8px;text-transform:uppercase;
-  padding:8px 16px}
+  font-weight:600;font-size:12px;letter-spacing:.7px;text-transform:uppercase;
+  padding:8px 14px}
 .promo b{color:#FF6B70}
 
 /* ── Nav ────────────────────────────────────────────────── */
 .navbar{background:var(--red);position:sticky;top:0;z-index:60;box-shadow:0 2px 10px rgba(0,0,0,.18)}
-.nav-in{max-width:1160px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:26px}
+.nav-in{max-width:1160px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:22px}
 .nav-logo img{height:36px;width:auto}
 .nav-links{display:flex;gap:2px}
 .nav-links a{color:#fff;text-decoration:none;font-weight:600;font-size:13.5px;
@@ -47,12 +55,6 @@ h1,h2,h3{line-height:1.22}
 .nav-cart{color:#fff;text-decoration:none;font-weight:600;font-size:13.5px;
   border:2px solid #fff;padding:7px 16px;border-radius:7px;white-space:nowrap}
 .nav-cart:hover{background:#fff;color:var(--red)}
-.burger{display:none;margin-left:auto;background:none;border:2px solid #fff;border-radius:7px;
-  color:#fff;font-size:18px;padding:4px 12px;cursor:pointer}
-.mobile-menu{display:none;background:var(--red-dark);padding:8px 22px 16px}
-.mobile-menu a{display:block;color:#fff;text-decoration:none;font-weight:600;
-  padding:11px 0;border-bottom:1px solid rgba(255,255,255,.18);text-transform:uppercase;font-size:14px}
-.mobile-menu.open{display:block}
 
 /* ── Buttons ────────────────────────────────────────────── */
 .btn{display:inline-block;text-decoration:none;font-weight:700;font-size:14px;
@@ -69,9 +71,9 @@ h1,h2,h3{line-height:1.22}
 .btn.line:hover{background:var(--black);color:#fff}
 
 /* ── Sections ───────────────────────────────────────────── */
-.section{padding:72px 0}
+.section{padding:68px 0}
 .section.grey{background:var(--grey)}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:32px;flex-wrap:wrap}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:30px;flex-wrap:wrap}
 .sec-head h2{font-weight:700;font-size:clamp(21px,2.8vw,28px);
   text-transform:uppercase;letter-spacing:.4px;border-left:6px solid var(--red);padding-left:16px}
 .sec-head a{font-weight:600;font-size:14px;color:var(--red);text-decoration:none}
@@ -79,7 +81,7 @@ h1,h2,h3{line-height:1.22}
 
 /* ── Hero ───────────────────────────────────────────────── */
 .hero{position:relative;background:linear-gradient(115deg,#262626,#3E3E3E);color:#fff;
-  padding:84px 0 96px;overflow:hidden;clip-path:polygon(0 0,100% 0,100% calc(100% - 46px),0 100%)}
+  padding:80px 0 92px;overflow:hidden;clip-path:polygon(0 0,100% 0,100% calc(100% - 46px),0 100%)}
 .hero::after{content:"1975";position:absolute;right:-20px;bottom:-60px;
   font-weight:800;font-size:clamp(140px,24vw,300px);line-height:1;color:transparent;
   -webkit-text-stroke:2px rgba(255,255,255,.07);pointer-events:none}
@@ -95,12 +97,11 @@ h1,h2,h3{line-height:1.22}
 .trust div{font-size:13px;color:#C9C9C9}
 .trust b{display:block;color:#fff;font-size:14.5px}
 
-/* ── Tiles (single-photo crops) ─────────────────────────── */
+/* ── Tiles ──────────────────────────────────────────────── */
 .tiles{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
 .tile{position:relative;border-radius:var(--rad);overflow:hidden;text-decoration:none;
-  aspect-ratio:4/3;display:block;box-shadow:var(--shadow);background:#DDD}
-.tile img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
-.tile:hover img{transform:scale(calc(var(--z,1) * 1.05))!important}
+  aspect-ratio:4/3;display:block;box-shadow:var(--shadow);background:#EEE}
+.tile:hover .bim{transform:scale(1.05)}
 .tile .lab{position:absolute;left:0;right:0;bottom:0;padding:40px 18px 16px;
   background:linear-gradient(transparent,rgba(0,0,0,.8));color:#fff;
   font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.5px}
@@ -113,28 +114,32 @@ h1,h2,h3{line-height:1.22}
   flex-direction:column;box-shadow:var(--shadow);text-decoration:none;
   transition:transform .15s ease,box-shadow .15s ease;border:1px solid var(--line)}
 .card:hover{transform:translateY(-4px);box-shadow:var(--shadow-h)}
+.card:hover .bim{transform:scale(1.05)}
 .im{aspect-ratio:4/3;background:#F1F1F1;overflow:hidden;display:grid;place-items:center;position:relative}
-.im img{width:100%;height:100%;object-fit:cover}
+.sale{position:absolute;top:10px;left:10px;z-index:2;background:var(--red);color:#fff;
+  font-weight:700;font-size:11px;letter-spacing:1.2px;padding:5px 11px;border-radius:6px}
 .ph2{width:100%;height:100%;display:grid;place-items:center;
   background:linear-gradient(135deg,#2C2C2C,#484848)}
-.ph2 span{color:#fff;font-weight:700;font-size:15px;letter-spacing:2.5px;
+.ph2 span{color:#fff;font-weight:700;font-size:14px;letter-spacing:2.5px;
   text-transform:uppercase;border-bottom:3px solid var(--red);padding-bottom:8px}
-.card-body{padding:16px 18px 20px;display:flex;flex-direction:column;flex:1}
+.card-body{padding:15px 18px 19px;display:flex;flex-direction:column;flex:1}
 .card .cat{font-size:11px;font-weight:600;letter-spacing:1.4px;color:var(--mut);text-transform:uppercase}
 .card h3{font-weight:600;font-size:15.5px;margin-top:4px}
+.card .sub{font-size:13px;color:var(--mut);margin-top:3px}
 .card .row{margin-top:auto;padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.was{color:#A6A6A6;text-decoration:line-through;font-weight:600;font-size:12.5px;margin-right:5px}
 .card .price{color:var(--red);font-weight:700;font-size:18px;white-space:nowrap}
 .card .price small{color:#999;font-weight:600;font-size:11px}
 .card .go{font-weight:600;font-size:13px;color:var(--black)}
 .card:hover .go{color:var(--red)}
 
-/* ── Split band (custom work) ───────────────────────────── */
+/* ── Split band ─────────────────────────────────────────── */
 .split{display:grid;grid-template-columns:1.1fr 1fr;border-radius:var(--rad);
   overflow:hidden;box-shadow:var(--shadow);background:var(--black);color:#fff}
 .split .tx{padding:52px 46px;display:flex;flex-direction:column;justify-content:center}
 .split h2{font-weight:700;font-size:clamp(22px,2.8vw,30px);text-transform:uppercase;letter-spacing:.4px}
 .split p{color:#C9C9C9;margin:14px 0 26px;font-size:15px;max-width:44ch}
-.split .im{aspect-ratio:auto;min-height:280px}
+.split .simg{min-height:300px}
 
 /* ── Game band + page ───────────────────────────────────── */
 .gameband{background:linear-gradient(115deg,#7A0E13,var(--red));color:#fff;
@@ -150,12 +155,14 @@ canvas{display:block;width:100%;border-radius:10px;touch-action:manipulation;cur
 .ghelp{text-align:center;color:var(--mut);font-size:13px;margin-top:6px}
 
 /* ── Shop toolbar ───────────────────────────────────────── */
-.toolbar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:26px}
-.search{flex:1;min-width:220px;display:flex;background:#fff;border:2px solid var(--line);
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:24px}
+.search{flex:1;min-width:200px;display:flex;background:#fff;border:2px solid var(--line);
   border-radius:9px;overflow:hidden}
-.search input{flex:1;border:0;font-family:var(--font);font-size:15px;padding:11px 16px;outline:none}
+.search input{flex:1;border:0;font-family:var(--font);font-size:15px;padding:11px 16px;outline:none;min-width:0}
 .search .ic{display:grid;place-items:center;padding:0 14px;color:var(--mut)}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
+.sortsel{font-family:var(--font);font-weight:600;font-size:13.5px;color:var(--ink);
+  border:2px solid var(--line);border-radius:9px;padding:10px 12px;background:#fff}
+.chips{display:flex;gap:8px;flex-wrap:wrap;width:100%}
 .chip{background:#fff;border:2px solid var(--line);color:var(--ink);border-radius:20px;
   font-family:var(--font);font-weight:600;font-size:13px;padding:8px 18px;cursor:pointer}
 .chip:hover{border-color:var(--red);color:var(--red)}
@@ -168,12 +175,12 @@ canvas{display:block;width:100%;border-radius:10px;touch-action:manipulation;cur
 .crumb a:hover{color:var(--red)}
 .pdp{display:grid;gap:42px;grid-template-columns:1fr 1fr;align-items:start;margin-bottom:64px}
 .pdp .imbox{border-radius:var(--rad);overflow:hidden;background:#F1F1F1;
-  aspect-ratio:4/3;box-shadow:var(--shadow)}
-.pdp .imbox img{width:100%;height:100%;object-fit:cover}
+  aspect-ratio:4/3;box-shadow:var(--shadow);position:relative}
 .pdp .cat{font-size:12px;font-weight:600;letter-spacing:1.6px;color:var(--mut);text-transform:uppercase}
 .pdp h1{font-weight:700;font-size:clamp(24px,3.2vw,34px);margin:6px 0 10px}
 .pdp .price{color:var(--red);font-weight:700;font-size:28px}
 .pdp .price small{color:#999;font-size:14px;font-weight:600}
+.pdp .was{font-size:16px}
 .pdp .desc{margin:18px 0 22px;color:#444;font-size:15.5px}
 .specs{border:1px solid var(--line);border-radius:11px;overflow:hidden;margin-bottom:26px}
 .specs div{display:flex;justify-content:space-between;gap:14px;padding:11px 16px;font-size:14px}
@@ -187,10 +194,11 @@ canvas{display:block;width:100%;border-radius:10px;touch-action:manipulation;cur
 .pdp .note{margin-top:16px;font-size:13.5px;color:var(--mut)}
 .pdp .note a{color:var(--red);font-weight:600;text-decoration:none}
 
-/* ── Range / contact cards ──────────────────────────────── */
+/* ── Range / contact ────────────────────────────────────── */
 .range-grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
 .rcard{background:#fff;border-radius:var(--rad);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line)}
-.rcard .im{aspect-ratio:16/10}
+.rcard .rim{aspect-ratio:16/10;overflow:hidden}
+.rcard:hover .bim{transform:scale(1.05)}
 .rcard .rb{padding:15px 18px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .rcard h3{font-weight:600;font-size:14.5px;text-transform:uppercase;letter-spacing:.3px}
 .rcard .rb a{font-size:13px;font-weight:700;color:var(--red);text-decoration:none;white-space:nowrap}
@@ -223,34 +231,47 @@ footer{background:var(--black);color:#B5B5B5;padding:56px 22px 40px}
 .foot-in a:hover{color:#fff;text-decoration:underline}
 .legal{max-width:1160px;margin:36px auto 0;padding-top:18px;border-top:1px solid #2A2A2A;font-size:12.5px;letter-spacing:.5px}
 
-/* ── WhatsApp float ─────────────────────────────────────── */
+/* ── WhatsApp float (desktop) ───────────────────────────── */
 .wa{position:fixed;right:20px;bottom:20px;width:54px;height:54px;z-index:70;
   background:#25D366;border-radius:50%;display:grid;place-items:center;
   box-shadow:0 6px 18px rgba(0,0,0,.25);transition:transform .12s ease}
 .wa svg{width:29px;height:29px;fill:#fff}
 .wa:hover{transform:scale(1.08)}
 
+/* ── Bottom tab bar (mobile) ────────────────────────────── */
+.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:80;
+  background:#fff;border-top:1px solid var(--line);
+  box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+.tabbar a{flex:1;text-align:center;text-decoration:none;font-weight:600;
+  font-size:10.5px;color:var(--mut);
+  padding:8px 0 calc(8px + env(safe-area-inset-bottom))}
+.tabbar a span{display:block;font-size:21px;line-height:1.25}
+.tabbar a.active{color:var(--red)}
+.tabbar a.twa{color:#1DA851}
+
 @media (max-width:900px){
   .nav-links,.nav-phone{display:none}
-  .burger{display:block}
+  body{padding-bottom:64px}
+  .tabbar{display:flex}
+  .wa{display:none}
   .pdp{grid-template-columns:1fr}
   .split{grid-template-columns:1fr}
-  .split .im{min-height:220px;order:-1}
-  .hero{padding:56px 0 76px}
+  .split .simg{min-height:220px;order:-1}
+  .hero{padding:54px 0 74px}
   .gameband{padding:34px 28px}
 }
 </style>
 </head>
 <body>
 
-<p class="promo">🔥 <b>Grand Opening</b> — up to 50% off selected 4x4 accessories · UAE-wide delivery</p>
+<p class="promo">🔥 <b>Grand Opening</b> — up to 50% off selected 4x4 gear · UAE-wide delivery</p>
 
 <header class="navbar">
   <div class="nav-in">
     <a class="nav-logo" href="#/" aria-label="Sai Raj Global home">
       <img src="data:image/png;base64,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" alt="Sai Raj">
     </a>
-    <nav class="nav-links" id="navLinks" aria-label="Main">
+    <nav class="nav-links" aria-label="Main">
       <a href="#/" data-nav="home">Home</a>
       <a href="#/shop" data-nav="shop">Shop</a>
       <a href="#/range" data-nav="range">Our Range</a>
@@ -261,16 +282,7 @@ footer{background:var(--black);color:#B5B5B5;padding:56px 22px 40px}
       <a class="nav-phone" href="tel:+971543256505">+971 543 256 505</a>
       <a class="nav-cart" id="cartLink" href="#">Cart 🛒</a>
     </div>
-    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">☰</button>
   </div>
-  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
-    <a href="#/">Home</a>
-    <a href="#/shop">Shop</a>
-    <a href="#/range">Our Range</a>
-    <a href="#/game">Desert Dash 🎮</a>
-    <a href="#/contact">Contact</a>
-    <a href="tel:+971543256505">Call +971 543 256 505</a>
-  </nav>
 </header>
 
 <main id="app"></main>
@@ -310,6 +322,14 @@ footer{background:var(--black);color:#B5B5B5;padding:56px 22px 40px}
   <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3C9.4 3 4 8.3 4 14.9c0 2.6.8 5 2.3 7L4 29l7.3-2.2c1.9 1 3.9 1.5 4.7 1.5 6.6 0 12-5.3 12-11.9C28 8.3 22.6 3 16 3zm6.9 16.9c-.3.8-1.7 1.6-2.4 1.6-.6.1-1.4.1-2.2-.1-.5-.2-1.2-.4-2.1-.8-3.6-1.6-6-5.2-6.2-5.5-.2-.2-1.5-2-1.5-3.8 0-1.8 1-2.7 1.3-3 .3-.4.7-.4 1-.4h.7c.2 0 .5-.1.8.6.3.8 1.1 2.6 1.2 2.8.1.2.2.4 0 .7-.1.2-.2.4-.4.6l-.6.7c-.2.2-.4.4-.2.8.2.4 1 1.7 2.2 2.7 1.5 1.4 2.8 1.8 3.2 2 .4.2.6.2.9-.1.2-.3 1-1.2 1.3-1.6.3-.4.5-.3.9-.2.4.1 2.2 1 2.6 1.2.4.2.6.3.7.5.1.2.1.9-.2 1.7z"/></svg>
 </a>
 
+<nav class="tabbar" aria-label="Bottom navigation">
+  <a href="#/" data-nav="home"><span>🏠</span>Home</a>
+  <a href="#/shop" data-nav="shop"><span>🛍️</span>Shop</a>
+  <a href="#/game" data-nav="game"><span>🎮</span>Game</a>
+  <a class="twa" href="https://wa.me/971543256505"><span>💬</span>WhatsApp</a>
+  <a href="#" id="cartTab"><span>🛒</span>Cart</a>
+</nav>
+
 <script>
 /* ════════════════════════════════════════════════════════════
    SHOPIFY CONFIG — the only block you need to edit.
@@ -322,60 +342,80 @@ const SHOPIFY = { domain: "YOUR-STORE.myshopify.com" };
 const WA = "https://wa.me/971543256505";
 const IMG = "https://www.sairaj.global/web/image/";
 
-/* Images: z = zoom crop (isolates ONE photo from collage shots),
-   p = focus position. Tweak the numbers if a crop needs nudging. */
+/* ════════════════════════════════════════════════════════════
+   PHOTO CROPS — each entry shows ONE photo from a collage.
+   size: how far to zoom in ("212%" ≈ one quadrant of a 2x2,
+         "cover" = whole image for single-photo shots)
+   pos:  which photo — "0% 0%" top-left · "100% 0%" top-right
+         "0% 100%" bottom-left · "100% 100%" bottom-right
+   If a tile shows the wrong photo, just change pos.
+   ════════════════════════════════════════════════════════════ */
 const PIC = {
-  canopies:  {s:"44815-66c374e6/canopies%20%281%29.webp",              z:2.1, p:"30% 42%"},
-  bedliners: {s:"43987-e4b36a99/bedliners%2C%20lids%20covers.webp",    z:1.9, p:"50% 45%"},
-  fourx4:    {s:"49346-f7df97f5/safarituff%204%204%20accessories%20.webp", z:1.9, p:"50% 40%"},
-  camping:   {s:"49347-daccb30b/_winboCamping.webp",                   z:1.7, p:"50% 45%"},
-  coldrooms: {s:"44007-0b6272ec/coldrooms.webp",                       z:1.8, p:"50% 50%"},
-  trucks:    {s:"44810-190ad271/TRuck%20bodies%20%282%29.webp",        z:2.0, p:"30% 45%"},
-  pickups:   {s:"44811-14c27a62/pick%20up%20bodies.webp",              z:2.0, p:"40% 45%"},
-  convers:   {s:"44020-65226f85/conversions.webp",                     z:1.9, p:"50% 45%"},
-  riv:       {s:"44032-97aaed13/riv.webp",                             z:1.6, p:"50% 45%"},
-  bikebox:   {s:"44816-b41366a5/bike%20boxes%20%282%29.webp",          z:2.0, p:"50% 45%"},
-  trailers:  {s:"43990-94f2da35/Bike%20boxes%20%281%29.webp",          z:2.0, p:"50% 45%"},
-  roofing:   {s:"44008-53301906/Roofing%20sheets%20%26%20polycarboates.webp", z:1.8, p:"50% 45%"}
+  trucks:    {s:"44810-190ad271/TRuck%20bodies%20%282%29.webp",              size:"212%", pos:"100% 0%"},
+  pickups:   {s:"44811-14c27a62/pick%20up%20bodies.webp",                    size:"212%", pos:"100% 0%"},
+  canopies:  {s:"44815-66c374e6/canopies%20%281%29.webp",                    size:"212%", pos:"0% 0%"},
+  bedliners: {s:"43987-e4b36a99/bedliners%2C%20lids%20covers.webp",          size:"212%", pos:"0% 0%"},
+  convers:   {s:"44020-65226f85/conversions.webp",                           size:"212%", pos:"0% 0%"},
+  riv:       {s:"44032-97aaed13/riv.webp",                                   size:"cover", pos:"50% 45%"},
+  bikebox:   {s:"44816-b41366a5/bike%20boxes%20%282%29.webp",                size:"212%", pos:"0% 0%"},
+  coldrooms: {s:"44007-0b6272ec/coldrooms.webp",                             size:"212%", pos:"0% 0%"},
+  trailers:  {s:"43990-94f2da35/Bike%20boxes%20%281%29.webp",                size:"212%", pos:"0% 0%"},
+  fourx4:    {s:"49346-f7df97f5/safarituff%204%204%20accessories%20.webp",   size:"cover", pos:"50% 45%"},
+  camping:   {s:"49347-daccb30b/_winboCamping.webp",                         size:"cover", pos:"50% 45%"},
+  roofing:   {s:"44008-53301906/Roofing%20sheets%20%26%20polycarboates.webp",size:"212%", pos:"0% 0%"}
 };
-const pic = k => PIC[k] ? IMG + PIC[k].s : "";
-const imgTag = (k, alt) => {
+const bim = (k, alt) => {
   const m = PIC[k]; if (!m) return "";
-  return `<img src="${IMG+m.s}" alt="${alt}" loading="lazy"
-    style="transform:scale(${m.z});object-position:${m.p};--z:${m.z}">`;
+  return `<div class="bim" role="img" aria-label="${alt}" style="background-image:url('${IMG+m.s}');background-size:${m.size};background-position:${m.pos}"></div>`;
 };
 
 const PRODUCTS = [
-  {id:"frp-pickup-canopy", title:"FRP Pick-up Canopy", cat:"Canopies", price:4200, img:"canopies",
-   handle:"frp-pickup-canopy", variantId:"",
+  {id:"frp-pickup-canopy", title:"FRP Pick-up Canopy", cat:"Canopies", price:4200, was:4900, img:"canopies",
+   sub:"Colour-coded · lockable · fitted same day", handle:"frp-pickup-canopy", variantId:"",
    desc:"Hand-laid fibreglass canopy engineered for Gulf heat. Colour-coded to your vehicle with lockable rear access and sliding side windows.",
    specs:[["Vehicle fit","Hilux · Ranger · L200 · Navara"],["Shell","Hand-laid FRP, UV-stable gelcoat"],["Windows","Sliding sides + lockable rear door"],["Finish","Colour-coded to factory paint"],["Fitting","Same-day at our Dubai workshop"]]},
-  {id:"bedliner-lid-cover", title:"Bedliner, Lid & Cover", cat:"Canopies", price:2850, img:"bedliners",
-   handle:"bedliner-lid-cover", variantId:"",
+  {id:"bedliner-lid-cover", title:"Bedliner, Lid & Cover", cat:"Canopies", price:2850, was:0, img:"bedliners",
+   sub:"Lockable one-piece FRP lid", handle:"bedliner-lid-cover", variantId:"",
    desc:"One-piece lockable FRP lid with weatherproof sealing — keeps cargo secure, dust-free and out of sight.",
    specs:[["Type","One-piece lockable FRP lid"],["Finish","Colour-coded"],["Hardware","Gas struts included"],["Sealing","Full weatherproof rubber seal"],["Fit","Most double-cab pick-ups"]]},
-  {id:"safarituff-drawer-system", title:"Safarituff Drawer System", cat:"4x4", price:3400, img:"fourx4",
-   handle:"safarituff-drawer-system", variantId:"",
+  {id:"safarituff-drawer-system", title:"Safarituff Drawer System", cat:"4x4", price:3400, was:0, img:"fourx4",
+   sub:"Twin lockable drawers · 80 kg each", handle:"safarituff-drawer-system", variantId:"",
    desc:"Twin full-extension drawers with a carpeted load deck. Organise recovery gear, tools and camp kit — built by Safarituff.",
    specs:[["Layout","Dual drawers, full extension"],["Deck","Carpeted top load deck"],["Security","Central locking"],["Capacity","80 kg per drawer"],["Extras","Modular tie-down points"]]},
-  {id:"cargocool-cooler-box-45l", title:"Cargocool Cooler Box 45 L", cat:"Cooling", price:650, img:"",
-   handle:"cargocool-cooler-box-45l", variantId:"",
-   desc:"Sai Raj's own portable cooler box. Thick PU insulation keeps ice for days — desert weekends, fishing trips, site work.",
-   specs:[["Capacity","45 L"],["Insulation","Thick PU core"],["Ice retention","Up to 5 days"],["Liner","Food-grade"],["Made by","Cargocool — a Sai Raj brand"]]},
-  {id:"led-driving-lights-9in", title:'9" LED Driving Lights (Pair)', cat:"4x4", price:1150, img:"",
-   handle:"led-driving-lights-9in", variantId:"",
+  {id:"full-length-roof-rack", title:"Full-Length Steel Roof Rack", cat:"4x4", price:1600, was:0, img:"",
+   sub:"Flat platform · powder-coated", handle:"full-length-roof-rack", variantId:"",
+   desc:"Flat steel platform running cab to bed. Powder-coated, T-slot channels for lights, awnings and recovery boards.",
+   specs:[["Coverage","Full cab + bed length"],["Material","Powder-coated steel"],["Load","150 kg dynamic"],["Mounting","Gutter / track mount"],["Channels","T-slot accessory rails"]]},
+  {id:"recovery-kit-8pc", title:"8-Piece Recovery Kit", cat:"4x4", price:780, was:0, img:"",
+   sub:"Snatch strap, shackles, damper + bag", handle:"recovery-kit-8pc", variantId:"",
+   desc:"Everything to get unstuck from the sand: snatch strap, rated shackles, damper blanket, gloves and a heavy-duty bag.",
+   specs:[["Strap","8-tonne snatch strap"],["Shackles","2 × 4.75 t rated"],["Safety","Damper blanket included"],["Extras","Gloves + hitch receiver"],["Bag","Heavy-duty carry bag"]]},
+  {id:"led-driving-lights-9in", title:'9" LED Driving Lights (Pair)', cat:"4x4", price:1150, was:1400, img:"",
+   sub:"1,200 m of light · pair", handle:"led-driving-lights-9in", variantId:"",
    desc:"Serious distance for desert night runs. Spot + flood combo beam with full wiring harness in the box.",
    specs:[["Beam","Spot + flood combo"],["Distance","1,200 m (pair, 1 lux)"],["Rating","IP68 dust & waterproof"],["Includes","Wiring harness + switch"],["Compliance","E-marked"]]},
-  {id:"alloy-wheels-17-set", title:'17" Alloy Wheels — Set of 4', cat:"4x4", price:3900, img:"",
-   handle:"alloy-wheels-17-set", variantId:"",
+  {id:"alloy-wheels-17-set", title:'17" Alloy Wheels — Set of 4', cat:"4x4", price:3900, was:0, img:"",
+   sub:"Load-rated · matte black", handle:"alloy-wheels-17-set", variantId:"",
    desc:"Load-rated matte black alloys sized for GCC-spec 4x4s. Sold as a set of four with caps and nuts.",
    specs:[["Size","17 x 9"],["PCD","6 x 139.7"],["Load rating","1,250 kg per wheel"],["Finish","Matte black"],["Includes","Centre caps + wheel nuts"]]},
-  {id:"hardshell-roof-tent", title:"Hardshell Roof Tent", cat:"Camping", price:5500, img:"camping",
-   handle:"hardshell-roof-tent", variantId:"",
+  {id:"hardshell-roof-tent", title:"Hardshell Roof Tent", cat:"Camping", price:5500, was:6200, img:"camping",
+   sub:"Camp-ready in 60 seconds", handle:"hardshell-roof-tent", variantId:"",
    desc:"Sixty seconds from parked to camped. ABS hardshell with a proper mattress — overlanding without the setup fight.",
    specs:[["Sleeps","2 adults"],["Setup","~60 seconds"],["Shell","ABS hardshell"],["Mattress","75 mm high-density foam"],["Mounting","Universal crossbar"]]},
-  {id:"portable-fridge-freezer-45l", title:"Portable Fridge/Freezer 45 L", cat:"Cooling", price:2400, img:"",
-   handle:"portable-fridge-freezer-45l", variantId:"",
+  {id:"side-awning-25m", title:"Side Awning 2.5 m", cat:"Camping", price:950, was:0, img:"",
+   sub:"Instant shade · UV50+ ripstop", handle:"side-awning-25m", variantId:"",
+   desc:"2.5 × 2.5 m of shade off the side of your truck in thirty seconds. Ripstop UV50+ fabric with poles and pegs included.",
+   specs:[["Coverage","2.5 × 2.5 m"],["Fabric","Ripstop, UV50+"],["Mount","Universal roof rack"],["Includes","Poles, pegs, guy ropes"],["Weight","12 kg"]]},
+  {id:"cargocool-cooler-box-45l", title:"Cargocool Cooler Box 45 L", cat:"Cooling", price:650, was:800, img:"",
+   sub:"Ice for up to 5 days", handle:"cargocool-cooler-box-45l", variantId:"",
+   desc:"Sai Raj's own portable cooler box. Thick PU insulation keeps ice for days — desert weekends, fishing trips, site work.",
+   specs:[["Capacity","45 L"],["Insulation","Thick PU core"],["Ice retention","Up to 5 days"],["Liner","Food-grade"],["Made by","Cargocool — a Sai Raj brand"]]},
+  {id:"cargocool-cooler-box-90l", title:"Cargocool Cooler Box 90 L", cat:"Cooling", price:990, was:0, img:"",
+   sub:"Big trips · 6-day ice retention", handle:"cargocool-cooler-box-90l", variantId:"",
+   desc:"The big Cargocool for long hauls and large groups. Drain plug, heavy-duty hinges and serious insulation.",
+   specs:[["Capacity","90 L"],["Insulation","Thick PU core"],["Ice retention","Up to 6 days"],["Drain","Quick-drain plug"],["Hinges","Heavy-duty stainless"]]},
+  {id:"portable-fridge-freezer-45l", title:"Portable Fridge/Freezer 45 L", cat:"Cooling", price:2400, was:0, img:"",
+   sub:"−20 °C off 12 V · app control", handle:"portable-fridge-freezer-45l", variantId:"",
    desc:"True fridge/freezer performance off 12 V. App control, removable basket and battery protection built in.",
    specs:[["Power","12/24 V DC + 220 V"],["Range","−20 °C to +10 °C"],["Control","Bluetooth app"],["Basket","Removable"],["Protection","Low-voltage cutoff"]]}
 ];
@@ -414,12 +454,16 @@ function cartHref(p, qty=1){
 }
 function cardHTML(p){
   return `<a class="card" href="#/product/${p.id}">
-    <div class="im">${p.img ? imgTag(p.img, p.title) : `<div class="ph2"><span>${p.cat}</span></div>`}</div>
+    <div class="im">
+      ${p.was ? `<span class="sale">SALE</span>` : ""}
+      ${p.img ? bim(p.img, p.title) : `<div class="ph2"><span>${p.cat}</span></div>`}
+    </div>
     <div class="card-body">
       <span class="cat">${p.cat}</span>
       <h3>${p.title}</h3>
+      <p class="sub">${p.sub}</p>
       <div class="row">
-        <span class="price"><small>AED</small> ${money(p.price)}</span>
+        <span class="price">${p.was ? `<span class="was">${money(p.was)}</span>` : ""}<small>AED</small> ${money(p.price)}</span>
         <span class="go">View →</span>
       </div>
     </div>
@@ -451,7 +495,7 @@ function pageHome(){
     <div class="tiles">
       ${CATS.map(([key,label,im]) => `
         <a class="tile" href="#/shop/${key}">
-          ${imgTag(im, label)}
+          ${bim(im, label)}
           <span class="lab">${label}<span>Shop now →</span></span>
         </a>`).join("")}
     </div>
@@ -459,7 +503,7 @@ function pageHome(){
 
   <section class="section grey"><div class="wrap">
     <div class="sec-head"><h2>Featured Products</h2><a href="#/shop">See everything →</a></div>
-    <div class="grid">${PRODUCTS.slice(0,4).map(cardHTML).join("")}</div>
+    <div class="grid">${PRODUCTS.filter(p => p.was).concat(PRODUCTS.filter(p => !p.was)).slice(0,4).map(cardHTML).join("")}</div>
   </div></section>
 
   <section class="section"><div class="wrap">
@@ -469,7 +513,7 @@ function pageHome(){
         <p>Truck bodies, conversions, coldrooms and emergency vehicles — designed and fabricated by the team that's been doing it for 50 years.</p>
         <div><a class="btn red" href="#/range">Explore Our Range</a></div>
       </div>
-      <div class="im">${imgTag("trucks","Custom truck bodies")}</div>
+      <div class="simg">${bim("trucks","Custom truck bodies")}</div>
     </div>
   </div></section>
 
@@ -499,6 +543,11 @@ function pageShop(filterCat){
         <input type="search" id="q" placeholder="Search products…" aria-label="Search products">
         <span class="ic">🔍</span>
       </div>
+      <select class="sortsel" id="sort" aria-label="Sort products">
+        <option value="feat">Featured</option>
+        <option value="asc">Price: Low → High</option>
+        <option value="desc">Price: High → Low</option>
+      </select>
       <div class="chips" id="chips"></div>
     </div>
     <p class="count" id="count"></p>
@@ -511,12 +560,15 @@ function pageShop(filterCat){
   const grid = document.getElementById("grid");
   const count = document.getElementById("count");
   const q = document.getElementById("q");
+  const sort = document.getElementById("sort");
 
   function draw(){
     const term = q.value.trim().toLowerCase();
-    const list = PRODUCTS.filter(p =>
+    let list = PRODUCTS.filter(p =>
       (active === "All" || p.cat === active) &&
       (!term || (p.title + " " + p.desc + " " + p.cat).toLowerCase().includes(term)));
+    if (sort.value === "asc")  list = [...list].sort((a,b) => a.price - b.price);
+    if (sort.value === "desc") list = [...list].sort((a,b) => b.price - a.price);
     grid.innerHTML = list.length ? list.map(cardHTML).join("")
       : `<p style="grid-column:1/-1;color:var(--mut)">No products match — try a different search, or <a href="${WA}" style="color:var(--red);font-weight:600">WhatsApp us</a> and we'll source it.</p>`;
     count.textContent = `${list.length} product${list.length === 1 ? "" : "s"}${active !== "All" ? " in " + active : ""}`;
@@ -528,6 +580,7 @@ function pageShop(filterCat){
     active = b.dataset.cat; draw();
   });
   q.addEventListener("input", draw);
+  sort.addEventListener("change", draw);
   draw();
 }
 
@@ -542,11 +595,14 @@ function pageProduct(id){
   <div class="wrap">
     <p class="crumb"><a href="#/">Home</a> / <a href="#/shop">Shop</a> / <a href="#/shop/${p.cat}">${p.cat}</a> / ${p.title}</p>
     <div class="pdp">
-      <div class="imbox">${p.img ? imgTag(p.img, p.title) : `<div class="ph2" style="height:100%"><span>${p.cat}</span></div>`}</div>
+      <div class="imbox">
+        ${p.was ? `<span class="sale">SALE</span>` : ""}
+        ${p.img ? bim(p.img, p.title) : `<div class="ph2" style="height:100%"><span>${p.cat}</span></div>`}
+      </div>
       <div>
         <span class="cat">${p.cat}</span>
         <h1>${p.title}</h1>
-        <p class="price"><small>AED</small> ${money(p.price)}</p>
+        <p class="price">${p.was ? `<span class="was">AED ${money(p.was)}</span> ` : ""}<small>AED</small> ${money(p.price)}</p>
         <p class="desc">${p.desc}</p>
         <div class="specs">${p.specs.map(([k,v]) => `<div><b>${k}</b><span>${v}</span></div>`).join("")}</div>
         <div class="qtyrow">
@@ -582,7 +638,7 @@ function pageRange(){
     <div class="range-grid">
       ${RANGE.map(([name,im]) => `
       <article class="rcard">
-        <div class="im">${imgTag(im, name)}</div>
+        <div class="rim">${bim(im, name)}</div>
         <div class="rb">
           <h3>${name}</h3>
           <a href="${WA}?text=${encodeURIComponent("Hello, I'd like to enquire about " + name.toLowerCase())}">Enquire →</a>
@@ -662,11 +718,11 @@ function pageGame(){
   window.addEventListener("resize", size);
 
   const groundY = () => H - 42;
-  let state = "ready", truck, obs, speed, dist, t;
+  let state = "ready", truck, obs, speed, dist;
 
   function reset(){
-    truck = { x:64, y:groundY(), vy:0, w:62, h:30 };
-    obs = []; speed = 5.2; dist = 0; t = 0;
+    truck = { x:64, y:groundY(), vy:0 };
+    obs = []; speed = 5.2; dist = 0;
   }
   reset();
 
@@ -692,19 +748,14 @@ function pageGame(){
   }
 
   function drawTruck(){
-    const g = groundY(), x = truck.x, y = truck.y;
+    const x = truck.x, y = truck.y;
     ctx.save();
     ctx.translate(x, y);
-    // body
     ctx.fillStyle = "#ED1C24";
-    ctx.beginPath();
-    ctx.roundRect(-30, -26, 62, 18, 4); ctx.fill();          // bed+body
-    ctx.beginPath();
-    ctx.roundRect(-4, -42, 28, 18, [6,6,0,0]); ctx.fill();   // cab
-    // window
+    ctx.beginPath(); ctx.roundRect(-30, -26, 62, 18, 4); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(-4, -42, 28, 18, [6,6,0,0]); ctx.fill();
     ctx.fillStyle = "#222";
     ctx.beginPath(); ctx.roundRect(1, -38, 15, 11, 3); ctx.fill();
-    // wheels
     ctx.fillStyle = "#111";
     ctx.beginPath(); ctx.arc(-16, -4, 9, 0, 7); ctx.fill();
     ctx.beginPath(); ctx.arc(18, -4, 9, 0, 7); ctx.fill();
@@ -734,14 +785,11 @@ function pageGame(){
   }
 
   function drawScene(){
-    // sky
     const sky = ctx.createLinearGradient(0, 0, 0, H);
     sky.addColorStop(0, "#FFF7EA"); sky.addColorStop(1, "#FFE7C8");
     ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
-    // sun
     ctx.fillStyle = "rgba(245,179,1,.55)";
     ctx.beginPath(); ctx.arc(W - 70, 54, 26, 0, 7); ctx.fill();
-    // dunes (parallax)
     ctx.fillStyle = "#F6D9A8";
     for (let i = -1; i < W/180 + 1; i++) {
       const dx = (i*180) - ((dist*0.35) % 180);
@@ -752,7 +800,6 @@ function pageGame(){
       const dx = (i*140) - ((dist*0.7) % 140);
       ctx.beginPath(); ctx.ellipse(dx+40, groundY()+8, 95, 26, 0, Math.PI, 0); ctx.fill();
     }
-    // ground
     ctx.fillStyle = "#111";
     ctx.fillRect(0, groundY(), W, 3);
     ctx.fillStyle = "rgba(17,17,17,.28)";
@@ -778,16 +825,13 @@ function pageGame(){
     drawScene();
 
     if (state === "run") {
-      t++;
       speed = Math.min(11, speed + 0.0016);
       dist += speed;
-      // physics
       truck.vy += 0.55;
       truck.y = Math.min(groundY(), truck.y + truck.vy);
       spawn();
       obs.forEach(o => o.x -= speed);
       obs = obs.filter(o => o.x + o.w > -30);
-      // collide
       const tx = truck.x - 28, tw = 58, ty = truck.y - 40, th = 40;
       for (const o of obs) {
         const g = groundY();
@@ -826,8 +870,6 @@ function route(){
   if (GAME.cleanup) GAME.cleanup();
   const h = location.hash.replace(/^#\/?/, "");
   const [page, param] = h.split("/");
-  document.getElementById("mobileMenu").classList.remove("open");
-  document.getElementById("burger").setAttribute("aria-expanded","false");
 
   if (page === "shop")         pageShop(decodeURIComponent(param || ""));
   else if (page === "product") pageProduct(param);
@@ -846,11 +888,7 @@ route();
 
 /* ── Chrome ── */
 document.getElementById("cartLink").href = `https://${SHOPIFY.domain}/cart`;
-const burger = document.getElementById("burger"), mm = document.getElementById("mobileMenu");
-burger.addEventListener("click", () => {
-  const open = mm.classList.toggle("open");
-  burger.setAttribute("aria-expanded", open);
-});
+document.getElementById("cartTab").href = `https://${SHOPIFY.domain}/cart`;
 
 /* ── SEO: JSON-LD ── */
 const ld = {"@context":"https://schema.org","@graph":[
