@@ -12,321 +12,277 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ════════════════════════════════════════════════════════════
-   SAI RAJ BRAND TOKENS — matched to sairaj.com
-   ════════════════════════════════════════════════════════════ */
 :root{
-  --sr-red:#ED1C24;
-  --sr-red-dark:#C4121A;
-  --sr-black:#111111;
-  --sr-charcoal:#3F3F3F;
-  --sr-grey:#F1F2F4;
-  --sr-ink:#222222;
-  --font:'Poppins',sans-serif;
+  --red:#ED1C24; --red-dark:#C4121A; --black:#111; --charcoal:#3F3F3F;
+  --grey:#F4F5F7; --ink:#222; --mut:#6B6B6B; --line:#E7E8EA;
+  --font:'Poppins',sans-serif; --rad:12px;
+  --shadow:0 2px 10px rgba(0,0,0,.07); --shadow-h:0 12px 28px rgba(0,0,0,.13);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{transition:none!important;animation:none!important}
-}
-body{font-family:var(--font);color:var(--sr-ink);background:#fff;line-height:1.6}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+body{font-family:var(--font);color:var(--ink);background:#fff;line-height:1.6}
 a{color:inherit}
 img{max-width:100%;display:block}
-:focus-visible{outline:3px solid var(--sr-black);outline-offset:2px}
+:focus-visible{outline:3px solid var(--black);outline-offset:2px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+h1,h2,h3{line-height:1.25}
 
-/* ── Sale ticker ────────────────────────────────────────── */
-.ticker{background:var(--sr-red);color:#fff;overflow:hidden;white-space:nowrap}
-.ticker-track{display:inline-block;padding:9px 0;animation:tick 28s linear infinite;
-  font-weight:700;font-size:14px;letter-spacing:.6px;text-transform:uppercase}
-.ticker-track span{margin:0 18px}
+/* ── Ticker ─────────────────────────────────────────────── */
+.ticker{background:var(--black);color:#fff;overflow:hidden;white-space:nowrap}
+.ticker-track{display:inline-block;padding:7px 0;animation:tick 30s linear infinite;
+  font-weight:600;font-size:12.5px;letter-spacing:.8px;text-transform:uppercase}
+.ticker-track span{margin:0 16px;opacity:.95}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ── Nav ────────────────────────────────────────────────── */
-.navbar{background:var(--sr-red);position:sticky;top:0;z-index:60}
-.nav-in{max-width:1220px;margin:0 auto;padding:10px 20px;
-  display:flex;align-items:center;gap:22px}
-.nav-logo img{height:40px;width:auto}
-.nav-links{display:flex;gap:26px;margin-left:6px}
-.nav-links a{color:#fff;text-decoration:none;font-weight:600;font-size:14.5px;
-  text-transform:uppercase;letter-spacing:.5px;padding-bottom:4px;
-  border-bottom:3px solid transparent}
-.nav-links a:hover{border-bottom-color:#fff}
-.nav-right{margin-left:auto;display:flex;align-items:center;gap:14px}
-.nav-phone{color:#fff;font-weight:600;font-size:14.5px;text-decoration:none;white-space:nowrap}
-.btn-contact{background:var(--sr-black);color:#fff;text-decoration:none;
-  font-weight:600;font-size:15px;padding:11px 24px;white-space:nowrap}
-.btn-contact:hover{background:#000}
-.nav-cart{color:#fff;text-decoration:none;font-size:20px;line-height:1}
-.burger{display:none;margin-left:auto;background:none;border:2px solid #fff;
-  color:#fff;font-size:20px;padding:4px 12px;cursor:pointer}
-.mobile-menu{display:none;background:var(--sr-red-dark);padding:10px 20px 18px}
+.navbar{background:var(--red);position:sticky;top:0;z-index:60;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.nav-in{max-width:1200px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:26px}
+.nav-logo img{height:38px;width:auto}
+.nav-links{display:flex;gap:4px}
+.nav-links a{color:#fff;text-decoration:none;font-weight:600;font-size:14px;
+  text-transform:uppercase;letter-spacing:.5px;padding:8px 14px;border-radius:6px}
+.nav-links a:hover{background:rgba(0,0,0,.15)}
+.nav-links a.active{background:var(--black)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:16px}
+.nav-phone{color:#fff;font-weight:600;font-size:14px;text-decoration:none;white-space:nowrap}
+.nav-cart{color:#fff;text-decoration:none;font-weight:600;font-size:14px;
+  border:2px solid #fff;padding:7px 16px;border-radius:6px;white-space:nowrap}
+.nav-cart:hover{background:#fff;color:var(--red)}
+.burger{display:none;margin-left:auto;background:none;border:2px solid #fff;border-radius:6px;
+  color:#fff;font-size:18px;padding:4px 12px;cursor:pointer}
+.mobile-menu{display:none;background:var(--red-dark);padding:8px 20px 16px}
 .mobile-menu a{display:block;color:#fff;text-decoration:none;font-weight:600;
-  padding:10px 0;border-bottom:1px solid rgba(255,255,255,.2);text-transform:uppercase;font-size:14px}
+  padding:11px 0;border-bottom:1px solid rgba(255,255,255,.18);text-transform:uppercase;font-size:14px}
 .mobile-menu.open{display:block}
 
-/* ── Hero ───────────────────────────────────────────────── */
-.logo-band{background:#fff;text-align:center;padding:32px 20px 24px}
-.logo-band img{height:clamp(64px,10vw,96px);width:auto;margin:0 auto}
-.hero{background:var(--sr-charcoal);color:#fff;text-align:center;padding:60px 20px 68px}
-.hero h1{font-weight:600;font-size:clamp(23px,3.4vw,36px);line-height:1.35;max-width:24ch;margin:0 auto}
-.hero p{color:#D6D6D6;max-width:62ch;margin:16px auto 0;font-size:16px}
-.btn-red{display:inline-block;margin-top:28px;background:var(--sr-red);color:#fff;
-  text-decoration:none;font-weight:700;font-size:15px;letter-spacing:.8px;
-  text-transform:uppercase;padding:14px 36px}
-.btn-red:hover{background:var(--sr-red-dark)}
-.btn-ghost{display:inline-block;margin:28px 0 0 12px;border:2px solid #fff;color:#fff;
-  text-decoration:none;font-weight:600;font-size:15px;letter-spacing:.6px;
-  text-transform:uppercase;padding:12px 30px}
-.btn-ghost:hover{background:#fff;color:var(--sr-charcoal)}
+/* ── Buttons ────────────────────────────────────────────── */
+.btn{display:inline-block;text-decoration:none;font-weight:700;font-size:14.5px;
+  letter-spacing:.6px;text-transform:uppercase;padding:14px 32px;border-radius:8px;
+  border:0;cursor:pointer;font-family:var(--font);text-align:center}
+.btn.red{background:var(--red);color:#fff}
+.btn.red:hover{background:var(--red-dark)}
+.btn.dark{background:var(--black);color:#fff}
+.btn.dark:hover{background:#000}
+.btn.ghost{border:2px solid #fff;color:#fff;padding:12px 28px}
+.btn.ghost:hover{background:#fff;color:var(--charcoal)}
+.btn.line{border:2px solid var(--black);color:var(--black);padding:12px 28px;background:#fff}
+.btn.line:hover{background:var(--black);color:#fff}
 
-.sale-strip{background:var(--sr-red);color:#fff;text-align:center;
-  font-weight:700;font-size:15px;letter-spacing:.6px;text-transform:uppercase;
-  padding:13px 20px;margin:44px auto 0;max-width:1220px}
+/* ── Page sections ──────────────────────────────────────── */
+.section{padding:64px 0}
+.section.grey{background:var(--grey)}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:30px;flex-wrap:wrap}
+.sec-head h2{color:var(--ink);font-weight:700;font-size:clamp(22px,3vw,30px);
+  text-transform:uppercase;letter-spacing:.4px;border-left:6px solid var(--red);padding-left:16px}
+.sec-head a{font-weight:600;font-size:14px;color:var(--red);text-decoration:none}
+.sec-head a:hover{text-decoration:underline}
 
-/* ── Sections ───────────────────────────────────────────── */
-.section{padding:64px 20px}
-.section.grey{background:var(--sr-grey)}
-.sec-in{max-width:1220px;margin:0 auto}
-.sec-title{color:var(--sr-red);text-align:center;font-weight:700;
-  font-size:clamp(26px,3.4vw,34px);letter-spacing:.5px;text-transform:uppercase;
-  margin-bottom:14px}
-.sec-title.dark{color:var(--sr-ink)}
-.sec-sub{text-align:center;color:#666;max-width:64ch;margin:0 auto 38px;font-size:15px}
+/* ── Hero (home) ────────────────────────────────────────── */
+.hero{background:linear-gradient(120deg,#2E2E2E,#464646);color:#fff;padding:72px 0 66px}
+.hero .kick{color:var(--red);font-weight:700;font-size:13px;letter-spacing:2.5px;
+  text-transform:uppercase;margin-bottom:14px}
+.hero .kick::before{content:"";display:inline-block;width:34px;height:3px;
+  background:var(--red);vertical-align:middle;margin-right:12px}
+.hero h1{font-weight:700;font-size:clamp(30px,4.6vw,52px);max-width:18ch}
+.hero p{color:#D8D8D8;max-width:56ch;margin:18px 0 30px;font-size:16.5px}
+.hero .cta{display:flex;gap:14px;flex-wrap:wrap}
+.trust{display:flex;gap:26px;flex-wrap:wrap;margin-top:40px;padding-top:26px;
+  border-top:1px solid rgba(255,255,255,.18)}
+.trust div{font-size:13.5px;color:#CFCFCF}
+.trust b{display:block;color:#fff;font-size:15px}
 
-/* ── Filter chips ───────────────────────────────────────── */
-.chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:34px}
-.chip{background:#fff;border:2px solid var(--sr-ink);color:var(--sr-ink);
-  font-family:var(--font);font-weight:600;font-size:13.5px;text-transform:uppercase;
-  letter-spacing:.5px;padding:9px 20px;cursor:pointer}
-.chip:hover{border-color:var(--sr-red);color:var(--sr-red)}
-.chip.active{background:var(--sr-red);border-color:var(--sr-red);color:#fff}
+/* ── Category tiles ─────────────────────────────────────── */
+.tiles{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.tile{position:relative;border-radius:var(--rad);overflow:hidden;text-decoration:none;
+  aspect-ratio:4/3;display:block;box-shadow:var(--shadow)}
+.tile img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
+.tile:hover img{transform:scale(1.06)}
+.tile .lab{position:absolute;left:0;right:0;bottom:0;padding:36px 18px 16px;
+  background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;
+  font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.5px}
+.tile .lab span{display:block;font-weight:500;font-size:12.5px;text-transform:none;
+  letter-spacing:0;color:#E4E4E4;margin-top:2px}
 
-/* ── Product grid ───────────────────────────────────────── */
-.grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
-.card{background:#fff;border-radius:10px;overflow:hidden;display:flex;
-  flex-direction:column;box-shadow:0 2px 10px rgba(0,0,0,.07);
-  transition:transform .15s ease,box-shadow .15s ease}
-.card:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(0,0,0,.13)}
+/* ── Product cards ──────────────────────────────────────── */
+.grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.card{background:#fff;border-radius:var(--rad);overflow:hidden;display:flex;
+  flex-direction:column;box-shadow:var(--shadow);text-decoration:none;
+  transition:transform .15s ease,box-shadow .15s ease;border:1px solid var(--line)}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-h)}
 .card .im{aspect-ratio:4/3;background:#F4F4F4;overflow:hidden;display:grid;place-items:center}
 .card .im img{width:100%;height:100%;object-fit:cover}
-.card .im .noimg{font-weight:700;font-size:13px;letter-spacing:2px;color:#B7B7B7;text-transform:uppercase}
-.card-body{padding:18px 20px 22px;display:flex;flex-direction:column;flex:1}
-.card h3{font-weight:600;font-size:16.5px;line-height:1.35}
-.card .fit{font-size:13px;color:#777;margin-top:4px}
-.card .row{margin-top:auto;padding-top:16px;display:flex;align-items:center;
-  justify-content:space-between;gap:10px}
-.card .price{color:var(--sr-red);font-weight:700;font-size:19px;white-space:nowrap}
-.card .price small{color:#999;font-weight:600;font-size:11.5px}
-.buy{background:var(--sr-red);color:#fff;text-decoration:none;font-weight:600;
-  font-size:13.5px;padding:10px 16px;white-space:nowrap;border:0;cursor:pointer;font-family:var(--font)}
-.buy:hover{background:var(--sr-red-dark)}
+.card .noimg{font-weight:700;font-size:12px;letter-spacing:2px;color:#B7B7B7;text-transform:uppercase}
+.card-body{padding:16px 18px 20px;display:flex;flex-direction:column;flex:1}
+.card .cat{font-size:11.5px;font-weight:600;letter-spacing:1.2px;color:var(--mut);text-transform:uppercase}
+.card h3{font-weight:600;font-size:16px;margin-top:4px}
+.card .row{margin-top:auto;padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.card .price{color:var(--red);font-weight:700;font-size:18px;white-space:nowrap}
+.card .price small{color:#999;font-weight:600;font-size:11px}
+.card .go{font-weight:600;font-size:13px;color:var(--black)}
+.card:hover .go{color:var(--red)}
 
-/* ── Range (categories) ─────────────────────────────────── */
-.range-grid{display:grid;gap:24px;grid-template-columns:repeat(auto-fill,minmax(255px,1fr))}
-.rcard{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+/* ── Shop toolbar ───────────────────────────────────────── */
+.toolbar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:28px}
+.search{flex:1;min-width:220px;display:flex;background:#fff;border:2px solid var(--line);
+  border-radius:8px;overflow:hidden}
+.search input{flex:1;border:0;font-family:var(--font);font-size:15px;padding:11px 16px;outline:none}
+.search .ic{display:grid;place-items:center;padding:0 14px;color:var(--mut)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:#fff;border:2px solid var(--line);color:var(--ink);border-radius:20px;
+  font-family:var(--font);font-weight:600;font-size:13px;padding:8px 18px;cursor:pointer}
+.chip:hover{border-color:var(--red);color:var(--red)}
+.chip.active{background:var(--red);border-color:var(--red);color:#fff}
+.count{color:var(--mut);font-size:13.5px;margin-bottom:18px}
+
+/* ── Product detail ─────────────────────────────────────── */
+.crumb{font-size:13px;color:var(--mut);margin:26px 0 20px}
+.crumb a{color:var(--mut);text-decoration:none}
+.crumb a:hover{color:var(--red)}
+.pdp{display:grid;gap:40px;grid-template-columns:1fr 1fr;align-items:start;margin-bottom:60px}
+.pdp .im{border-radius:var(--rad);overflow:hidden;background:#F4F4F4;
+  aspect-ratio:4/3;display:grid;place-items:center;box-shadow:var(--shadow)}
+.pdp .im img{width:100%;height:100%;object-fit:cover}
+.pdp .cat{font-size:12px;font-weight:600;letter-spacing:1.5px;color:var(--mut);text-transform:uppercase}
+.pdp h1{font-weight:700;font-size:clamp(24px,3.2vw,34px);margin:6px 0 10px}
+.pdp .price{color:var(--red);font-weight:700;font-size:28px}
+.pdp .price small{color:#999;font-size:14px;font-weight:600}
+.pdp .desc{margin:18px 0 22px;color:#444;font-size:15.5px}
+.specs{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:26px}
+.specs div{display:flex;justify-content:space-between;gap:14px;padding:11px 16px;font-size:14px}
+.specs div:nth-child(odd){background:var(--grey)}
+.specs b{font-weight:600;color:var(--mut);font-weight:500}
+.qtyrow{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}
+.qty{display:flex;border:2px solid var(--line);border-radius:8px;overflow:hidden}
+.qty button{width:44px;border:0;background:#fff;font-size:20px;cursor:pointer;font-family:var(--font)}
+.qty button:hover{background:var(--grey)}
+.qty span{display:grid;place-items:center;min-width:44px;font-weight:600}
+.pdp .note{margin-top:16px;font-size:13.5px;color:var(--mut)}
+.pdp .note a{color:var(--red);font-weight:600;text-decoration:none}
+
+/* ── Range cards ────────────────────────────────────────── */
+.range-grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.rcard{background:#fff;border-radius:var(--rad);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line)}
 .rcard .im{aspect-ratio:16/10;overflow:hidden}
 .rcard .im img{width:100%;height:100%;object-fit:cover;transition:transform .25s ease}
 .rcard:hover .im img{transform:scale(1.05)}
-.rcard .rb{padding:16px 18px 20px}
-.rcard h3{font-weight:600;font-size:15.5px;text-transform:uppercase;letter-spacing:.4px}
-.rcard .rlinks{margin-top:10px;display:flex;gap:16px}
-.rcard .rlinks a{font-size:13.5px;font-weight:600;color:var(--sr-red);text-decoration:none}
+.rcard .rb{padding:15px 18px 18px}
+.rcard h3{font-weight:600;font-size:15px;text-transform:uppercase;letter-spacing:.3px}
+.rcard .rlinks{margin-top:8px;display:flex;gap:16px}
+.rcard .rlinks a{font-size:13.5px;font-weight:600;color:var(--red);text-decoration:none}
 .rcard .rlinks a:hover{text-decoration:underline}
 
+/* ── Why us / contact cards ─────────────────────────────── */
+.feat{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.fcard{background:#fff;border-radius:var(--rad);padding:26px 24px;box-shadow:var(--shadow);border-top:4px solid var(--red)}
+.fcard b{display:block;font-size:16px;margin-bottom:6px}
+.fcard p,.fcard a{font-size:14px;color:var(--mut);text-decoration:none;line-height:1.7}
+.fcard a:hover{color:var(--red)}
+
 /* ── Brands ─────────────────────────────────────────────── */
-.brandrow{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;align-items:center}
-.brandrow .b{background:#fff;border-radius:8px;padding:16px 22px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);display:grid;place-items:center}
-.brandrow img{height:52px;width:auto;max-width:170px;object-fit:contain}
+.brandrow{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:center}
+.brandrow .b{background:#fff;border-radius:10px;padding:14px 20px;border:1px solid var(--line);display:grid;place-items:center}
+.brandrow img{height:44px;width:auto;max-width:150px;object-fit:contain}
 
-/* ── Newsletter ─────────────────────────────────────────── */
-.newsletter{background:var(--sr-charcoal);color:#fff;text-align:center;padding:56px 20px}
-.newsletter h2{font-weight:700;font-size:clamp(24px,3vw,30px);text-transform:uppercase;letter-spacing:.5px}
-.newsletter p{color:#D6D6D6;max-width:58ch;margin:14px auto 26px;font-size:15px}
-.nl-form{display:flex;gap:0;justify-content:center;flex-wrap:wrap}
-.nl-form input{font-family:var(--font);font-size:15px;padding:13px 18px;border:0;min-width:min(320px,80vw)}
-.nl-form button{background:var(--sr-red);color:#fff;border:0;font-family:var(--font);
-  font-weight:700;font-size:14px;letter-spacing:.8px;text-transform:uppercase;
-  padding:13px 28px;cursor:pointer}
-.nl-form button:hover{background:var(--sr-red-dark)}
+/* ── Quotes ─────────────────────────────────────────────── */
+.quotes{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.quote{background:#fff;border-radius:var(--rad);padding:26px 24px;box-shadow:var(--shadow)}
+.stars{color:#F5B301;font-size:17px;letter-spacing:2px;margin-bottom:10px}
+.quote p{font-size:14.5px}
+.quote .who{margin-top:12px;font-weight:600;color:var(--mut);font-size:13.5px}
 
-/* ── Testimonials ───────────────────────────────────────── */
-.quotes{display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.quote{background:#fff;border-radius:10px;padding:30px 26px;text-align:center;
-  box-shadow:0 2px 10px rgba(0,0,0,.07)}
-.stars{color:#F5B301;font-size:20px;letter-spacing:3px;margin-bottom:14px}
-.quote p{font-size:15px}
-.quote .who{margin-top:14px;font-weight:600;color:#555;font-size:14px}
+/* ── CTA band ───────────────────────────────────────────── */
+.cta-band{background:var(--red);color:#fff;text-align:center;padding:54px 20px}
+.cta-band h2{font-weight:700;font-size:clamp(22px,3vw,30px);text-transform:uppercase;letter-spacing:.4px}
+.cta-band p{margin:12px auto 24px;max-width:56ch;color:#FFE0E1;font-size:15px}
 
 /* ── Footer ─────────────────────────────────────────────── */
-footer{background:var(--sr-black);color:#B9B9B9;padding:54px 20px 40px}
-.foot-in{max-width:1220px;margin:0 auto;display:grid;gap:34px;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.foot-in h4{color:#fff;font-weight:600;font-size:15px;text-transform:uppercase;
-  letter-spacing:1px;margin-bottom:12px}
+footer{background:var(--black);color:#B9B9B9;padding:54px 20px 40px}
+.foot-in{max-width:1200px;margin:0 auto;display:grid;gap:34px;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.foot-in h4{color:#fff;font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
 .foot-in p,.foot-in a{font-size:14px;line-height:1.9;text-decoration:none}
+.foot-in a{display:block}
 .foot-in a:hover{color:#fff;text-decoration:underline}
-.legal{max-width:1220px;margin:36px auto 0;padding-top:18px;
-  border-top:1px solid #2C2C2C;font-size:12.5px;letter-spacing:.5px}
+.legal{max-width:1200px;margin:36px auto 0;padding-top:18px;border-top:1px solid #2C2C2C;font-size:12.5px;letter-spacing:.5px}
 
 /* ── WhatsApp float ─────────────────────────────────────── */
-.wa{position:fixed;right:22px;bottom:22px;width:58px;height:58px;z-index:70;
+.wa{position:fixed;right:20px;bottom:20px;width:56px;height:56px;z-index:70;
   background:#25D366;border-radius:50%;display:grid;place-items:center;
   box-shadow:0 6px 18px rgba(0,0,0,.25)}
-.wa svg{width:32px;height:32px;fill:#fff}
+.wa svg{width:30px;height:30px;fill:#fff}
 .wa:hover{transform:scale(1.06)}
 
-@media (max-width:860px){
-  .nav-links,.nav-phone,.btn-contact{display:none}
+@media (max-width:900px){
+  .nav-links,.nav-phone{display:none}
   .burger{display:block}
-  .hero{padding:46px 20px 54px}
-  .btn-ghost{margin-left:0}
+  .pdp{grid-template-columns:1fr}
+  .hero{padding:52px 0 50px}
 }
 </style>
 </head>
 <body>
 
 <div class="ticker" aria-hidden="true">
-  <div class="ticker-track">
-    <span>🔥 GRAND OPENING SALE LIVE NOW</span><span>•</span>
-    <span>UP TO 50% OFF SELECTED 4X4 ACCESSORIES</span><span>•</span>
-    <span>BUY MORE SAVE MORE</span><span>•</span>
-    <span>LIMITED STOCK AVAILABLE</span><span>•</span>
-    <span>SHOP NOW</span><span>•</span>
-    <span>🔥 GRAND OPENING SALE LIVE NOW</span><span>•</span>
-    <span>UP TO 50% OFF SELECTED 4X4 ACCESSORIES</span><span>•</span>
-    <span>BUY MORE SAVE MORE</span><span>•</span>
-    <span>LIMITED STOCK AVAILABLE</span><span>•</span>
-    <span>SHOP NOW</span><span>•</span>
-  </div>
+  <div class="ticker-track" id="tick"></div>
 </div>
 
 <header class="navbar">
   <div class="nav-in">
-    <a class="nav-logo" href="#top" aria-label="Sai Raj Global home">
+    <a class="nav-logo" href="#/" aria-label="Sai Raj Global home">
       <img src="data:image/png;base64,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" alt="Sai Raj">
     </a>
-    <nav class="nav-links" aria-label="Main">
-      <a href="#shop">Shop</a>
-      <a href="#range">Our Range</a>
-      <a href="#brands">Brands</a>
+    <nav class="nav-links" id="navLinks" aria-label="Main">
+      <a href="#/" data-nav="home">Home</a>
+      <a href="#/shop" data-nav="shop">Shop</a>
+      <a href="#/range" data-nav="range">Our Range</a>
+      <a href="#/contact" data-nav="contact">Contact</a>
     </nav>
     <div class="nav-right">
-      <a class="nav-cart" id="cartLink" href="#" aria-label="Cart">🛒</a>
       <a class="nav-phone" href="tel:+971543256505">+971 543 256 505</a>
-      <a class="btn-contact" href="mailto:info@sairaj.global">Contact Us</a>
+      <a class="nav-cart" id="cartLink" href="#">Cart 🛒</a>
     </div>
     <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">☰</button>
   </div>
   <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
-    <a href="#shop">Shop</a>
-    <a href="#range">Our Range</a>
-    <a href="#brands">Brands</a>
-    <a href="tel:+971543256505">+971 543 256 505</a>
-    <a href="mailto:info@sairaj.global">Contact Us</a>
+    <a href="#/">Home</a>
+    <a href="#/shop">Shop</a>
+    <a href="#/range">Our Range</a>
+    <a href="#/contact">Contact</a>
+    <a href="tel:+971543256505">Call +971 543 256 505</a>
   </nav>
 </header>
 
-<main id="top">
+<main id="app"></main>
 
-  <div class="logo-band">
-    <img src="data:image/png;base64,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" alt="Sai Raj">
-  </div>
-
-  <section class="hero">
-    <h1>Ultimate Protection &amp; Versatility: Canopies, Lids and Covers — built for the Emirates.</h1>
-    <p>Five decades of fibreglass and 4x4 fabrication, now shipping UAE-wide from Jebel Ali Free Zone, Dubai. Shop online or talk to us about custom builds.</p>
-    <a class="btn-red" href="#shop">Shop Now</a>
-    <a class="btn-ghost" href="#range">Explore Our Range</a>
-  </section>
-
-  <div class="sale-strip">🔥 Grand Opening Sale Live Now • Up to 50% off selected 4x4 accessories</div>
-
-  <section class="section" id="shop">
-    <div class="sec-in">
-      <h2 class="sec-title">Shop Online</h2>
-      <p class="sec-sub">Retail range with UAE-wide delivery. Checkout powered by Shopify.</p>
-      <div class="chips" id="chips" role="group" aria-label="Filter products"></div>
-      <div class="grid" id="productGrid"></div>
-    </div>
-  </section>
-
-  <section class="section grey" id="range">
-    <div class="sec-in">
-      <h2 class="sec-title">Explore Our Range</h2>
-      <p class="sec-sub">Bespoke fabrication and fleet work: truck and pick-up bodies, conversions, coldrooms and more. Download a catalogue or enquire directly.</p>
-      <div class="range-grid" id="rangeGrid"></div>
-    </div>
-  </section>
-
-  <section class="section" id="brands">
-    <div class="sec-in">
-      <h2 class="sec-title">Our Brands</h2>
-      <div class="brandrow" id="brandRow"></div>
-    </div>
-  </section>
-
-  <section class="newsletter">
-    <h2>Stay Ahead With Sai Raj</h2>
-    <p>From fleet operations to lifestyle vehicle owners — our newsletter keeps you informed with product updates, expert tips, and exclusive offers designed just for you.</p>
-    <form class="nl-form" id="nlForm">
-      <input type="email" id="nlEmail" placeholder="Your email address" required aria-label="Email address">
-      <button type="submit">Subscribe</button>
-    </form>
-  </section>
-
-  <section class="section grey" id="reviews">
-    <div class="sec-in">
-      <h2 class="sec-title dark">What Our Customers Say</h2>
-      <div class="quotes">
-        <div class="quote">
-          <div class="stars" aria-label="5 stars">★★★★★</div>
-          <p>Canopy fitted on my Hilux in a day — solid build quality.</p>
-          <p class="who">— Sample review</p>
-        </div>
-        <div class="quote">
-          <div class="stars" aria-label="5 stars">★★★★★</div>
-          <p>Amazing customer experience and great products!</p>
-          <p class="who">— Sample review</p>
-        </div>
-        <div class="quote">
-          <div class="stars" aria-label="5 stars">★★★★★</div>
-          <p>Cooler box kept ice for the whole desert weekend.</p>
-          <p class="who">— Sample review</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer id="contact">
+<footer>
   <div class="foot-in">
     <div>
       <h4>Sai Raj Trading FZCO</h4>
-      <p>Jebel Ali Free Zone (JAFZA)<br>Dubai, United Arab Emirates</p>
+      <p>Jebel Ali Free Zone (JAFZA)<br>Dubai, United Arab Emirates<br>Since 1975 · Quality… it's in our DNA.</p>
     </div>
     <div>
-      <h4>Get in Touch</h4>
-      <p><a href="mailto:info@sairaj.global">info@sairaj.global</a><br>
-      <a href="tel:+971543256505">+971 543 256 505</a><br>
-      <a href="https://wa.me/971543256505">WhatsApp us</a></p>
-    </div>
-    <div>
-      <h4>Head Office</h4>
-      <p>Sai Raj Ltd · Nairobi, Kenya<br>
-      <a href="tel:+254708771100">+254 708 771 100</a><br>
-      <a href="https://sairaj.com">sairaj.com</a></p>
+      <h4>Shop</h4>
+      <a href="#/shop">All products</a>
+      <a href="#/shop/Canopies">Canopies &amp; lids</a>
+      <a href="#/shop/4x4">4x4 accessories</a>
+      <a href="#/shop/Camping">Camping</a>
+      <a href="#/shop/Cooling">Cooling</a>
     </div>
     <div>
       <h4>Company</h4>
-      <p><a href="https://www.sairaj.global/web/content/3219?unique=46b2841a157e2acd9de9396b9fe6d4218c104d34">Company profile (PDF)</a><br>
-      <a href="https://www.sairaj.global/locate-a-dealer">Locate a dealer</a><br>
-      Checkout powered by Shopify</p>
+      <a href="#/range">Our range</a>
+      <a href="#/contact">Contact us</a>
+      <a href="https://www.sairaj.global/web/content/3219?unique=46b2841a157e2acd9de9396b9fe6d4218c104d34">Company profile (PDF)</a>
+      <a href="https://sairaj.com">Kenya HQ — sairaj.com</a>
+    </div>
+    <div>
+      <h4>Get in Touch</h4>
+      <a href="mailto:info@sairaj.global">info@sairaj.global</a>
+      <a href="tel:+971543256505">+971 543 256 505</a>
+      <a href="https://wa.me/971543256505">WhatsApp us</a>
     </div>
   </div>
-  <p class="legal">© 2026 Sai Raj Limited. All rights reserved. Quality… it's in our DNA. Since 1975.</p>
+  <p class="legal">© 2026 Sai Raj Limited. All rights reserved. · Checkout powered by Shopify</p>
 </footer>
 
 <a class="wa" href="https://wa.me/971543256505?text=Hello%2C%20I%20found%20you%20on%20your%20website%20and%20would%20like%20to%20inquire%20about%20..." aria-label="Chat on WhatsApp">
@@ -336,37 +292,55 @@ footer{background:var(--sr-black);color:#B9B9B9;padding:54px 20px 40px}
 <script>
 /* ════════════════════════════════════════════════════════════
    SHOPIFY CONFIG — the only block you need to edit.
-
-   1. domain    → your Shopify store domain.
-   2. handle    → the product's URL slug in Shopify.
-                  Button links to the product page.
-   3. variantId → OPTIONAL. The numeric variant ID from
-                  Shopify admin. If set, the button becomes an
-                  instant Add-to-Cart link (cart permalink) —
-                  one tap straight into checkout.
-   Products with neither → "Enquire" (WhatsApp).
+   domain    → your Shopify store domain.
+   handle    → product URL slug in Shopify (links to product page).
+   variantId → OPTIONAL numeric variant ID; if set, Add to Cart
+               becomes an instant cart permalink with quantity.
    ════════════════════════════════════════════════════════════ */
 const SHOPIFY = { domain: "YOUR-STORE.myshopify.com" };
-
+const WA = "https://wa.me/971543256505";
 const IMG = "https://www.sairaj.global/web/image/";
 
 const PRODUCTS = [
-  {title:"FRP Pick-up Canopy", fit:"Hilux · Ranger · L200 · Navara", price:4200, cat:"Canopies",
-   img:IMG+"44815-66c374e6/canopies%20%281%29.webp", handle:"frp-pickup-canopy", variantId:""},
-  {title:"Bedliner, Lid & Cover", fit:"Lockable FRP lid · colour-coded", price:2850, cat:"Canopies",
-   img:IMG+"43987-e4b36a99/bedliners%2C%20lids%20covers.webp", handle:"bedliner-lid-cover", variantId:""},
-  {title:"Safarituff Drawer System", fit:"Dual drawer · full extension · lockable", price:3400, cat:"4x4",
-   img:IMG+"49346-f7df97f5/safarituff%204%204%20accessories%20.webp", handle:"safarituff-drawer-system", variantId:""},
-  {title:"Cargocool Cooler Box 45 L", fit:"Portable cooler box by Sai Raj", price:650, cat:"Cooling",
-   img:IMG+"1421-4890bcb3/CargoCool%20Logo%205%20Approved-01.webp", handle:"cargocool-cooler-box-45l", variantId:""},
-  {title:'9" LED Driving Lights (Pair)', fit:"Spot + flood combo · harness included", price:1150, cat:"4x4",
-   img:"", handle:"led-driving-lights-9in", variantId:""},
-  {title:'17" Alloy Wheels — Set of 4', fit:"6x139.7 · matte black · load rated", price:3900, cat:"4x4",
-   img:"", handle:"alloy-wheels-17-set", variantId:""},
-  {title:"Hardshell Roof Tent", fit:"2-person · 60-second setup", price:5500, cat:"Camping",
-   img:IMG+"49347-daccb30b/_winboCamping.webp", handle:"hardshell-roof-tent", variantId:""},
-  {title:"Portable Fridge/Freezer 45 L", fit:"12/24 V · app control · basket incl.", price:2400, cat:"Cooling",
-   img:"", handle:"portable-fridge-freezer-45l", variantId:""}
+  {id:"frp-pickup-canopy", title:"FRP Pick-up Canopy", cat:"Canopies", price:4200,
+   img:IMG+"44815-66c374e6/canopies%20%281%29.webp", handle:"frp-pickup-canopy", variantId:"",
+   desc:"Hand-laid fibreglass canopy engineered for Gulf heat. Colour-coded to your vehicle with lockable rear access and sliding side windows.",
+   specs:[["Vehicle fit","Hilux · Ranger · L200 · Navara"],["Shell","Hand-laid FRP, UV-stable gelcoat"],["Windows","Sliding sides + lockable rear door"],["Finish","Colour-coded to factory paint"],["Fitting","Same-day at our Dubai workshop"]]},
+  {id:"bedliner-lid-cover", title:"Bedliner, Lid & Cover", cat:"Canopies", price:2850,
+   img:IMG+"43987-e4b36a99/bedliners%2C%20lids%20covers.webp", handle:"bedliner-lid-cover", variantId:"",
+   desc:"One-piece lockable FRP lid with weatherproof sealing — keeps cargo secure, dust-free and out of sight.",
+   specs:[["Type","One-piece lockable FRP lid"],["Finish","Colour-coded"],["Hardware","Gas struts included"],["Sealing","Full weatherproof rubber seal"],["Fit","Most double-cab pick-ups"]]},
+  {id:"safarituff-drawer-system", title:"Safarituff Drawer System", cat:"4x4", price:3400,
+   img:IMG+"49346-f7df97f5/safarituff%204%204%20accessories%20.webp", handle:"safarituff-drawer-system", variantId:"",
+   desc:"Twin full-extension drawers with a carpeted load deck. Organise recovery gear, tools and camp kit — built by Safarituff.",
+   specs:[["Layout","Dual drawers, full extension"],["Deck","Carpeted top load deck"],["Security","Central locking"],["Capacity","80 kg per drawer"],["Extras","Modular tie-down points"]]},
+  {id:"cargocool-cooler-box-45l", title:"Cargocool Cooler Box 45 L", cat:"Cooling", price:650,
+   img:IMG+"1421-4890bcb3/CargoCool%20Logo%205%20Approved-01.webp", handle:"cargocool-cooler-box-45l", variantId:"",
+   desc:"Sai Raj's own portable cooler box. Thick PU insulation keeps ice for days — desert weekends, fishing trips, site work.",
+   specs:[["Capacity","45 L"],["Insulation","Thick PU core"],["Ice retention","Up to 5 days"],["Liner","Food-grade"],["Made by","Cargocool — a Sai Raj brand"]]},
+  {id:"led-driving-lights-9in", title:'9" LED Driving Lights (Pair)', cat:"4x4", price:1150,
+   img:"", handle:"led-driving-lights-9in", variantId:"",
+   desc:"Serious distance for desert night runs. Spot + flood combo beam with full wiring harness in the box.",
+   specs:[["Beam","Spot + flood combo"],["Distance","1,200 m (pair, 1 lux)"],["Rating","IP68 dust & waterproof"],["Includes","Wiring harness + switch"],["Compliance","E-marked"]]},
+  {id:"alloy-wheels-17-set", title:'17" Alloy Wheels — Set of 4', cat:"4x4", price:3900,
+   img:"", handle:"alloy-wheels-17-set", variantId:"",
+   desc:"Load-rated matte black alloys sized for GCC-spec 4x4s. Sold as a set of four with caps and nuts.",
+   specs:[["Size","17 x 9"],["PCD","6 x 139.7"],["Load rating","1,250 kg per wheel"],["Finish","Matte black"],["Includes","Centre caps + wheel nuts"]]},
+  {id:"hardshell-roof-tent", title:"Hardshell Roof Tent", cat:"Camping", price:5500,
+   img:IMG+"49347-daccb30b/_winboCamping.webp", handle:"hardshell-roof-tent", variantId:"",
+   desc:"Sixty seconds from parked to camped. ABS hardshell with a proper mattress — overlanding without the setup fight.",
+   specs:[["Sleeps","2 adults"],["Setup","~60 seconds"],["Shell","ABS hardshell"],["Mattress","75 mm high-density foam"],["Mounting","Universal crossbar"]]},
+  {id:"portable-fridge-freezer-45l", title:"Portable Fridge/Freezer 45 L", cat:"Cooling", price:2400,
+   img:"", handle:"portable-fridge-freezer-45l", variantId:"",
+   desc:"True fridge/freezer performance off 12 V. App control, removable basket and battery protection built in.",
+   specs:[["Power","12/24 V DC + 220 V"],["Range","−20 °C to +10 °C"],["Control","Bluetooth app"],["Basket","Removable"],["Protection","Low-voltage cutoff"]]}
+];
+
+const CATS = [
+  ["Canopies","Canopies & lids",IMG+"44815-66c374e6/canopies%20%281%29.webp"],
+  ["4x4","4x4 accessories",IMG+"49346-f7df97f5/safarituff%204%204%20accessories%20.webp"],
+  ["Camping","Camping gear",IMG+"49347-daccb30b/_winboCamping.webp"],
+  ["Cooling","Cooler boxes & fridges",IMG+"1421-4890bcb3/CargoCool%20Logo%205%20Approved-01.webp"]
 ];
 
 const RANGE = [
@@ -387,72 +361,270 @@ const RANGE = [
 const BRANDS = [
   ["Cargotuff","1423-ce12035b/CARGO%20TUFF.webp"],
   ["Cargocool","1421-4890bcb3/CargoCool%20Logo%205%20Approved-01.webp"],
-  ["Pulse Ambulance & Mobile Clinic","1429-f41f782b/Pulse%20Ambulance%20and%20Mobile%20Clinic%20Logo-01.webp"],
+  ["Pulse","1429-f41f782b/Pulse%20Ambulance%20and%20Mobile%20Clinic%20Logo-01.webp"],
   ["Safarituff","1430-d6978757/Safarituff%20Logo%201.webp"],
   ["Carryboy","39997-292c28b9/carryboy%20Logo.webp"],
   ["Deco Roof","1425-0805cc22/DECO%20ROOF.webp"],
   ["Deco Glaze","1424-a6826a0c/DECO%20GRAZE.webp"]
 ];
 
-/* ── Render: shop grid + filters ── */
-const grid = document.getElementById("productGrid");
-const chips = document.getElementById("chips");
-const cats = ["All", ...new Set(PRODUCTS.map(p => p.cat))];
-
-function buyLink(p){
-  if (p.variantId) return `https://${SHOPIFY.domain}/cart/${p.variantId}:1`;
+/* ── Helpers ── */
+const app = document.getElementById("app");
+const money = n => n.toLocaleString();
+const productLink = p => `#/product/${p.id}`;
+function cartHref(p, qty=1){
+  if (p.variantId) return `https://${SHOPIFY.domain}/cart/${p.variantId}:${qty}`;
   if (p.handle)    return `https://${SHOPIFY.domain}/products/${p.handle}`;
-  return "https://wa.me/971543256505";
+  return WA;
 }
-function buyLabel(p){ return p.variantId ? "Add to Cart" : (p.handle ? "View Product" : "Enquire"); }
-
-function renderProducts(filter){
-  grid.innerHTML = PRODUCTS
-    .filter(p => filter === "All" || p.cat === filter)
-    .map(p => `
-    <article class="card">
-      <div class="im">${p.img
-        ? `<img src="${p.img}" alt="${p.title}" loading="lazy">`
-        : `<span class="noimg">${p.cat}</span>`}</div>
-      <div class="card-body">
-        <h3>${p.title}</h3>
-        <p class="fit">${p.fit}</p>
-        <div class="row">
-          <span class="price"><small>AED</small> ${p.price.toLocaleString()}</span>
-          <a class="buy" href="${buyLink(p)}">${buyLabel(p)}</a>
-        </div>
-      </div>
-    </article>`).join("");
-}
-
-chips.innerHTML = cats.map((c,i) =>
-  `<button class="chip${i===0?" active":""}" data-cat="${c}">${c}</button>`).join("");
-chips.addEventListener("click", e => {
-  const btn = e.target.closest(".chip"); if (!btn) return;
-  chips.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-  btn.classList.add("active");
-  renderProducts(btn.dataset.cat);
-});
-renderProducts("All");
-
-/* ── Render: range + brands ── */
-document.getElementById("rangeGrid").innerHTML = RANGE.map(([name,img,page,cat]) => `
-  <article class="rcard">
-    <div class="im"><img src="${IMG+img}" alt="${name}" loading="lazy"></div>
-    <div class="rb">
-      <h3>${name}</h3>
-      <div class="rlinks">
-        ${page ? `<a href="https://www.sairaj.global/${page}">Read more</a>` : ""}
-        ${cat ? `<a href="https://www.sairaj.global/web/content/${cat}">Catalogue</a>` : ""}
-        ${!page && !cat ? `<a href="https://wa.me/971543256505">Enquire</a>` : ""}
+function cardHTML(p){
+  return `<a class="card" href="${productLink(p)}">
+    <div class="im">${p.img ? `<img src="${p.img}" alt="${p.title}" loading="lazy">` : `<span class="noimg">${p.cat}</span>`}</div>
+    <div class="card-body">
+      <span class="cat">${p.cat}</span>
+      <h3>${p.title}</h3>
+      <div class="row">
+        <span class="price"><small>AED</small> ${money(p.price)}</span>
+        <span class="go">View →</span>
       </div>
     </div>
-  </article>`).join("");
+  </a>`;
+}
 
-document.getElementById("brandRow").innerHTML = BRANDS.map(([name,img]) =>
-  `<div class="b"><img src="${IMG+img}" alt="${name}" loading="lazy"></div>`).join("");
+/* ── Pages ── */
+function pageHome(){
+  document.title = "Sai Raj Global — UAE | 4x4 Accessories, Canopies & Fibreglass Products";
+  app.innerHTML = `
+  <section class="hero"><div class="wrap">
+    <p class="kick">Sai Raj Trading FZCO · Dubai</p>
+    <h1>Gear your 4x4. Protect your load. Built since 1975.</h1>
+    <p>Canopies, bedliners, drawer systems, cooler boxes and camping gear — engineered in fibreglass and shipped UAE-wide from Jebel Ali Free Zone.</p>
+    <div class="cta">
+      <a class="btn red" href="#/shop">Shop Now</a>
+      <a class="btn ghost" href="#/range">Custom &amp; Fleet Work</a>
+    </div>
+    <div class="trust">
+      <div><b>Since 1975</b>Five decades of fabrication</div>
+      <div><b>JAFZA, Dubai</b>Local stock &amp; fitting</div>
+      <div><b>UAE-wide delivery</b>Fast dispatch</div>
+      <div><b>Genuine brands</b>Cargocool · Safarituff · Carryboy</div>
+    </div>
+  </div></section>
 
-/* ── Cart, menu, newsletter ── */
+  <section class="section"><div class="wrap">
+    <div class="sec-head"><h2>Shop by Category</h2><a href="#/shop">View all products →</a></div>
+    <div class="tiles">
+      ${CATS.map(([key,label,img]) => `
+        <a class="tile" href="#/shop/${key}">
+          <img src="${img}" alt="${label}" loading="lazy">
+          <span class="lab">${label}<span>Shop now →</span></span>
+        </a>`).join("")}
+    </div>
+  </div></section>
+
+  <section class="section grey"><div class="wrap">
+    <div class="sec-head"><h2>Featured Products</h2><a href="#/shop">See everything →</a></div>
+    <div class="grid">${PRODUCTS.slice(0,4).map(cardHTML).join("")}</div>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="sec-head"><h2>Beyond Retail</h2><a href="#/range">Explore our range →</a></div>
+    <div class="tiles">
+      ${RANGE.slice(0,4).map(([name,img]) => `
+        <a class="tile" href="#/range">
+          <img src="${IMG+img}" alt="${name}" loading="lazy">
+          <span class="lab">${name}<span>Learn more →</span></span>
+        </a>`).join("")}
+    </div>
+  </div></section>
+
+  <section class="section grey"><div class="wrap">
+    <div class="sec-head"><h2>What Our Customers Say</h2></div>
+    <div class="quotes">
+      <div class="quote"><div class="stars">★★★★★</div><p>Canopy fitted on my Hilux in a day — solid build quality.</p><p class="who">— Sample review</p></div>
+      <div class="quote"><div class="stars">★★★★★</div><p>Amazing customer experience and great products!</p><p class="who">— Sample review</p></div>
+      <div class="quote"><div class="stars">★★★★★</div><p>Cooler box kept ice for the whole desert weekend.</p><p class="who">— Sample review</p></div>
+    </div>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="sec-head"><h2>Our Brands</h2></div>
+    <div class="brandrow">${BRANDS.map(([n,i]) => `<div class="b"><img src="${IMG+i}" alt="${n}" loading="lazy"></div>`).join("")}</div>
+  </div></section>
+
+  <div class="cta-band">
+    <h2>Need a custom build?</h2>
+    <p>Truck bodies, conversions, coldrooms and fleet work — talk to the team that's been building them for 50 years.</p>
+    <a class="btn dark" href="${WA}">WhatsApp Us</a>
+  </div>`;
+}
+
+function pageShop(filterCat){
+  document.title = "Shop — Sai Raj Global UAE";
+  app.innerHTML = `
+  <section class="section"><div class="wrap">
+    <div class="sec-head"><h2>Shop Online</h2><a href="#/range">Looking for custom work? →</a></div>
+    <div class="toolbar">
+      <div class="search">
+        <input type="search" id="q" placeholder="Search products…" aria-label="Search products">
+        <span class="ic">🔍</span>
+      </div>
+      <div class="chips" id="chips"></div>
+    </div>
+    <p class="count" id="count"></p>
+    <div class="grid" id="grid"></div>
+  </div></section>`;
+
+  const cats = ["All", ...new Set(PRODUCTS.map(p => p.cat))];
+  let active = cats.includes(filterCat) ? filterCat : "All";
+  const chips = document.getElementById("chips");
+  const grid = document.getElementById("grid");
+  const count = document.getElementById("count");
+  const q = document.getElementById("q");
+
+  function draw(){
+    const term = q.value.trim().toLowerCase();
+    const list = PRODUCTS.filter(p =>
+      (active === "All" || p.cat === active) &&
+      (!term || (p.title + " " + p.desc + " " + p.cat).toLowerCase().includes(term)));
+    grid.innerHTML = list.length ? list.map(cardHTML).join("")
+      : `<p style="grid-column:1/-1;color:var(--mut)">No products match — try a different search, or <a href="${WA}" style="color:var(--red);font-weight:600">WhatsApp us</a> and we'll source it.</p>`;
+    count.textContent = `${list.length} product${list.length === 1 ? "" : "s"}${active !== "All" ? " in " + active : ""}`;
+    chips.innerHTML = cats.map(c =>
+      `<button class="chip${c === active ? " active" : ""}" data-cat="${c}">${c}</button>`).join("");
+  }
+  chips.addEventListener("click", e => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    active = b.dataset.cat; draw();
+  });
+  q.addEventListener("input", draw);
+  draw();
+}
+
+function pageProduct(id){
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) { location.hash = "#/shop"; return; }
+  document.title = p.title + " — Sai Raj Global UAE";
+  let qty = 1;
+  const related = PRODUCTS.filter(x => x.cat === p.cat && x.id !== p.id).slice(0,3);
+
+  app.innerHTML = `
+  <div class="wrap">
+    <p class="crumb"><a href="#/">Home</a> / <a href="#/shop">Shop</a> / <a href="#/shop/${p.cat}">${p.cat}</a> / ${p.title}</p>
+    <div class="pdp">
+      <div class="im">${p.img ? `<img src="${p.img}" alt="${p.title}">` : `<span class="noimg">${p.cat}</span>`}</div>
+      <div>
+        <span class="cat">${p.cat}</span>
+        <h1>${p.title}</h1>
+        <p class="price"><small>AED</small> ${money(p.price)}</p>
+        <p class="desc">${p.desc}</p>
+        <div class="specs">${p.specs.map(([k,v]) => `<div><b>${k}</b><span>${v}</span></div>`).join("")}</div>
+        <div class="qtyrow">
+          <div class="qty" aria-label="Quantity">
+            <button id="minus" aria-label="Decrease">−</button>
+            <span id="qtyVal">1</span>
+            <button id="plus" aria-label="Increase">+</button>
+          </div>
+          <a class="btn red" id="buyBtn" href="${cartHref(p,1)}">${p.variantId ? "Add to Cart" : (p.handle ? "Buy on Shopify" : "Enquire")}</a>
+          <a class="btn line" href="${WA}?text=${encodeURIComponent("Hello, I'm interested in the " + p.title)}">Ask on WhatsApp</a>
+        </div>
+        <p class="note">UAE-wide delivery · Fitting available at our Dubai workshop · <a href="#/contact">Contact us</a></p>
+      </div>
+    </div>
+    ${related.length ? `
+    <div class="sec-head"><h2>You Might Also Like</h2></div>
+    <div class="grid" style="margin-bottom:64px">${related.map(cardHTML).join("")}</div>` : ""}
+  </div>`;
+
+  const val = document.getElementById("qtyVal"), buy = document.getElementById("buyBtn");
+  const upd = () => { val.textContent = qty; buy.href = cartHref(p, qty); };
+  document.getElementById("minus").onclick = () => { if (qty > 1) { qty--; upd(); } };
+  document.getElementById("plus").onclick = () => { if (qty < 99) { qty++; upd(); } };
+}
+
+function pageRange(){
+  document.title = "Our Range — Sai Raj Global UAE";
+  app.innerHTML = `
+  <section class="section"><div class="wrap">
+    <div class="sec-head"><h2>Our Full Range</h2><a href="#/shop">Shop retail products →</a></div>
+    <p style="color:var(--mut);max-width:70ch;margin:-14px 0 30px;font-size:15px">
+      Bespoke fabrication and fleet work: truck and pick-up bodies, speciality conversions, coldrooms and more.
+      Download a catalogue, or enquire and we'll spec it with you.</p>
+    <div class="range-grid">
+      ${RANGE.map(([name,img,page,cat]) => `
+      <article class="rcard">
+        <div class="im"><img src="${IMG+img}" alt="${name}" loading="lazy"></div>
+        <div class="rb">
+          <h3>${name}</h3>
+          <div class="rlinks">
+            ${cat ? `<a href="https://www.sairaj.global/web/content/${cat}">Catalogue (PDF)</a>` : ""}
+            <a href="${WA}?text=${encodeURIComponent("Hello, I'd like to enquire about " + name.toLowerCase())}">Enquire</a>
+          </div>
+        </div>
+      </article>`).join("")}
+    </div>
+  </div></section>
+
+  <div class="cta-band">
+    <h2>Fleet or project in mind?</h2>
+    <p>Send us the brief — we've built for logistics fleets, farms, emergency services and resorts across two continents.</p>
+    <a class="btn dark" href="mailto:info@sairaj.global">Email the Team</a>
+  </div>`;
+}
+
+function pageContact(){
+  document.title = "Contact — Sai Raj Global UAE";
+  app.innerHTML = `
+  <section class="section"><div class="wrap">
+    <div class="sec-head"><h2>Contact Us</h2></div>
+    <div class="feat">
+      <div class="fcard"><b>Visit</b>
+        <p>Sai Raj Trading FZCO<br>Jebel Ali Free Zone (JAFZA)<br>Dubai, United Arab Emirates</p></div>
+      <div class="fcard"><b>Call or WhatsApp</b>
+        <p><a href="tel:+971543256505">+971 543 256 505</a><br>
+        <a href="${WA}">Chat on WhatsApp</a><br>Sat–Thu, 8:00–18:00</p></div>
+      <div class="fcard"><b>Email</b>
+        <p><a href="mailto:info@sairaj.global">info@sairaj.global</a><br>Quotes, fleet &amp; custom work</p></div>
+      <div class="fcard"><b>Head Office — Kenya</b>
+        <p>Sai Raj Ltd, Nairobi<br><a href="tel:+254708771100">+254 708 771 100</a><br>
+        <a href="https://sairaj.com">sairaj.com</a></p></div>
+    </div>
+  </div></section>
+
+  <div class="cta-band">
+    <h2>Fastest answer: WhatsApp</h2>
+    <p>Photos, measurements, vehicle model — send it over and we'll quote you same day.</p>
+    <a class="btn dark" href="${WA}">Open WhatsApp</a>
+  </div>`;
+}
+
+/* ── Router ── */
+function route(){
+  const h = location.hash.replace(/^#\/?/, "");
+  const [page, param] = h.split("/");
+  document.getElementById("mobileMenu").classList.remove("open");
+  document.getElementById("burger").setAttribute("aria-expanded","false");
+
+  if (page === "shop")         pageShop(decodeURIComponent(param || ""));
+  else if (page === "product") pageProduct(param);
+  else if (page === "range")   pageRange();
+  else if (page === "contact") pageContact();
+  else                         pageHome();
+
+  const active = page === "product" ? "shop" : (page || "home");
+  document.querySelectorAll("[data-nav]").forEach(a =>
+    a.classList.toggle("active", a.dataset.nav === active));
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange", route);
+route();
+
+/* ── Chrome: ticker, cart, burger ── */
+const tickMsg = `<span>🔥 GRAND OPENING SALE LIVE NOW</span><span>•</span>
+<span>UP TO 50% OFF SELECTED 4X4 ACCESSORIES</span><span>•</span>
+<span>UAE-WIDE DELIVERY</span><span>•</span><span>SHOP NOW</span><span>•</span>`;
+document.getElementById("tick").innerHTML = tickMsg + tickMsg;
+
 document.getElementById("cartLink").href = `https://${SHOPIFY.domain}/cart`;
 
 const burger = document.getElementById("burger"), mm = document.getElementById("mobileMenu");
@@ -461,20 +633,13 @@ burger.addEventListener("click", () => {
   burger.setAttribute("aria-expanded", open);
 });
 
-document.getElementById("nlForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const em = document.getElementById("nlEmail").value;
-  location.href = `mailto:info@sairaj.global?subject=Newsletter%20signup&body=Please%20subscribe%20${encodeURIComponent(em)}`;
-});
-
 /* ── SEO: JSON-LD ── */
-const ld = {
-  "@context":"https://schema.org","@graph":[
+const ld = {"@context":"https://schema.org","@graph":[
   {"@type":"Organization","name":"Sai Raj Trading FZCO","url":"https://www.sairaj.global",
    "telephone":"+971543256505",
    "address":{"@type":"PostalAddress","addressLocality":"Jebel Ali Free Zone, Dubai","addressCountry":"AE"}},
   {"@type":"ItemList","itemListElement":PRODUCTS.map((p,i)=>({
-    "@type":"Product","position":i+1,"name":p.title,
+    "@type":"Product","position":i+1,"name":p.title,"description":p.desc,
     "offers":{"@type":"Offer","priceCurrency":"AED","price":p.price}}))}]};
 const s = document.createElement("script");
 s.type = "application/ld+json"; s.textContent = JSON.stringify(ld);
