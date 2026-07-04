@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sai Raj Global — UAE | 4x4 Accessories, Canopies &amp; Fibreglass Products</title>
-<meta name="description" content="Sai Raj Trading FZCO, Dubai. Shop canopies, bedliners, 4x4 accessories, cooler boxes and camping gear online. Truck bodies, conversions and coldrooms since 1975.">
+<meta name="description" content="Sai Raj Trading FZCO, Dubai. Shop canopies, bedliners, 4x4 accessories, cooler boxes and camping gear online. Custom builds and fleet work since 1975.">
 <meta property="og:title" content="Sai Raj Global — UAE">
 <meta property="og:description" content="4x4 accessories, canopies and fibreglass products. UAE-wide delivery from JAFZA, Dubai.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --red:#ED1C24; --red-dark:#C4121A; --black:#111; --charcoal:#3F3F3F;
-  --grey:#F4F5F7; --ink:#222; --mut:#6B6B6B; --line:#E7E8EA;
-  --font:'Poppins',sans-serif; --rad:12px;
-  --shadow:0 2px 10px rgba(0,0,0,.07); --shadow-h:0 12px 28px rgba(0,0,0,.13);
+  --red:#ED1C24; --red-dark:#C4121A; --black:#111; --charcoal:#333;
+  --grey:#F5F6F8; --ink:#1E1E1E; --mut:#6B6B6B; --line:#E8E9EB;
+  --font:'Poppins',sans-serif; --rad:14px;
+  --shadow:0 2px 12px rgba(0,0,0,.06); --shadow-h:0 14px 30px rgba(0,0,0,.12);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
@@ -24,81 +24,85 @@ body{font-family:var(--font);color:var(--ink);background:#fff;line-height:1.6}
 a{color:inherit}
 img{max-width:100%;display:block}
 :focus-visible{outline:3px solid var(--black);outline-offset:2px}
-.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
-h1,h2,h3{line-height:1.25}
+.wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+h1,h2,h3{line-height:1.22}
 
-/* ── Ticker ─────────────────────────────────────────────── */
-.ticker{background:var(--black);color:#fff;overflow:hidden;white-space:nowrap}
-.ticker-track{display:inline-block;padding:7px 0;animation:tick 30s linear infinite;
-  font-weight:600;font-size:12.5px;letter-spacing:.8px;text-transform:uppercase}
-.ticker-track span{margin:0 16px;opacity:.95}
-@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* ── Promo bar (static, no marquee) ─────────────────────── */
+.promo{background:var(--black);color:#fff;text-align:center;
+  font-weight:600;font-size:12.5px;letter-spacing:.8px;text-transform:uppercase;
+  padding:8px 16px}
+.promo b{color:#FF6B70}
 
 /* ── Nav ────────────────────────────────────────────────── */
-.navbar{background:var(--red);position:sticky;top:0;z-index:60;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.nav-in{max-width:1200px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:26px}
-.nav-logo img{height:38px;width:auto}
-.nav-links{display:flex;gap:4px}
-.nav-links a{color:#fff;text-decoration:none;font-weight:600;font-size:14px;
-  text-transform:uppercase;letter-spacing:.5px;padding:8px 14px;border-radius:6px}
+.navbar{background:var(--red);position:sticky;top:0;z-index:60;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.nav-in{max-width:1160px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:26px}
+.nav-logo img{height:36px;width:auto}
+.nav-links{display:flex;gap:2px}
+.nav-links a{color:#fff;text-decoration:none;font-weight:600;font-size:13.5px;
+  text-transform:uppercase;letter-spacing:.5px;padding:8px 14px;border-radius:7px}
 .nav-links a:hover{background:rgba(0,0,0,.15)}
 .nav-links a.active{background:var(--black)}
-.nav-right{margin-left:auto;display:flex;align-items:center;gap:16px}
-.nav-phone{color:#fff;font-weight:600;font-size:14px;text-decoration:none;white-space:nowrap}
-.nav-cart{color:#fff;text-decoration:none;font-weight:600;font-size:14px;
-  border:2px solid #fff;padding:7px 16px;border-radius:6px;white-space:nowrap}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+.nav-phone{color:#fff;font-weight:600;font-size:13.5px;text-decoration:none;white-space:nowrap}
+.nav-cart{color:#fff;text-decoration:none;font-weight:600;font-size:13.5px;
+  border:2px solid #fff;padding:7px 16px;border-radius:7px;white-space:nowrap}
 .nav-cart:hover{background:#fff;color:var(--red)}
-.burger{display:none;margin-left:auto;background:none;border:2px solid #fff;border-radius:6px;
+.burger{display:none;margin-left:auto;background:none;border:2px solid #fff;border-radius:7px;
   color:#fff;font-size:18px;padding:4px 12px;cursor:pointer}
-.mobile-menu{display:none;background:var(--red-dark);padding:8px 20px 16px}
+.mobile-menu{display:none;background:var(--red-dark);padding:8px 22px 16px}
 .mobile-menu a{display:block;color:#fff;text-decoration:none;font-weight:600;
   padding:11px 0;border-bottom:1px solid rgba(255,255,255,.18);text-transform:uppercase;font-size:14px}
 .mobile-menu.open{display:block}
 
 /* ── Buttons ────────────────────────────────────────────── */
-.btn{display:inline-block;text-decoration:none;font-weight:700;font-size:14.5px;
-  letter-spacing:.6px;text-transform:uppercase;padding:14px 32px;border-radius:8px;
-  border:0;cursor:pointer;font-family:var(--font);text-align:center}
+.btn{display:inline-block;text-decoration:none;font-weight:700;font-size:14px;
+  letter-spacing:.6px;text-transform:uppercase;padding:14px 32px;border-radius:9px;
+  border:0;cursor:pointer;font-family:var(--font);text-align:center;
+  transition:transform .12s ease,background .12s ease}
+.btn:hover{transform:translateY(-2px)}
 .btn.red{background:var(--red);color:#fff}
 .btn.red:hover{background:var(--red-dark)}
 .btn.dark{background:var(--black);color:#fff}
-.btn.dark:hover{background:#000}
-.btn.ghost{border:2px solid #fff;color:#fff;padding:12px 28px}
+.btn.ghost{border:2px solid #fff;color:#fff;padding:12px 28px;background:transparent}
 .btn.ghost:hover{background:#fff;color:var(--charcoal)}
 .btn.line{border:2px solid var(--black);color:var(--black);padding:12px 28px;background:#fff}
 .btn.line:hover{background:var(--black);color:#fff}
 
-/* ── Page sections ──────────────────────────────────────── */
-.section{padding:64px 0}
+/* ── Sections ───────────────────────────────────────────── */
+.section{padding:72px 0}
 .section.grey{background:var(--grey)}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:30px;flex-wrap:wrap}
-.sec-head h2{color:var(--ink);font-weight:700;font-size:clamp(22px,3vw,30px);
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:32px;flex-wrap:wrap}
+.sec-head h2{font-weight:700;font-size:clamp(21px,2.8vw,28px);
   text-transform:uppercase;letter-spacing:.4px;border-left:6px solid var(--red);padding-left:16px}
 .sec-head a{font-weight:600;font-size:14px;color:var(--red);text-decoration:none}
 .sec-head a:hover{text-decoration:underline}
 
-/* ── Hero (home) ────────────────────────────────────────── */
-.hero{background:linear-gradient(120deg,#2E2E2E,#464646);color:#fff;padding:72px 0 66px}
-.hero .kick{color:var(--red);font-weight:700;font-size:13px;letter-spacing:2.5px;
-  text-transform:uppercase;margin-bottom:14px}
+/* ── Hero ───────────────────────────────────────────────── */
+.hero{position:relative;background:linear-gradient(115deg,#262626,#3E3E3E);color:#fff;
+  padding:84px 0 96px;overflow:hidden;clip-path:polygon(0 0,100% 0,100% calc(100% - 46px),0 100%)}
+.hero::after{content:"1975";position:absolute;right:-20px;bottom:-60px;
+  font-weight:800;font-size:clamp(140px,24vw,300px);line-height:1;color:transparent;
+  -webkit-text-stroke:2px rgba(255,255,255,.07);pointer-events:none}
+.hero .kick{color:#FF6B70;font-weight:700;font-size:12.5px;letter-spacing:2.6px;
+  text-transform:uppercase;margin-bottom:16px}
 .hero .kick::before{content:"";display:inline-block;width:34px;height:3px;
   background:var(--red);vertical-align:middle;margin-right:12px}
-.hero h1{font-weight:700;font-size:clamp(30px,4.6vw,52px);max-width:18ch}
-.hero p{color:#D8D8D8;max-width:56ch;margin:18px 0 30px;font-size:16.5px}
-.hero .cta{display:flex;gap:14px;flex-wrap:wrap}
-.trust{display:flex;gap:26px;flex-wrap:wrap;margin-top:40px;padding-top:26px;
-  border-top:1px solid rgba(255,255,255,.18)}
-.trust div{font-size:13.5px;color:#CFCFCF}
-.trust b{display:block;color:#fff;font-size:15px}
+.hero h1{font-weight:700;font-size:clamp(30px,4.6vw,52px);max-width:17ch}
+.hero p{color:#D8D8D8;max-width:54ch;margin:18px 0 30px;font-size:16.5px}
+.hero .cta{display:flex;gap:14px;flex-wrap:wrap;position:relative;z-index:1}
+.trust{display:flex;gap:30px;flex-wrap:wrap;margin-top:44px;padding-top:26px;
+  border-top:1px solid rgba(255,255,255,.16)}
+.trust div{font-size:13px;color:#C9C9C9}
+.trust b{display:block;color:#fff;font-size:14.5px}
 
-/* ── Category tiles ─────────────────────────────────────── */
+/* ── Tiles (single-photo crops) ─────────────────────────── */
 .tiles{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
 .tile{position:relative;border-radius:var(--rad);overflow:hidden;text-decoration:none;
-  aspect-ratio:4/3;display:block;box-shadow:var(--shadow)}
-.tile img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
-.tile:hover img{transform:scale(1.06)}
-.tile .lab{position:absolute;left:0;right:0;bottom:0;padding:36px 18px 16px;
-  background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;
+  aspect-ratio:4/3;display:block;box-shadow:var(--shadow);background:#DDD}
+.tile img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+.tile:hover img{transform:scale(calc(var(--z,1) * 1.05))!important}
+.tile .lab{position:absolute;left:0;right:0;bottom:0;padding:40px 18px 16px;
+  background:linear-gradient(transparent,rgba(0,0,0,.8));color:#fff;
   font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.5px}
 .tile .lab span{display:block;font-weight:500;font-size:12.5px;text-transform:none;
   letter-spacing:0;color:#E4E4E4;margin-top:2px}
@@ -109,22 +113,46 @@ h1,h2,h3{line-height:1.25}
   flex-direction:column;box-shadow:var(--shadow);text-decoration:none;
   transition:transform .15s ease,box-shadow .15s ease;border:1px solid var(--line)}
 .card:hover{transform:translateY(-4px);box-shadow:var(--shadow-h)}
-.card .im{aspect-ratio:4/3;background:#F4F4F4;overflow:hidden;display:grid;place-items:center}
-.card .im img{width:100%;height:100%;object-fit:cover}
-.card .noimg{font-weight:700;font-size:12px;letter-spacing:2px;color:#B7B7B7;text-transform:uppercase}
+.im{aspect-ratio:4/3;background:#F1F1F1;overflow:hidden;display:grid;place-items:center;position:relative}
+.im img{width:100%;height:100%;object-fit:cover}
+.ph2{width:100%;height:100%;display:grid;place-items:center;
+  background:linear-gradient(135deg,#2C2C2C,#484848)}
+.ph2 span{color:#fff;font-weight:700;font-size:15px;letter-spacing:2.5px;
+  text-transform:uppercase;border-bottom:3px solid var(--red);padding-bottom:8px}
 .card-body{padding:16px 18px 20px;display:flex;flex-direction:column;flex:1}
-.card .cat{font-size:11.5px;font-weight:600;letter-spacing:1.2px;color:var(--mut);text-transform:uppercase}
-.card h3{font-weight:600;font-size:16px;margin-top:4px}
+.card .cat{font-size:11px;font-weight:600;letter-spacing:1.4px;color:var(--mut);text-transform:uppercase}
+.card h3{font-weight:600;font-size:15.5px;margin-top:4px}
 .card .row{margin-top:auto;padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .card .price{color:var(--red);font-weight:700;font-size:18px;white-space:nowrap}
 .card .price small{color:#999;font-weight:600;font-size:11px}
 .card .go{font-weight:600;font-size:13px;color:var(--black)}
 .card:hover .go{color:var(--red)}
 
+/* ── Split band (custom work) ───────────────────────────── */
+.split{display:grid;grid-template-columns:1.1fr 1fr;border-radius:var(--rad);
+  overflow:hidden;box-shadow:var(--shadow);background:var(--black);color:#fff}
+.split .tx{padding:52px 46px;display:flex;flex-direction:column;justify-content:center}
+.split h2{font-weight:700;font-size:clamp(22px,2.8vw,30px);text-transform:uppercase;letter-spacing:.4px}
+.split p{color:#C9C9C9;margin:14px 0 26px;font-size:15px;max-width:44ch}
+.split .im{aspect-ratio:auto;min-height:280px}
+
+/* ── Game band + page ───────────────────────────────────── */
+.gameband{background:linear-gradient(115deg,#7A0E13,var(--red));color:#fff;
+  border-radius:var(--rad);padding:44px 46px;display:flex;align-items:center;
+  justify-content:space-between;gap:26px;flex-wrap:wrap;box-shadow:var(--shadow)}
+.gameband h2{font-weight:800;font-size:clamp(24px,3vw,34px);text-transform:uppercase;letter-spacing:1px}
+.gameband p{color:#FFDCDD;margin-top:6px;font-size:15px;max-width:46ch}
+.gamewrap{background:linear-gradient(#FFF7EA,#FFEBD0);border:1px solid var(--line);
+  border-radius:var(--rad);padding:16px;box-shadow:var(--shadow)}
+canvas{display:block;width:100%;border-radius:10px;touch-action:manipulation;cursor:pointer}
+.gstats{display:flex;gap:26px;justify-content:center;margin-top:14px;font-weight:600;font-size:14.5px}
+.gstats b{color:var(--red)}
+.ghelp{text-align:center;color:var(--mut);font-size:13px;margin-top:6px}
+
 /* ── Shop toolbar ───────────────────────────────────────── */
-.toolbar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:28px}
+.toolbar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:26px}
 .search{flex:1;min-width:220px;display:flex;background:#fff;border:2px solid var(--line);
-  border-radius:8px;overflow:hidden}
+  border-radius:9px;overflow:hidden}
 .search input{flex:1;border:0;font-family:var(--font);font-size:15px;padding:11px 16px;outline:none}
 .search .ic{display:grid;place-items:center;padding:0 14px;color:var(--mut)}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
@@ -138,40 +166,35 @@ h1,h2,h3{line-height:1.25}
 .crumb{font-size:13px;color:var(--mut);margin:26px 0 20px}
 .crumb a{color:var(--mut);text-decoration:none}
 .crumb a:hover{color:var(--red)}
-.pdp{display:grid;gap:40px;grid-template-columns:1fr 1fr;align-items:start;margin-bottom:60px}
-.pdp .im{border-radius:var(--rad);overflow:hidden;background:#F4F4F4;
-  aspect-ratio:4/3;display:grid;place-items:center;box-shadow:var(--shadow)}
-.pdp .im img{width:100%;height:100%;object-fit:cover}
-.pdp .cat{font-size:12px;font-weight:600;letter-spacing:1.5px;color:var(--mut);text-transform:uppercase}
+.pdp{display:grid;gap:42px;grid-template-columns:1fr 1fr;align-items:start;margin-bottom:64px}
+.pdp .imbox{border-radius:var(--rad);overflow:hidden;background:#F1F1F1;
+  aspect-ratio:4/3;box-shadow:var(--shadow)}
+.pdp .imbox img{width:100%;height:100%;object-fit:cover}
+.pdp .cat{font-size:12px;font-weight:600;letter-spacing:1.6px;color:var(--mut);text-transform:uppercase}
 .pdp h1{font-weight:700;font-size:clamp(24px,3.2vw,34px);margin:6px 0 10px}
 .pdp .price{color:var(--red);font-weight:700;font-size:28px}
 .pdp .price small{color:#999;font-size:14px;font-weight:600}
 .pdp .desc{margin:18px 0 22px;color:#444;font-size:15.5px}
-.specs{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:26px}
+.specs{border:1px solid var(--line);border-radius:11px;overflow:hidden;margin-bottom:26px}
 .specs div{display:flex;justify-content:space-between;gap:14px;padding:11px 16px;font-size:14px}
 .specs div:nth-child(odd){background:var(--grey)}
-.specs b{font-weight:600;color:var(--mut);font-weight:500}
+.specs b{font-weight:500;color:var(--mut)}
 .qtyrow{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}
-.qty{display:flex;border:2px solid var(--line);border-radius:8px;overflow:hidden}
+.qty{display:flex;border:2px solid var(--line);border-radius:9px;overflow:hidden}
 .qty button{width:44px;border:0;background:#fff;font-size:20px;cursor:pointer;font-family:var(--font)}
 .qty button:hover{background:var(--grey)}
 .qty span{display:grid;place-items:center;min-width:44px;font-weight:600}
 .pdp .note{margin-top:16px;font-size:13.5px;color:var(--mut)}
 .pdp .note a{color:var(--red);font-weight:600;text-decoration:none}
 
-/* ── Range cards ────────────────────────────────────────── */
+/* ── Range / contact cards ──────────────────────────────── */
 .range-grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
 .rcard{background:#fff;border-radius:var(--rad);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line)}
-.rcard .im{aspect-ratio:16/10;overflow:hidden}
-.rcard .im img{width:100%;height:100%;object-fit:cover;transition:transform .25s ease}
-.rcard:hover .im img{transform:scale(1.05)}
-.rcard .rb{padding:15px 18px 18px}
-.rcard h3{font-weight:600;font-size:15px;text-transform:uppercase;letter-spacing:.3px}
-.rcard .rlinks{margin-top:8px;display:flex;gap:16px}
-.rcard .rlinks a{font-size:13.5px;font-weight:600;color:var(--red);text-decoration:none}
-.rcard .rlinks a:hover{text-decoration:underline}
-
-/* ── Why us / contact cards ─────────────────────────────── */
+.rcard .im{aspect-ratio:16/10}
+.rcard .rb{padding:15px 18px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.rcard h3{font-weight:600;font-size:14.5px;text-transform:uppercase;letter-spacing:.3px}
+.rcard .rb a{font-size:13px;font-weight:700;color:var(--red);text-decoration:none;white-space:nowrap}
+.rcard .rb a:hover{text-decoration:underline}
 .feat{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 .fcard{background:#fff;border-radius:var(--rad);padding:26px 24px;box-shadow:var(--shadow);border-top:4px solid var(--red)}
 .fcard b{display:block;font-size:16px;margin-bottom:6px}
@@ -179,52 +202,48 @@ h1,h2,h3{line-height:1.25}
 .fcard a:hover{color:var(--red)}
 
 /* ── Brands ─────────────────────────────────────────────── */
-.brandrow{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:center}
-.brandrow .b{background:#fff;border-radius:10px;padding:14px 20px;border:1px solid var(--line);display:grid;place-items:center}
-.brandrow img{height:44px;width:auto;max-width:150px;object-fit:contain}
-
-/* ── Quotes ─────────────────────────────────────────────── */
-.quotes{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.quote{background:#fff;border-radius:var(--rad);padding:26px 24px;box-shadow:var(--shadow)}
-.stars{color:#F5B301;font-size:17px;letter-spacing:2px;margin-bottom:10px}
-.quote p{font-size:14.5px}
-.quote .who{margin-top:12px;font-weight:600;color:var(--mut);font-size:13.5px}
+.brandrow{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:center}
+.brandrow .b{background:#fff;border-radius:10px;padding:12px 18px;border:1px solid var(--line);display:grid;place-items:center}
+.brandrow img{height:38px;width:auto;max-width:130px;object-fit:contain;
+  filter:grayscale(1);opacity:.65;transition:filter .2s,opacity .2s}
+.brandrow .b:hover img{filter:none;opacity:1}
 
 /* ── CTA band ───────────────────────────────────────────── */
-.cta-band{background:var(--red);color:#fff;text-align:center;padding:54px 20px}
+.cta-band{background:var(--red);color:#fff;text-align:center;padding:56px 22px}
 .cta-band h2{font-weight:700;font-size:clamp(22px,3vw,30px);text-transform:uppercase;letter-spacing:.4px}
-.cta-band p{margin:12px auto 24px;max-width:56ch;color:#FFE0E1;font-size:15px}
+.cta-band p{margin:12px auto 24px;max-width:54ch;color:#FFE0E1;font-size:15px}
 
 /* ── Footer ─────────────────────────────────────────────── */
-footer{background:var(--black);color:#B9B9B9;padding:54px 20px 40px}
-.foot-in{max-width:1200px;margin:0 auto;display:grid;gap:34px;
-  grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
-.foot-in h4{color:#fff;font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+footer{background:var(--black);color:#B5B5B5;padding:56px 22px 40px}
+.foot-in{max-width:1160px;margin:0 auto;display:grid;gap:34px;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.foot-in h4{color:#fff;font-weight:600;font-size:13.5px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px}
 .foot-in p,.foot-in a{font-size:14px;line-height:1.9;text-decoration:none}
 .foot-in a{display:block}
 .foot-in a:hover{color:#fff;text-decoration:underline}
-.legal{max-width:1200px;margin:36px auto 0;padding-top:18px;border-top:1px solid #2C2C2C;font-size:12.5px;letter-spacing:.5px}
+.legal{max-width:1160px;margin:36px auto 0;padding-top:18px;border-top:1px solid #2A2A2A;font-size:12.5px;letter-spacing:.5px}
 
 /* ── WhatsApp float ─────────────────────────────────────── */
-.wa{position:fixed;right:20px;bottom:20px;width:56px;height:56px;z-index:70;
+.wa{position:fixed;right:20px;bottom:20px;width:54px;height:54px;z-index:70;
   background:#25D366;border-radius:50%;display:grid;place-items:center;
-  box-shadow:0 6px 18px rgba(0,0,0,.25)}
-.wa svg{width:30px;height:30px;fill:#fff}
-.wa:hover{transform:scale(1.06)}
+  box-shadow:0 6px 18px rgba(0,0,0,.25);transition:transform .12s ease}
+.wa svg{width:29px;height:29px;fill:#fff}
+.wa:hover{transform:scale(1.08)}
 
 @media (max-width:900px){
   .nav-links,.nav-phone{display:none}
   .burger{display:block}
   .pdp{grid-template-columns:1fr}
-  .hero{padding:52px 0 50px}
+  .split{grid-template-columns:1fr}
+  .split .im{min-height:220px;order:-1}
+  .hero{padding:56px 0 76px}
+  .gameband{padding:34px 28px}
 }
 </style>
 </head>
 <body>
 
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-track" id="tick"></div>
-</div>
+<p class="promo">🔥 <b>Grand Opening</b> — up to 50% off selected 4x4 accessories · UAE-wide delivery</p>
 
 <header class="navbar">
   <div class="nav-in">
@@ -235,6 +254,7 @@ footer{background:var(--black);color:#B9B9B9;padding:54px 20px 40px}
       <a href="#/" data-nav="home">Home</a>
       <a href="#/shop" data-nav="shop">Shop</a>
       <a href="#/range" data-nav="range">Our Range</a>
+      <a href="#/game" data-nav="game">Game</a>
       <a href="#/contact" data-nav="contact">Contact</a>
     </nav>
     <div class="nav-right">
@@ -247,6 +267,7 @@ footer{background:var(--black);color:#B9B9B9;padding:54px 20px 40px}
     <a href="#/">Home</a>
     <a href="#/shop">Shop</a>
     <a href="#/range">Our Range</a>
+    <a href="#/game">Desert Dash 🎮</a>
     <a href="#/contact">Contact</a>
     <a href="tel:+971543256505">Call +971 543 256 505</a>
   </nav>
@@ -269,10 +290,10 @@ footer{background:var(--black);color:#B9B9B9;padding:54px 20px 40px}
       <a href="#/shop/Cooling">Cooling</a>
     </div>
     <div>
-      <h4>Company</h4>
+      <h4>Explore</h4>
       <a href="#/range">Our range</a>
+      <a href="#/game">Desert Dash 🎮</a>
       <a href="#/contact">Contact us</a>
-      <a href="https://www.sairaj.global/web/content/3219?unique=46b2841a157e2acd9de9396b9fe6d4218c104d34">Company profile (PDF)</a>
       <a href="https://sairaj.com">Kenya HQ — sairaj.com</a>
     </div>
     <div>
@@ -293,7 +314,7 @@ footer{background:var(--black);color:#B9B9B9;padding:54px 20px 40px}
 /* ════════════════════════════════════════════════════════════
    SHOPIFY CONFIG — the only block you need to edit.
    domain    → your Shopify store domain.
-   handle    → product URL slug in Shopify (links to product page).
+   handle    → product URL slug (links to product page).
    variantId → OPTIONAL numeric variant ID; if set, Add to Cart
                becomes an instant cart permalink with quantity.
    ════════════════════════════════════════════════════════════ */
@@ -301,61 +322,76 @@ const SHOPIFY = { domain: "YOUR-STORE.myshopify.com" };
 const WA = "https://wa.me/971543256505";
 const IMG = "https://www.sairaj.global/web/image/";
 
+/* Images: z = zoom crop (isolates ONE photo from collage shots),
+   p = focus position. Tweak the numbers if a crop needs nudging. */
+const PIC = {
+  canopies:  {s:"44815-66c374e6/canopies%20%281%29.webp",              z:2.1, p:"30% 42%"},
+  bedliners: {s:"43987-e4b36a99/bedliners%2C%20lids%20covers.webp",    z:1.9, p:"50% 45%"},
+  fourx4:    {s:"49346-f7df97f5/safarituff%204%204%20accessories%20.webp", z:1.9, p:"50% 40%"},
+  camping:   {s:"49347-daccb30b/_winboCamping.webp",                   z:1.7, p:"50% 45%"},
+  coldrooms: {s:"44007-0b6272ec/coldrooms.webp",                       z:1.8, p:"50% 50%"},
+  trucks:    {s:"44810-190ad271/TRuck%20bodies%20%282%29.webp",        z:2.0, p:"30% 45%"},
+  pickups:   {s:"44811-14c27a62/pick%20up%20bodies.webp",              z:2.0, p:"40% 45%"},
+  convers:   {s:"44020-65226f85/conversions.webp",                     z:1.9, p:"50% 45%"},
+  riv:       {s:"44032-97aaed13/riv.webp",                             z:1.6, p:"50% 45%"},
+  bikebox:   {s:"44816-b41366a5/bike%20boxes%20%282%29.webp",          z:2.0, p:"50% 45%"},
+  trailers:  {s:"43990-94f2da35/Bike%20boxes%20%281%29.webp",          z:2.0, p:"50% 45%"},
+  roofing:   {s:"44008-53301906/Roofing%20sheets%20%26%20polycarboates.webp", z:1.8, p:"50% 45%"}
+};
+const pic = k => PIC[k] ? IMG + PIC[k].s : "";
+const imgTag = (k, alt) => {
+  const m = PIC[k]; if (!m) return "";
+  return `<img src="${IMG+m.s}" alt="${alt}" loading="lazy"
+    style="transform:scale(${m.z});object-position:${m.p};--z:${m.z}">`;
+};
+
 const PRODUCTS = [
-  {id:"frp-pickup-canopy", title:"FRP Pick-up Canopy", cat:"Canopies", price:4200,
-   img:IMG+"44815-66c374e6/canopies%20%281%29.webp", handle:"frp-pickup-canopy", variantId:"",
+  {id:"frp-pickup-canopy", title:"FRP Pick-up Canopy", cat:"Canopies", price:4200, img:"canopies",
+   handle:"frp-pickup-canopy", variantId:"",
    desc:"Hand-laid fibreglass canopy engineered for Gulf heat. Colour-coded to your vehicle with lockable rear access and sliding side windows.",
    specs:[["Vehicle fit","Hilux · Ranger · L200 · Navara"],["Shell","Hand-laid FRP, UV-stable gelcoat"],["Windows","Sliding sides + lockable rear door"],["Finish","Colour-coded to factory paint"],["Fitting","Same-day at our Dubai workshop"]]},
-  {id:"bedliner-lid-cover", title:"Bedliner, Lid & Cover", cat:"Canopies", price:2850,
-   img:IMG+"43987-e4b36a99/bedliners%2C%20lids%20covers.webp", handle:"bedliner-lid-cover", variantId:"",
+  {id:"bedliner-lid-cover", title:"Bedliner, Lid & Cover", cat:"Canopies", price:2850, img:"bedliners",
+   handle:"bedliner-lid-cover", variantId:"",
    desc:"One-piece lockable FRP lid with weatherproof sealing — keeps cargo secure, dust-free and out of sight.",
    specs:[["Type","One-piece lockable FRP lid"],["Finish","Colour-coded"],["Hardware","Gas struts included"],["Sealing","Full weatherproof rubber seal"],["Fit","Most double-cab pick-ups"]]},
-  {id:"safarituff-drawer-system", title:"Safarituff Drawer System", cat:"4x4", price:3400,
-   img:IMG+"49346-f7df97f5/safarituff%204%204%20accessories%20.webp", handle:"safarituff-drawer-system", variantId:"",
+  {id:"safarituff-drawer-system", title:"Safarituff Drawer System", cat:"4x4", price:3400, img:"fourx4",
+   handle:"safarituff-drawer-system", variantId:"",
    desc:"Twin full-extension drawers with a carpeted load deck. Organise recovery gear, tools and camp kit — built by Safarituff.",
    specs:[["Layout","Dual drawers, full extension"],["Deck","Carpeted top load deck"],["Security","Central locking"],["Capacity","80 kg per drawer"],["Extras","Modular tie-down points"]]},
-  {id:"cargocool-cooler-box-45l", title:"Cargocool Cooler Box 45 L", cat:"Cooling", price:650,
-   img:IMG+"1421-4890bcb3/CargoCool%20Logo%205%20Approved-01.webp", handle:"cargocool-cooler-box-45l", variantId:"",
+  {id:"cargocool-cooler-box-45l", title:"Cargocool Cooler Box 45 L", cat:"Cooling", price:650, img:"",
+   handle:"cargocool-cooler-box-45l", variantId:"",
    desc:"Sai Raj's own portable cooler box. Thick PU insulation keeps ice for days — desert weekends, fishing trips, site work.",
    specs:[["Capacity","45 L"],["Insulation","Thick PU core"],["Ice retention","Up to 5 days"],["Liner","Food-grade"],["Made by","Cargocool — a Sai Raj brand"]]},
-  {id:"led-driving-lights-9in", title:'9" LED Driving Lights (Pair)', cat:"4x4", price:1150,
-   img:"", handle:"led-driving-lights-9in", variantId:"",
+  {id:"led-driving-lights-9in", title:'9" LED Driving Lights (Pair)', cat:"4x4", price:1150, img:"",
+   handle:"led-driving-lights-9in", variantId:"",
    desc:"Serious distance for desert night runs. Spot + flood combo beam with full wiring harness in the box.",
    specs:[["Beam","Spot + flood combo"],["Distance","1,200 m (pair, 1 lux)"],["Rating","IP68 dust & waterproof"],["Includes","Wiring harness + switch"],["Compliance","E-marked"]]},
-  {id:"alloy-wheels-17-set", title:'17" Alloy Wheels — Set of 4', cat:"4x4", price:3900,
-   img:"", handle:"alloy-wheels-17-set", variantId:"",
+  {id:"alloy-wheels-17-set", title:'17" Alloy Wheels — Set of 4', cat:"4x4", price:3900, img:"",
+   handle:"alloy-wheels-17-set", variantId:"",
    desc:"Load-rated matte black alloys sized for GCC-spec 4x4s. Sold as a set of four with caps and nuts.",
    specs:[["Size","17 x 9"],["PCD","6 x 139.7"],["Load rating","1,250 kg per wheel"],["Finish","Matte black"],["Includes","Centre caps + wheel nuts"]]},
-  {id:"hardshell-roof-tent", title:"Hardshell Roof Tent", cat:"Camping", price:5500,
-   img:IMG+"49347-daccb30b/_winboCamping.webp", handle:"hardshell-roof-tent", variantId:"",
+  {id:"hardshell-roof-tent", title:"Hardshell Roof Tent", cat:"Camping", price:5500, img:"camping",
+   handle:"hardshell-roof-tent", variantId:"",
    desc:"Sixty seconds from parked to camped. ABS hardshell with a proper mattress — overlanding without the setup fight.",
    specs:[["Sleeps","2 adults"],["Setup","~60 seconds"],["Shell","ABS hardshell"],["Mattress","75 mm high-density foam"],["Mounting","Universal crossbar"]]},
-  {id:"portable-fridge-freezer-45l", title:"Portable Fridge/Freezer 45 L", cat:"Cooling", price:2400,
-   img:"", handle:"portable-fridge-freezer-45l", variantId:"",
+  {id:"portable-fridge-freezer-45l", title:"Portable Fridge/Freezer 45 L", cat:"Cooling", price:2400, img:"",
+   handle:"portable-fridge-freezer-45l", variantId:"",
    desc:"True fridge/freezer performance off 12 V. App control, removable basket and battery protection built in.",
    specs:[["Power","12/24 V DC + 220 V"],["Range","−20 °C to +10 °C"],["Control","Bluetooth app"],["Basket","Removable"],["Protection","Low-voltage cutoff"]]}
 ];
 
 const CATS = [
-  ["Canopies","Canopies & lids",IMG+"44815-66c374e6/canopies%20%281%29.webp"],
-  ["4x4","4x4 accessories",IMG+"49346-f7df97f5/safarituff%204%204%20accessories%20.webp"],
-  ["Camping","Camping gear",IMG+"49347-daccb30b/_winboCamping.webp"],
-  ["Cooling","Cooler boxes & fridges",IMG+"1421-4890bcb3/CargoCool%20Logo%205%20Approved-01.webp"]
+  ["Canopies","Canopies & lids","canopies"],
+  ["4x4","4x4 accessories","fourx4"],
+  ["Camping","Camping gear","camping"],
+  ["Cooling","Cooling & fridges","coldrooms"]
 ];
 
 const RANGE = [
-  ["TRUCK BODIES","44810-190ad271/TRuck%20bodies%20%282%29.webp","truck-bodies","51579"],
-  ["PICK-UP BODIES","44811-14c27a62/pick%20up%20bodies.webp","pick-up-bodies","16480"],
-  ["SPECIALITY CONVERSIONS","44020-65226f85/conversions.webp","specialityconversions","51956"],
-  ["FIRE RESCUE & RIV","44032-97aaed13/riv.webp","fire-rescue-riv","52087"],
-  ["CANOPIES","44815-66c374e6/canopies%20%281%29.webp","canopies","52135"],
-  ["BEDLINERS, LIDS & COVERS","43987-e4b36a99/bedliners%2C%20lids%20covers.webp","bedliners-lids-covers","52210"],
-  ["MOTORBIKE BOXES","44816-b41366a5/bike%20boxes%20%282%29.webp","motorbike-boxes","52238"],
-  ["COLDROOMS","44007-0b6272ec/coldrooms.webp","coldrooms","52261"],
-  ["TRAILERS AND BOATS","43990-94f2da35/Bike%20boxes%20%281%29.webp","boats-trailers","52277"],
-  ["4X4 ACCESSORIES","49346-f7df97f5/safarituff%204%204%20accessories%20.webp","4x4-accessories","52136"],
-  ["CAMPING GEAR","49347-daccb30b/_winboCamping.webp","",""],
-  ["ROOFING PRODUCTS","44008-53301906/Roofing%20sheets%20%26%20polycarboates.webp","roofing-products","52278"]
+  ["Truck Bodies","trucks"],["Pick-up Bodies","pickups"],["Speciality Conversions","convers"],
+  ["Fire Rescue & RIV","riv"],["Canopies","canopies"],["Bedliners, Lids & Covers","bedliners"],
+  ["Motorbike Boxes","bikebox"],["Coldrooms","coldrooms"],["Trailers & Boats","trailers"],
+  ["4x4 Accessories","fourx4"],["Camping Gear","camping"],["Roofing Products","roofing"]
 ];
 
 const BRANDS = [
@@ -371,15 +407,14 @@ const BRANDS = [
 /* ── Helpers ── */
 const app = document.getElementById("app");
 const money = n => n.toLocaleString();
-const productLink = p => `#/product/${p.id}`;
 function cartHref(p, qty=1){
   if (p.variantId) return `https://${SHOPIFY.domain}/cart/${p.variantId}:${qty}`;
   if (p.handle)    return `https://${SHOPIFY.domain}/products/${p.handle}`;
   return WA;
 }
 function cardHTML(p){
-  return `<a class="card" href="${productLink(p)}">
-    <div class="im">${p.img ? `<img src="${p.img}" alt="${p.title}" loading="lazy">` : `<span class="noimg">${p.cat}</span>`}</div>
+  return `<a class="card" href="#/product/${p.id}">
+    <div class="im">${p.img ? imgTag(p.img, p.title) : `<div class="ph2"><span>${p.cat}</span></div>`}</div>
     <div class="card-body">
       <span class="cat">${p.cat}</span>
       <h3>${p.title}</h3>
@@ -397,8 +432,8 @@ function pageHome(){
   app.innerHTML = `
   <section class="hero"><div class="wrap">
     <p class="kick">Sai Raj Trading FZCO · Dubai</p>
-    <h1>Gear your 4x4. Protect your load. Built since 1975.</h1>
-    <p>Canopies, bedliners, drawer systems, cooler boxes and camping gear — engineered in fibreglass and shipped UAE-wide from Jebel Ali Free Zone.</p>
+    <h1>Gear your 4x4. Protect your load.</h1>
+    <p>Canopies, drawer systems, cooler boxes and camping gear — engineered in fibreglass since 1975 and shipped UAE-wide from Jebel Ali.</p>
     <div class="cta">
       <a class="btn red" href="#/shop">Shop Now</a>
       <a class="btn ghost" href="#/range">Custom &amp; Fleet Work</a>
@@ -412,11 +447,11 @@ function pageHome(){
   </div></section>
 
   <section class="section"><div class="wrap">
-    <div class="sec-head"><h2>Shop by Category</h2><a href="#/shop">View all products →</a></div>
+    <div class="sec-head"><h2>Shop by Category</h2><a href="#/shop">View all →</a></div>
     <div class="tiles">
-      ${CATS.map(([key,label,img]) => `
+      ${CATS.map(([key,label,im]) => `
         <a class="tile" href="#/shop/${key}">
-          <img src="${img}" alt="${label}" loading="lazy">
+          ${imgTag(im, label)}
           <span class="lab">${label}<span>Shop now →</span></span>
         </a>`).join("")}
     </div>
@@ -428,42 +463,37 @@ function pageHome(){
   </div></section>
 
   <section class="section"><div class="wrap">
-    <div class="sec-head"><h2>Beyond Retail</h2><a href="#/range">Explore our range →</a></div>
-    <div class="tiles">
-      ${RANGE.slice(0,4).map(([name,img]) => `
-        <a class="tile" href="#/range">
-          <img src="${IMG+img}" alt="${name}" loading="lazy">
-          <span class="lab">${name}<span>Learn more →</span></span>
-        </a>`).join("")}
+    <div class="split">
+      <div class="tx">
+        <h2>Custom builds &amp; fleet work</h2>
+        <p>Truck bodies, conversions, coldrooms and emergency vehicles — designed and fabricated by the team that's been doing it for 50 years.</p>
+        <div><a class="btn red" href="#/range">Explore Our Range</a></div>
+      </div>
+      <div class="im">${imgTag("trucks","Custom truck bodies")}</div>
+    </div>
+  </div></section>
+
+  <section class="section" style="padding-top:0"><div class="wrap">
+    <div class="gameband">
+      <div>
+        <h2>Desert Dash 🏜️</h2>
+        <p>Jump the dunes in our pickup. Beat the high score, flex it on WhatsApp.</p>
+      </div>
+      <a class="btn dark" href="#/game">Play Now</a>
     </div>
   </div></section>
 
   <section class="section grey"><div class="wrap">
-    <div class="sec-head"><h2>What Our Customers Say</h2></div>
-    <div class="quotes">
-      <div class="quote"><div class="stars">★★★★★</div><p>Canopy fitted on my Hilux in a day — solid build quality.</p><p class="who">— Sample review</p></div>
-      <div class="quote"><div class="stars">★★★★★</div><p>Amazing customer experience and great products!</p><p class="who">— Sample review</p></div>
-      <div class="quote"><div class="stars">★★★★★</div><p>Cooler box kept ice for the whole desert weekend.</p><p class="who">— Sample review</p></div>
-    </div>
-  </div></section>
-
-  <section class="section"><div class="wrap">
     <div class="sec-head"><h2>Our Brands</h2></div>
     <div class="brandrow">${BRANDS.map(([n,i]) => `<div class="b"><img src="${IMG+i}" alt="${n}" loading="lazy"></div>`).join("")}</div>
-  </div></section>
-
-  <div class="cta-band">
-    <h2>Need a custom build?</h2>
-    <p>Truck bodies, conversions, coldrooms and fleet work — talk to the team that's been building them for 50 years.</p>
-    <a class="btn dark" href="${WA}">WhatsApp Us</a>
-  </div>`;
+  </div></section>`;
 }
 
 function pageShop(filterCat){
   document.title = "Shop — Sai Raj Global UAE";
   app.innerHTML = `
   <section class="section"><div class="wrap">
-    <div class="sec-head"><h2>Shop Online</h2><a href="#/range">Looking for custom work? →</a></div>
+    <div class="sec-head"><h2>Shop Online</h2><a href="#/range">Need custom work? →</a></div>
     <div class="toolbar">
       <div class="search">
         <input type="search" id="q" placeholder="Search products…" aria-label="Search products">
@@ -512,7 +542,7 @@ function pageProduct(id){
   <div class="wrap">
     <p class="crumb"><a href="#/">Home</a> / <a href="#/shop">Shop</a> / <a href="#/shop/${p.cat}">${p.cat}</a> / ${p.title}</p>
     <div class="pdp">
-      <div class="im">${p.img ? `<img src="${p.img}" alt="${p.title}">` : `<span class="noimg">${p.cat}</span>`}</div>
+      <div class="imbox">${p.img ? imgTag(p.img, p.title) : `<div class="ph2" style="height:100%"><span>${p.cat}</span></div>`}</div>
       <div>
         <span class="cat">${p.cat}</span>
         <h1>${p.title}</h1>
@@ -546,20 +576,16 @@ function pageRange(){
   document.title = "Our Range — Sai Raj Global UAE";
   app.innerHTML = `
   <section class="section"><div class="wrap">
-    <div class="sec-head"><h2>Our Full Range</h2><a href="#/shop">Shop retail products →</a></div>
+    <div class="sec-head"><h2>Our Full Range</h2><a href="#/shop">Shop retail →</a></div>
     <p style="color:var(--mut);max-width:70ch;margin:-14px 0 30px;font-size:15px">
-      Bespoke fabrication and fleet work: truck and pick-up bodies, speciality conversions, coldrooms and more.
-      Download a catalogue, or enquire and we'll spec it with you.</p>
+      Bespoke fabrication and fleet work. Tell us what you're building — we'll spec it with you.</p>
     <div class="range-grid">
-      ${RANGE.map(([name,img,page,cat]) => `
+      ${RANGE.map(([name,im]) => `
       <article class="rcard">
-        <div class="im"><img src="${IMG+img}" alt="${name}" loading="lazy"></div>
+        <div class="im">${imgTag(im, name)}</div>
         <div class="rb">
           <h3>${name}</h3>
-          <div class="rlinks">
-            ${cat ? `<a href="https://www.sairaj.global/web/content/${cat}">Catalogue (PDF)</a>` : ""}
-            <a href="${WA}?text=${encodeURIComponent("Hello, I'd like to enquire about " + name.toLowerCase())}">Enquire</a>
-          </div>
+          <a href="${WA}?text=${encodeURIComponent("Hello, I'd like to enquire about " + name.toLowerCase())}">Enquire →</a>
         </div>
       </article>`).join("")}
     </div>
@@ -567,7 +593,7 @@ function pageRange(){
 
   <div class="cta-band">
     <h2>Fleet or project in mind?</h2>
-    <p>Send us the brief — we've built for logistics fleets, farms, emergency services and resorts across two continents.</p>
+    <p>We've built for logistics fleets, farms, emergency services and resorts across two continents.</p>
     <a class="btn dark" href="mailto:info@sairaj.global">Email the Team</a>
   </div>`;
 }
@@ -598,8 +624,206 @@ function pageContact(){
   </div>`;
 }
 
+/* ── Desert Dash ─────────────────────────────────────────── */
+const GAME = { raf:0, best:0, cleanup:null };
+
+function pageGame(){
+  document.title = "Desert Dash — Sai Raj Global UAE";
+  app.innerHTML = `
+  <section class="section"><div class="wrap">
+    <div class="sec-head"><h2>Desert Dash 🏜️</h2><a href="#/shop">Back to shopping →</a></div>
+    <div class="gamewrap">
+      <canvas id="dd" height="260" aria-label="Desert Dash game"></canvas>
+      <div class="gstats">
+        <span>Score: <b id="gScore">0</b> m</span>
+        <span>Best: <b id="gBest">${GAME.best}</b> m</span>
+      </div>
+      <p class="ghelp">Tap, click or press <b>Space</b> to jump. Don't hit the rocks and cones!</p>
+    </div>
+    <div style="text-align:center;margin-top:26px">
+      <a class="btn line" id="shareBtn" href="${WA}" style="display:none">Share My Score on WhatsApp</a>
+    </div>
+  </div></section>`;
+
+  const cv = document.getElementById("dd");
+  const ctx = cv.getContext("2d");
+  const scoreEl = document.getElementById("gScore");
+  const bestEl = document.getElementById("gBest");
+  const shareBtn = document.getElementById("shareBtn");
+
+  let W, H, dpr;
+  function size(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = 260;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  size();
+  window.addEventListener("resize", size);
+
+  const groundY = () => H - 42;
+  let state = "ready", truck, obs, speed, dist, t;
+
+  function reset(){
+    truck = { x:64, y:groundY(), vy:0, w:62, h:30 };
+    obs = []; speed = 5.2; dist = 0; t = 0;
+  }
+  reset();
+
+  function jump(){
+    if (state === "ready") { state = "run"; return; }
+    if (state === "over")  { reset(); state = "run"; shareBtn.style.display = "none"; return; }
+    if (truck.y >= groundY() - 0.5) truck.vy = -10.6;
+  }
+  const onKey = e => {
+    if (e.code === "Space" || e.code === "ArrowUp") { e.preventDefault(); jump(); }
+  };
+  cv.addEventListener("pointerdown", jump);
+  window.addEventListener("keydown", onKey);
+
+  function spawn(){
+    const last = obs[obs.length - 1];
+    if (!last || last.x < W - (240 + Math.random()*260 + speed*14)) {
+      const type = Math.random() < 0.45 ? "cone" : "rock";
+      const h = type === "cone" ? 26 : 22 + Math.random()*14;
+      const w = type === "cone" ? 20 : 26 + Math.random()*16;
+      obs.push({ x: W + 20, w, h, type });
+    }
+  }
+
+  function drawTruck(){
+    const g = groundY(), x = truck.x, y = truck.y;
+    ctx.save();
+    ctx.translate(x, y);
+    // body
+    ctx.fillStyle = "#ED1C24";
+    ctx.beginPath();
+    ctx.roundRect(-30, -26, 62, 18, 4); ctx.fill();          // bed+body
+    ctx.beginPath();
+    ctx.roundRect(-4, -42, 28, 18, [6,6,0,0]); ctx.fill();   // cab
+    // window
+    ctx.fillStyle = "#222";
+    ctx.beginPath(); ctx.roundRect(1, -38, 15, 11, 3); ctx.fill();
+    // wheels
+    ctx.fillStyle = "#111";
+    ctx.beginPath(); ctx.arc(-16, -4, 9, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(18, -4, 9, 0, 7); ctx.fill();
+    ctx.fillStyle = "#888";
+    ctx.beginPath(); ctx.arc(-16, -4, 4, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(18, -4, 4, 0, 7); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawObs(o){
+    const g = groundY();
+    if (o.type === "cone") {
+      ctx.fillStyle = "#ED1C24";
+      ctx.beginPath();
+      ctx.moveTo(o.x + o.w/2, g - o.h);
+      ctx.lineTo(o.x + o.w, g); ctx.lineTo(o.x, g); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(o.x + o.w*0.22, g - o.h*0.55, o.w*0.56, 5);
+    } else {
+      ctx.fillStyle = "#8D8D8D";
+      ctx.beginPath();
+      ctx.roundRect(o.x, g - o.h, o.w, o.h, 6); ctx.fill();
+      ctx.fillStyle = "#A9A9A9";
+      ctx.beginPath();
+      ctx.roundRect(o.x + o.w*0.15, g - o.h, o.w*0.4, o.h*0.4, 4); ctx.fill();
+    }
+  }
+
+  function drawScene(){
+    // sky
+    const sky = ctx.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, "#FFF7EA"); sky.addColorStop(1, "#FFE7C8");
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
+    // sun
+    ctx.fillStyle = "rgba(245,179,1,.55)";
+    ctx.beginPath(); ctx.arc(W - 70, 54, 26, 0, 7); ctx.fill();
+    // dunes (parallax)
+    ctx.fillStyle = "#F6D9A8";
+    for (let i = -1; i < W/180 + 1; i++) {
+      const dx = (i*180) - ((dist*0.35) % 180);
+      ctx.beginPath(); ctx.ellipse(dx, groundY()+4, 130, 34, 0, Math.PI, 0); ctx.fill();
+    }
+    ctx.fillStyle = "#F1C88C";
+    for (let i = -1; i < W/140 + 1; i++) {
+      const dx = (i*140) - ((dist*0.7) % 140);
+      ctx.beginPath(); ctx.ellipse(dx+40, groundY()+8, 95, 26, 0, Math.PI, 0); ctx.fill();
+    }
+    // ground
+    ctx.fillStyle = "#111";
+    ctx.fillRect(0, groundY(), W, 3);
+    ctx.fillStyle = "rgba(17,17,17,.28)";
+    for (let i = 0; i < W/46 + 1; i++) {
+      const dx = (i*46) - (dist % 46);
+      ctx.fillRect(dx, groundY() + 12, 20, 3);
+    }
+  }
+
+  function overlay(title, sub){
+    ctx.fillStyle = "rgba(17,17,17,.55)";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#fff";
+    ctx.textAlign = "center";
+    ctx.font = "800 30px Poppins, sans-serif";
+    ctx.fillText(title, W/2, H/2 - 10);
+    ctx.font = "600 14px Poppins, sans-serif";
+    ctx.fillText(sub, W/2, H/2 + 20);
+  }
+
+  function loop(){
+    GAME.raf = requestAnimationFrame(loop);
+    drawScene();
+
+    if (state === "run") {
+      t++;
+      speed = Math.min(11, speed + 0.0016);
+      dist += speed;
+      // physics
+      truck.vy += 0.55;
+      truck.y = Math.min(groundY(), truck.y + truck.vy);
+      spawn();
+      obs.forEach(o => o.x -= speed);
+      obs = obs.filter(o => o.x + o.w > -30);
+      // collide
+      const tx = truck.x - 28, tw = 58, ty = truck.y - 40, th = 40;
+      for (const o of obs) {
+        const g = groundY();
+        if (tx + 6 < o.x + o.w && tx + tw - 6 > o.x &&
+            ty + th > g - o.h + 4) { state = "over"; break; }
+      }
+      if (state === "over") {
+        const m = Math.floor(dist/12);
+        if (m > GAME.best) GAME.best = m;
+        bestEl.textContent = GAME.best;
+        shareBtn.style.display = "inline-block";
+        shareBtn.href = WA + "?text=" + encodeURIComponent(
+          `I scored ${m} m on Desert Dash at Sai Raj Global! 🏜️🚙 Can you beat it?`);
+      }
+      scoreEl.textContent = Math.floor(dist/12);
+    }
+
+    obs.forEach(drawObs);
+    drawTruck();
+
+    if (state === "ready") overlay("DESERT DASH", "Tap or press Space to start");
+    if (state === "over")  overlay("GAME OVER", "Tap or press Space to try again");
+  }
+  loop();
+
+  GAME.cleanup = () => {
+    cancelAnimationFrame(GAME.raf);
+    window.removeEventListener("keydown", onKey);
+    window.removeEventListener("resize", size);
+    GAME.cleanup = null;
+  };
+}
+
 /* ── Router ── */
 function route(){
+  if (GAME.cleanup) GAME.cleanup();
   const h = location.hash.replace(/^#\/?/, "");
   const [page, param] = h.split("/");
   document.getElementById("mobileMenu").classList.remove("open");
@@ -608,6 +832,7 @@ function route(){
   if (page === "shop")         pageShop(decodeURIComponent(param || ""));
   else if (page === "product") pageProduct(param);
   else if (page === "range")   pageRange();
+  else if (page === "game")    pageGame();
   else if (page === "contact") pageContact();
   else                         pageHome();
 
@@ -619,14 +844,8 @@ function route(){
 window.addEventListener("hashchange", route);
 route();
 
-/* ── Chrome: ticker, cart, burger ── */
-const tickMsg = `<span>🔥 GRAND OPENING SALE LIVE NOW</span><span>•</span>
-<span>UP TO 50% OFF SELECTED 4X4 ACCESSORIES</span><span>•</span>
-<span>UAE-WIDE DELIVERY</span><span>•</span><span>SHOP NOW</span><span>•</span>`;
-document.getElementById("tick").innerHTML = tickMsg + tickMsg;
-
+/* ── Chrome ── */
 document.getElementById("cartLink").href = `https://${SHOPIFY.domain}/cart`;
-
 const burger = document.getElementById("burger"), mm = document.getElementById("mobileMenu");
 burger.addEventListener("click", () => {
   const open = mm.classList.toggle("open");
