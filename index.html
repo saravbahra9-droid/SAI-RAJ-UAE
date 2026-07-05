@@ -292,6 +292,42 @@ textarea.fin{min-height:110px;resize:vertical}
 .btag{color:var(--red);font-weight:600;margin:4px 0 12px}
 .bdesc{color:#444;max-width:60ch;margin-bottom:22px}
 @media (max-width:900px){.bhero{grid-template-columns:1fr}.blogo{aspect-ratio:16/9}}
+
+/* ── Cart drawer ────────────────────────────────────────── */
+.cart-ov{position:fixed;inset:0;background:rgba(17,17,17,.5);z-index:90;
+  opacity:0;pointer-events:none;transition:opacity .2s}
+.cart-ov.open{opacity:1;pointer-events:auto}
+.cart-dr{position:fixed;top:0;bottom:0;right:0;width:min(400px,100vw);z-index:95;
+  background:#fff;display:flex;flex-direction:column;
+  transform:translateX(105%);transition:transform .25s ease;
+  box-shadow:-10px 0 30px rgba(0,0,0,.18)}
+.cart-dr.open{transform:none}
+.cart-head{display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px;border-bottom:2px solid var(--line)}
+.cart-head b{font-size:17px}
+.cart-head button{background:none;border:0;font-size:20px;cursor:pointer;padding:4px 8px}
+.cart-items{flex:1;overflow-y:auto;padding:10px 20px}
+.citem{display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.citem .ci-im{width:58px;height:58px;border-radius:8px;background:#F1F1F1;overflow:hidden;flex:none}
+.citem .ci-im .bim{border-radius:8px}
+.citem .ci-b{flex:1;min-width:0}
+.citem h4{font-size:13.5px;font-weight:600;line-height:1.3}
+.citem .ci-p{color:var(--red);font-weight:700;font-size:13.5px;margin-top:2px}
+.cqty{display:flex;align-items:center;border:2px solid var(--line);border-radius:7px;overflow:hidden}
+.cqty button{width:28px;height:28px;border:0;background:#fff;font-size:15px;cursor:pointer;font-family:var(--font)}
+.cqty span{min-width:26px;text-align:center;font-weight:600;font-size:13px}
+.ci-x{background:none;border:0;color:var(--mut);font-size:15px;cursor:pointer;padding:4px}
+.ci-x:hover{color:var(--red)}
+.cart-empty{text-align:center;color:var(--mut);padding:48px 10px;font-size:14.5px}
+.cart-foot{padding:16px 20px calc(16px + env(safe-area-inset-bottom));border-top:2px solid var(--line)}
+.cart-sub{display:flex;justify-content:space-between;font-size:15px;margin-bottom:12px}
+.cart-note{text-align:center;color:var(--mut);font-size:12.5px;margin-top:10px}
+.cbadge{background:#fff;color:var(--red);border-radius:10px;padding:1px 7px;
+  font-size:11px;font-weight:700;margin-left:6px;display:none}
+.tbadge{position:absolute;top:4px;right:calc(50% - 20px);background:var(--red);color:#fff;
+  border-radius:9px;min-width:17px;height:17px;font-size:10.5px;font-weight:700;
+  display:none;place-items:center;line-height:17px;padding:0 4px}
+.tabbar a{position:relative}
 </style>
 </head>
 <body>
@@ -310,7 +346,7 @@ textarea.fin{min-height:110px;resize:vertical}
     </nav>
     <div class="nav-right">
       <a class="nav-phone" href="tel:+971543256505">+971 543 256 505</a>
-      <a class="nav-cart" id="cartLink" href="#">Cart 🛒</a>
+      <a class="nav-cart" id="cartLink" href="#" role="button">Cart 🛒<span class="cbadge" id="cartBadge1"></span></a>
     </div>
   </div>
 </header>
@@ -357,8 +393,20 @@ textarea.fin{min-height:110px;resize:vertical}
   <a href="#/shop" data-nav="shop"><span>🛍️</span>Shop</a>
   <a href="#/game" data-nav="game"><span>🎮</span>Game</a>
   <a class="twa" href="https://wa.me/971543256505"><span>💬</span>WhatsApp</a>
-  <a href="#" id="cartTab"><span>🛒</span>Cart</a>
+  <a href="#" id="cartTab" role="button"><span>🛒</span>Cart<span class="tbadge" id="cartBadge2"></span></a>
 </nav>
+
+
+<div class="cart-ov" id="cartOv"></div>
+<aside class="cart-dr" id="cartDr" aria-label="Shopping cart">
+  <div class="cart-head"><b>Your Cart</b><button id="cartClose" aria-label="Close cart">✕</button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot">
+    <div class="cart-sub"><span>Subtotal</span><b id="cartTotal">AED 0</b></div>
+    <a class="btn red" id="cartCheckout" href="#" style="display:block;text-align:center">Checkout</a>
+    <p class="cart-note">Shipping calculated at Shopify checkout</p>
+  </div>
+</aside>
 
 <script>
 /* ════════════════════════════════════════════════════════════
@@ -667,7 +715,7 @@ function pageProduct(id){
             <span id="qtyVal">1</span>
             <button id="plus" aria-label="Increase">+</button>
           </div>
-          <a class="btn red" id="buyBtn" href="${cartHref(p,1)}">${p.variantId ? "Add to Cart" : (p.handle ? "Buy on Shopify" : "Enquire")}</a>
+          <button class="btn red" id="buyBtn" type="button">Add to Cart</button>
           <a class="btn line" href="${WA}?text=${encodeURIComponent("Hello, I'm interested in the " + p.title)}">Ask on WhatsApp</a>
         </div>
         <p class="note">GCC delivery · worldwide shipping on request · <a href="#/contact">Contact us</a></p>
@@ -678,10 +726,10 @@ function pageProduct(id){
     <div class="grid" style="margin-bottom:64px">${related.map(cardHTML).join("")}</div>` : ""}
   </div>`;
 
-  const val = document.getElementById("qtyVal"), buy = document.getElementById("buyBtn");
-  const upd = () => { val.textContent = qty; buy.href = cartHref(p, qty); };
-  document.getElementById("minus").onclick = () => { if (qty > 1) { qty--; upd(); } };
-  document.getElementById("plus").onclick = () => { if (qty < 99) { qty++; upd(); } };
+  const val = document.getElementById("qtyVal");
+  document.getElementById("minus").onclick = () => { if (qty > 1) { qty--; val.textContent = qty; } };
+  document.getElementById("plus").onclick = () => { if (qty < 99) { qty++; val.textContent = qty; } };
+  document.getElementById("buyBtn").onclick = () => addToCart(p.id, qty);
 }
 
 function pageRange(){
@@ -1013,6 +1061,7 @@ function pageGame(){
 /* ── Router ── */
 function route(){
   if (GAME.cleanup) GAME.cleanup();
+  if (typeof closeCart === "function") closeCart();
   const h = location.hash.replace(/^#\/?/, "");
   const [page, param] = h.split("/");
 
@@ -1032,9 +1081,83 @@ function route(){
 window.addEventListener("hashchange", route);
 route();
 
+/* ── Cart (on-site, multi-item) ── */
+const cartStore = {
+  get(){ try { return JSON.parse(localStorage.getItem("srcart") || "[]"); } catch(e) { return []; } },
+  set(c){ try { localStorage.setItem("srcart", JSON.stringify(c)); } catch(e) {} }
+};
+let CART = cartStore.get();
+
+function cartCount(){ return CART.reduce((n,i) => n + i.qty, 0); }
+function addToCart(id, qty){
+  const line = CART.find(i => i.id === id);
+  if (line) line.qty = Math.min(99, line.qty + qty); else CART.push({id, qty});
+  cartStore.set(CART); renderCart(); openCart();
+}
+function renderCart(){
+  const box = document.getElementById("cartItems");
+  const total = document.getElementById("cartTotal");
+  const go = document.getElementById("cartCheckout");
+  const b1 = document.getElementById("cartBadge1");
+  const b2 = document.getElementById("cartBadge2");
+  const n = cartCount();
+  b1.textContent = n; b2.textContent = n;
+  b1.style.display = n ? "inline-block" : "none";
+  b2.style.display = n ? "grid" : "none";
+
+  if (!CART.length){
+    box.innerHTML = `<p class="cart-empty">Your cart is empty.<br><a href="#/shop" style="color:var(--red);font-weight:600" onclick="closeCart()">Browse the shop →</a></p>`;
+    total.textContent = "AED 0";
+    go.style.opacity = ".5"; go.style.pointerEvents = "none";
+    return;
+  }
+  let sum = 0;
+  box.innerHTML = CART.map(line => {
+    const p = PRODUCTS.find(x => x.id === line.id); if (!p) return "";
+    sum += p.price * line.qty;
+    return `<div class="citem" data-id="${p.id}">
+      <div class="ci-im">${p.img ? bim(p.img, p.title) : `<div class="ph2" style="border-radius:8px"><span style="font-size:9px;border-width:2px;padding-bottom:3px">${p.cat}</span></div>`}</div>
+      <div class="ci-b">
+        <h4>${p.title}</h4>
+        <p class="ci-p">AED ${money(p.price)}</p>
+      </div>
+      <div class="cqty">
+        <button data-act="minus" aria-label="Decrease">−</button>
+        <span>${line.qty}</span>
+        <button data-act="plus" aria-label="Increase">+</button>
+      </div>
+      <button class="ci-x" data-act="remove" aria-label="Remove">✕</button>
+    </div>`;
+  }).join("");
+  total.textContent = "AED " + money(sum);
+  go.style.opacity = "1"; go.style.pointerEvents = "auto";
+  go.href = `https://${SHOPIFY.domain}/cart/` +
+    CART.map(l => `${PRODUCTS.find(x => x.id === l.id).variantId}:${l.qty}`).join(",");
+}
+function openCart(){
+  document.getElementById("cartDr").classList.add("open");
+  document.getElementById("cartOv").classList.add("open");
+}
+function closeCart(){
+  document.getElementById("cartDr").classList.remove("open");
+  document.getElementById("cartOv").classList.remove("open");
+}
+document.getElementById("cartItems").addEventListener("click", e => {
+  const btn = e.target.closest("[data-act]"); if (!btn) return;
+  const id = btn.closest(".citem").dataset.id;
+  const line = CART.find(i => i.id === id); if (!line) return;
+  if (btn.dataset.act === "plus")  line.qty = Math.min(99, line.qty + 1);
+  if (btn.dataset.act === "minus") line.qty = Math.max(1, line.qty - 1);
+  if (btn.dataset.act === "remove") CART = CART.filter(i => i.id !== id);
+  cartStore.set(CART); renderCart();
+});
+document.getElementById("cartLink").addEventListener("click", e => { e.preventDefault(); renderCart(); openCart(); });
+document.getElementById("cartTab").addEventListener("click", e => { e.preventDefault(); renderCart(); openCart(); });
+document.getElementById("cartClose").addEventListener("click", closeCart);
+document.getElementById("cartOv").addEventListener("click", closeCart);
+renderCart();
+
 /* ── Chrome ── */
-document.getElementById("cartLink").href = `https://${SHOPIFY.domain}/cart`;
-document.getElementById("cartTab").href = `https://${SHOPIFY.domain}/cart`;
 
 /* ── SEO: JSON-LD ── */
 const ld = {"@context":"https://schema.org","@graph":[
