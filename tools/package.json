@@ -1,0 +1,25 @@
+{
+  "name": "sairaj-site-tools",
+  "private": true,
+  "type": "module",
+  "description": "Build-time helpers for sairaj.global. The site itself is static and needs no build step on Vercel; these only regenerate committed assets.",
+  "scripts": {
+    "serve": "node serve.mjs",
+    "build:hero": "node build-hero.mjs",
+    "build:map": "node build-map.mjs",
+    "build:posters": "node render-posters.mjs",
+    "build:og": "node render-og.mjs",
+    "test": "node test-site.mjs"
+  },
+  "devDependencies": {
+    "d3-geo": "^3.1.1",
+    "esbuild": "^0.28.0",
+    "lenis": "^1.3.0",
+    "playwright-core": "^1.50.0",
+    "three": "0.170.0",
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2",
+    "@fontsource/playfair-display": "^5.0.0",
+    "@fontsource/poppins": "^5.0.0"
+  }
+}

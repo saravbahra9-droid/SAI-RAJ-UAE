@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sairaj.global/sitemap.xml
