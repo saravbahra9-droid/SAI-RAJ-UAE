@@ -9,7 +9,7 @@
     "build:map": "node build-map.mjs",
     "build:posters": "node render-posters.mjs",
     "build:og": "node render-og.mjs",
-    "build:profile": "python3 build_profile.py && node render-profile.mjs && python3 build_pages.py",
+    "build:pdfs": "python3 build_profile.py && node render-pdf.mjs profile && python3 build_catalogue.py && node render-pdf.mjs cargotuff && python3 build_pages.py",
     "test": "node test-site.mjs"
   },
   "devDependencies": {

@@ -54,23 +54,35 @@ section('Sitemap and downloads');
 const sm = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
 for (const u of ['', 'shop/', 'privacy/', 'terms/', ...NEW.map(n => n + '/')]) ok(sm.includes(`<loc>https://sairaj.global/${u}</loc>`), `sitemap lists /${u}`);
 ok(!sm.includes('404'), 'sitemap leaves out the 404 page');
-const PDF = 'assets/docs/sai-raj-company-profile-2026.pdf';
 const dl = readFileSync(join(ROOT, 'downloads/index.html'), 'utf8');
-ok(dl.includes(`href="/${PDF}" download`), 'Downloads links the 2026 company profile');
 ok(!shipped.some(f => readFileSync(f, 'utf8').includes('2024-25.pdf')), 'nothing links the retired 2024-25 PDF');
-const info = execFileSync('pdfinfo', [join(ROOT, PDF)]).toString();
-ok(/Pages:\s+20\b/.test(info), 'profile PDF has 20 pages', (info.match(/Pages:.*/) || [''])[0]);
-ok(/Page size:\s+59[45](\.\d+)? x 84[12](\.\d+)? pts \(A4\)/.test(info), 'profile PDF is A4', (info.match(/Page size:.*/) || [''])[0]);
-ok(statSync(join(ROOT, PDF)).size < 3e6, 'profile PDF is under 3 MB', String(statSync(join(ROOT, PDF)).size));
-ok(dl.includes(`${(statSync(join(ROOT, PDF)).size / 1e6).toFixed(1)} MB`), 'Downloads shows the real file size');
-const fonts = execFileSync('pdffonts', [join(ROOT, PDF)]).toString();
-const fontRows = fonts.split('\n').slice(2).filter(l => l.trim()).map(l => l.trim().split(/\s+/));
-ok(/Poppins/.test(fonts) && /PlayfairDisplay/.test(fonts) && fontRows.every(t => t[t.length - 5] === 'yes'), 'profile PDF embeds the brand fonts');
-const ptxt = execFileSync('pdftotext', ['-layout', join(ROOT, PDF), '-'], { maxBuffer: 1e8 }).toString();
-for (const t of ['Innovation is in our', 'Jebel Ali Freezone (JAFZA)', 'Baba Dogo Rd', '10,000+', 'Thermo King', 'Cargotuff', 'Safarituff', 'Cargocool', 'Decoroof', 'Decoglaze', '+971 543 256 505', 'info@sairaj.global'])
-  ok(ptxt.includes(t), `profile PDF text has "${t}"`);
-ok(!/over 40 years/i.test(ptxt), 'profile PDF says fifty years, not "over 40 years"');
-ok(ptxt.split('\f').filter(x => x.trim()).length === 20, 'every profile page carries text');
+const PDFS = [
+  ['assets/docs/sai-raj-company-profile-2026.pdf', 20, ['Innovation is in our', 'Jebel Ali Freezone (JAFZA)', 'Baba Dogo Rd', '10,000+', 'Thermo King', 'Cargotuff', 'Safarituff', 'Cargocool', 'Decoroof', 'Decoglaze', '+971 543 256 505', 'info@sairaj.global']],
+  ['assets/docs/cargotuff-cold-chain-catalogue-2026.pdf', 22, ['Built to', 'Rigicore fibreglass', '65, 90, 115 or 165 mm', 'Ferrotuff', 'Precise canopy', 'Thermo King', 'Official dealer', 'Rivacold', 'KEBS approved', 'Sherp carriers', 'Jebel Ali Freezone (JAFZA)', '+971 543 256 505', 'info@sairaj.global', '+254 708 771 100']],
+];
+for (const [PDF, pagesWanted, facts] of PDFS) {
+  const short = PDF.split('/').pop();
+  ok(dl.includes(`href="/${PDF}" download`), `Downloads links ${short}`);
+  const info = execFileSync('pdfinfo', [join(ROOT, PDF)]).toString();
+  ok(new RegExp(`Pages:\\s+${pagesWanted}\\b`).test(info), `${short} has ${pagesWanted} pages`, (info.match(/Pages:.*/) || [''])[0]);
+  ok(/Page size:\s+59[45](\.\d+)? x 84[12](\.\d+)? pts \(A4\)/.test(info), `${short} is A4`, (info.match(/Page size:.*/) || [''])[0]);
+  ok(statSync(join(ROOT, PDF)).size < 3e6, `${short} is under 3 MB`, String(statSync(join(ROOT, PDF)).size));
+  ok(dl.includes(`PDF, ${pagesWanted} pages, ${(statSync(join(ROOT, PDF)).size / 1e6).toFixed(1)} MB`), `Downloads shows the real page count and size of ${short}`);
+  const fonts = execFileSync('pdffonts', [join(ROOT, PDF)]).toString();
+  const fontRows = fonts.split('\n').slice(2).filter(l => l.trim()).map(l => l.trim().split(/\s+/));
+  ok(/Poppins/.test(fonts) && /PlayfairDisplay/.test(fonts) && fontRows.every(t => t[t.length - 5] === 'yes'), `${short} embeds the brand fonts`);
+  const ptxt = execFileSync('pdftotext', ['-layout', join(ROOT, PDF), '-'], { maxBuffer: 1e8 }).toString();
+  for (const t of facts) ok(ptxt.includes(t), `${short} text has "${t}"`);
+  ok(!/over 40 years/i.test(ptxt), `${short} never says "over 40 years"`);
+  ok(ptxt.split('\f').filter(x => x.trim()).length === pagesWanted, `every page of ${short} carries text`);
+}
+// the catalogue's contents page must point at the right pages
+{
+  const pagesTxt = execFileSync('pdftotext', ['-layout', join(ROOT, PDFS[1][0]), '-'], { maxBuffer: 1e8 }).toString().split('\f');
+  const toc = [...pagesTxt[1].matchAll(/^\s*0\d\s+(.+?)\s{2,}(\d{2})\s*$/gm)].map(m => [m[1].trim(), +m[2]]);
+  ok(toc.length === 7, 'catalogue contents lists 7 sections', String(toc.length));
+  for (const [title, n] of toc) ok(new RegExp(`0\\d · ${title.split(' ')[0]}`, 'i').test(pagesTxt[n - 1] || ''), `contents: "${title}" starts on page ${n}`);
+}
 
 /* ───────── 2. shop data is unchanged from main ───────── */
 section('Shop data vs main');
@@ -171,8 +183,10 @@ for (const dev of ['desktop', 'ipad', 'phone']) {
     await page.click('#navDdBtn'); await page.waitForTimeout(500);
     ok(await page.evaluate(() => { const p = document.getElementById('navBrands'), r = p.getBoundingClientRect(); return getComputedStyle(p).visibility === 'visible' && r.right <= innerWidth && document.getElementById('navDdBtn').getAttribute('aria-expanded') === 'true'; }), 'Brands menu opens inside the screen');
     await page.screenshot({ path: `${SHOTS}/desktop-12-brands-menu.jpg`, type: 'jpeg', quality: 72 });
-    await page.keyboard.press('Escape'); await page.mouse.move(700, 600); await page.waitForTimeout(500);
-    ok(await page.evaluate(() => getComputedStyle(document.getElementById('navBrands')).visibility === 'hidden'), 'Brands menu closes on Escape');
+    await page.keyboard.press('Escape'); await page.mouse.move(700, 600);
+    ok(await page.evaluate(() => document.getElementById('navDdBtn').getAttribute('aria-expanded') === 'false'), 'Escape marks the Brands menu closed straight away');
+    // the fade-out is a CSS transition; the software-rendered test browser can take a while to finish it
+    ok(await page.waitForFunction(() => getComputedStyle(document.getElementById('navBrands')).visibility === 'hidden', null, { timeout: 5000 }).then(() => true, () => false), 'Brands menu closes on Escape');
     await page.click('.nav__cta'); await page.waitForTimeout(2300);
     ok(Math.abs(await page.evaluate(() => Math.round(document.getElementById('enquiry').getBoundingClientRect().top))) < 60, 'Request a quote lands on the enquiry form');
     ok(await page.evaluate(() => document.querySelectorAll('.brands__grid .bc').length === 6 && [...document.querySelectorAll('.brands__grid .bc')].every(a => /^\/(cargotuff|pulse|safarituff|cargocool|deco)\/$/.test(a.getAttribute('href')))), 'six brand cards link to the brand pages');

@@ -516,17 +516,18 @@ write("contact/index.html", head("Contact — Sai Raj | Dubai and Nairobi", "Con
 ''')
 
 # ═════════════════════════════ downloads ═════════════════════════════
-PROFILE = "assets/docs/sai-raj-company-profile-2026.pdf"      # built by tools/build_profile.py + tools/render-profile.mjs
-_pp = os.path.join(ROOT, PROFILE)
-PROFILE_META = "Company profile · 2026 edition · PDF, 20 pages" + (f", {os.path.getsize(_pp) / 1e6:.1f} MB" if os.path.exists(_pp) else "")
-write("downloads/index.html", head("Downloads — Sai Raj", "Download the Sai Raj company profile, 2026 edition. New brand catalogues are in production.", "https://sairaj.global/downloads/") + f'''<body>
+# PDFs are built by tools/build_profile.py and tools/build_catalogue.py, then printed by tools/render-pdf.mjs
+def dl_row(kind, pages, title, path):
+    f = os.path.join(ROOT, path); size = f", {os.path.getsize(f) / 1e6:.1f} MB" if os.path.exists(f) else ""
+    return f'<li class="dl"><div><p class="dl__k">{kind} · 2026 edition · PDF, {pages} pages{size}</p><h2 class="dl__t">{title}</h2></div><a class="btn" href="/{path}" download>Download {ARR}</a></li>'
+write("downloads/index.html", head("Downloads — Sai Raj", "Download the Sai Raj company profile and the Cargotuff and cold chain catalogue, 2026 editions.", "https://sairaj.global/downloads/") + f'''<body>
 {nav("light", current="downloads")}
 <main id="main" class="page">
   <div class="wrap">
-    <header class="page__head"><p class="eyebrow">Downloads</p><h1>Profile and <em class="it">catalogues.</em></h1><p>The 2026 company profile is ready to download. New brand catalogues are in production.</p></header>
+    <header class="page__head"><p class="eyebrow">Downloads</p><h1>Profile and <em class="it">catalogues.</em></h1><p>The 2026 company profile and the Cargotuff catalogue are ready to download. More brand catalogues are in production.</p></header>
     <ul class="dls">
-      <li class="dl"><div><p class="dl__k">{PROFILE_META}</p><h2 class="dl__t">Sai Raj company profile</h2></div><a class="btn" href="/{PROFILE}" download>Download {ARR}</a></li>
-      <li class="dl dl--soon"><div><p class="dl__k">In production</p><h2 class="dl__t">Cargotuff and cold chain catalogue</h2></div><span class="dl__tag">Coming soon</span></li>
+      {dl_row("Company profile", 20, "Sai Raj company profile", "assets/docs/sai-raj-company-profile-2026.pdf")}
+      {dl_row("Catalogue", 22, "Cargotuff and cold chain catalogue", "assets/docs/cargotuff-cold-chain-catalogue-2026.pdf")}
       <li class="dl dl--soon"><div><p class="dl__k">In production</p><h2 class="dl__t">Pulse catalogue</h2></div><span class="dl__tag">Coming soon</span></li>
       <li class="dl dl--soon"><div><p class="dl__k">In production</p><h2 class="dl__t">Safarituff and Cargocool catalogues</h2></div><span class="dl__tag">Coming soon</span></li>
       <li class="dl dl--soon"><div><p class="dl__k">In production</p><h2 class="dl__t">4x4 parts catalogue</h2></div><span class="dl__tag">Coming soon</span></li>
