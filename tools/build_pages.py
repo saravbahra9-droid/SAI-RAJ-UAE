@@ -516,16 +516,20 @@ write("contact/index.html", head("Contact — Sai Raj | Dubai and Nairobi", "Con
 ''')
 
 # ═════════════════════════════ downloads ═════════════════════════════
-write("downloads/index.html", head("Downloads — Sai Raj", "Download the Sai Raj company profile. New brand catalogues are in production.", "https://sairaj.global/downloads/") + f'''<body>
+PROFILE = "assets/docs/sai-raj-company-profile-2026.pdf"      # built by tools/build_profile.py + tools/render-profile.mjs
+_pp = os.path.join(ROOT, PROFILE)
+PROFILE_META = "Company profile · 2026 edition · PDF, 20 pages" + (f", {os.path.getsize(_pp) / 1e6:.1f} MB" if os.path.exists(_pp) else "")
+write("downloads/index.html", head("Downloads — Sai Raj", "Download the Sai Raj company profile, 2026 edition. New brand catalogues are in production.", "https://sairaj.global/downloads/") + f'''<body>
 {nav("light", current="downloads")}
 <main id="main" class="page">
   <div class="wrap">
-    <header class="page__head"><p class="eyebrow">Downloads</p><h1>Profile and <em class="it">catalogues.</em></h1><p>A redesigned company profile and new brand catalogues are in production. Until they land, the current profile is here.</p></header>
+    <header class="page__head"><p class="eyebrow">Downloads</p><h1>Profile and <em class="it">catalogues.</em></h1><p>The 2026 company profile is ready to download. New brand catalogues are in production.</p></header>
     <ul class="dls">
-      <li class="dl"><div><p class="dl__k">Company profile · 2024–25 edition · PDF, 4.6 MB</p><h2 class="dl__t">Sai Raj Limited company profile</h2></div><a class="btn" href="/assets/docs/sai-raj-company-profile-2024-25.pdf" download>Download {ARR}</a></li>
-      <li class="dl dl--soon"><div><p class="dl__k">In production</p><h2 class="dl__t">Company profile, new edition</h2></div><span class="dl__tag">Coming soon</span></li>
+      <li class="dl"><div><p class="dl__k">{PROFILE_META}</p><h2 class="dl__t">Sai Raj company profile</h2></div><a class="btn" href="/{PROFILE}" download>Download {ARR}</a></li>
       <li class="dl dl--soon"><div><p class="dl__k">In production</p><h2 class="dl__t">Cargotuff and cold chain catalogue</h2></div><span class="dl__tag">Coming soon</span></li>
-      <li class="dl dl--soon"><div><p class="dl__k">In production</p><h2 class="dl__t">Pulse, Safarituff and Cargocool catalogues</h2></div><span class="dl__tag">Coming soon</span></li>
+      <li class="dl dl--soon"><div><p class="dl__k">In production</p><h2 class="dl__t">Pulse catalogue</h2></div><span class="dl__tag">Coming soon</span></li>
+      <li class="dl dl--soon"><div><p class="dl__k">In production</p><h2 class="dl__t">Safarituff and Cargocool catalogues</h2></div><span class="dl__tag">Coming soon</span></li>
+      <li class="dl dl--soon"><div><p class="dl__k">In production</p><h2 class="dl__t">4x4 parts catalogue</h2></div><span class="dl__tag">Coming soon</span></li>
     </ul>
     <p style="margin-top:40px">Need a specific catalogue now? <a class="tlink" href="/contact/#enquiry">Ask us {ARR}</a></p>
   </div>
@@ -608,3 +612,12 @@ p = os.path.join(ROOT, "index.html"); s = open(p, encoding="utf-8").read()
 for tag, block in (("brands", brands_block), ("pstrip", pstrip_block), ("enq", enq_block)):
     s = re.sub(rf"<!-- {tag}:start -->.*?<!-- {tag}:end -->", lambda m: block, s, flags=re.S)
 open(p, "w", encoding="utf-8").write(s); print("home blocks injected")
+
+# ═════════════════════════════ sitemap ═════════════════════════════
+LASTMOD = "2026-11-13"
+SITEMAP = [("", "monthly", "1.0"), ("cargotuff/", "monthly", "0.9"), ("cold-chain/", "monthly", "0.9"), ("pulse/", "monthly", "0.8"), ("safarituff/", "monthly", "0.8"),
+           ("cargocool/", "monthly", "0.8"), ("deco/", "monthly", "0.8"), ("shop/", "weekly", "0.8"), ("partners/", "monthly", "0.6"), ("contact/", "monthly", "0.7"),
+           ("downloads/", "monthly", "0.5"), ("privacy/", "yearly", "0.2"), ("terms/", "yearly", "0.2")]
+open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(
+    f"  <url><loc>https://sairaj.global/{u}</loc><lastmod>{LASTMOD}</lastmod><changefreq>{c}</changefreq><priority>{pr}</priority></url>\n" for u, c, pr in SITEMAP) + "</urlset>\n")
+print("sitemap.xml", len(SITEMAP), "urls")

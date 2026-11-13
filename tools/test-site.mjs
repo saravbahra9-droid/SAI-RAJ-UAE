@@ -49,6 +49,29 @@ const shipped = allFiles(ROOT).filter(f => !f.includes('/tools/') && !f.includes
 const googleFonts = shipped.filter(f => /fonts\.(googleapis|gstatic)\.com/.test(readFileSync(f, 'utf8')));
 ok(googleFonts.length === 0, 'fonts are self-hosted (no Google Fonts requests)', googleFonts.join(','));
 
+/* ───────── 1b. sitemap and downloads ───────── */
+section('Sitemap and downloads');
+const sm = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
+for (const u of ['', 'shop/', 'privacy/', 'terms/', ...NEW.map(n => n + '/')]) ok(sm.includes(`<loc>https://sairaj.global/${u}</loc>`), `sitemap lists /${u}`);
+ok(!sm.includes('404'), 'sitemap leaves out the 404 page');
+const PDF = 'assets/docs/sai-raj-company-profile-2026.pdf';
+const dl = readFileSync(join(ROOT, 'downloads/index.html'), 'utf8');
+ok(dl.includes(`href="/${PDF}" download`), 'Downloads links the 2026 company profile');
+ok(!shipped.some(f => readFileSync(f, 'utf8').includes('2024-25.pdf')), 'nothing links the retired 2024-25 PDF');
+const info = execFileSync('pdfinfo', [join(ROOT, PDF)]).toString();
+ok(/Pages:\s+20\b/.test(info), 'profile PDF has 20 pages', (info.match(/Pages:.*/) || [''])[0]);
+ok(/Page size:\s+59[45](\.\d+)? x 84[12](\.\d+)? pts \(A4\)/.test(info), 'profile PDF is A4', (info.match(/Page size:.*/) || [''])[0]);
+ok(statSync(join(ROOT, PDF)).size < 3e6, 'profile PDF is under 3 MB', String(statSync(join(ROOT, PDF)).size));
+ok(dl.includes(`${(statSync(join(ROOT, PDF)).size / 1e6).toFixed(1)} MB`), 'Downloads shows the real file size');
+const fonts = execFileSync('pdffonts', [join(ROOT, PDF)]).toString();
+const fontRows = fonts.split('\n').slice(2).filter(l => l.trim()).map(l => l.trim().split(/\s+/));
+ok(/Poppins/.test(fonts) && /PlayfairDisplay/.test(fonts) && fontRows.every(t => t[t.length - 5] === 'yes'), 'profile PDF embeds the brand fonts');
+const ptxt = execFileSync('pdftotext', ['-layout', join(ROOT, PDF), '-'], { maxBuffer: 1e8 }).toString();
+for (const t of ['Innovation is in our', 'Jebel Ali Freezone (JAFZA)', 'Baba Dogo Rd', '10,000+', 'Thermo King', 'Cargotuff', 'Safarituff', 'Cargocool', 'Decoroof', 'Decoglaze', '+971 543 256 505', 'info@sairaj.global'])
+  ok(ptxt.includes(t), `profile PDF text has "${t}"`);
+ok(!/over 40 years/i.test(ptxt), 'profile PDF says fifty years, not "over 40 years"');
+ok(ptxt.split('\f').filter(x => x.trim()).length === 20, 'every profile page carries text');
+
 /* ───────── 2. shop data is unchanged from main ───────── */
 section('Shop data vs main');
 const oldHtml = execFileSync('git', ['-C', ROOT, 'show', 'main:index.html'], { maxBuffer: 1e8 }).toString();
