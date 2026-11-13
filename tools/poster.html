@@ -6,7 +6,7 @@ const q = new URLSearchParams(location.search);
 const w = +q.get('w') || 1600, h = +q.get('h') || 1100;
 const c = document.getElementById('c'); c.style.width = w + 'px'; c.style.height = h + 'px';
 const { init } = await import('/assets/js/hero3d.js?' + Date.now());
-const ctl = init({ canvas: c, focus: c, variant: q.get('variant') || 'body', still: true, onFail: e => { window.__err = String(e); } });
+const ctl = init({ canvas: c, focus: c, still: true, onFail: e => { window.__err = String(e); } });
 window.__render = p => { ctl.renderAt(p); return true; };
 await new Promise(r => setTimeout(r, 700));   // logo texture
 window.__ready = true;

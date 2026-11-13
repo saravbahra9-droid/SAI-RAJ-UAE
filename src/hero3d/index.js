@@ -4,9 +4,8 @@
    lazy-loaded by home.js. Everything is procedural: no model
    files, no texture downloads except the Sai Raj logo.
 
-   variant "body"  — a refrigerated fibreglass truck body whose
-                     doors open and whose wall separates into layers
-   variant "panel" — a single insulated panel that separates
+   One object: a Cargotuff insulated fibreglass truck body whose
+   doors open and whose wall separates into its layers.
    ════════════════════════════════════════════════════════════ */
 import {
   Scene, PerspectiveCamera, WebGLRenderer, Group, Mesh, InstancedMesh, Object3D,
@@ -68,7 +67,7 @@ const texGlow = (inner, outer) => canvasTex(256, (g, s) => {
 
 /* ── scene ───────────────────────────────────────────────── */
 export function init(opts) {
-  const { canvas, focus, pins = [], variant = 'body', logoUrl = '/assets/img/logo.webp', still = false,
+  const { canvas, focus, pins = [], logoUrl = '/assets/img/logo.webp', still = false,
           onReady = () => {}, onFail = () => {} } = opts;
 
   let renderer;
@@ -118,7 +117,7 @@ export function init(opts) {
   const add = (parent, geo, mat, x = 0, y = 0, z = 0) => { const m = new Mesh(geo, mat); m.position.set(x, y, z); parent.add(m); return m; };
   const box = (parent, w, h, d, mat, x, y, z) => add(parent, new BoxGeometry(w, h, d), mat, x, y, z);
 
-  /* the four-layer panel, used by both variants */
+  /* the four-layer wall panel */
   const LAYERS = [
     { key: 'gel',   th: 0.008, mat: M.gel,   sep:  0.90, k: 0 },
     { key: 'skinO', th: 0.016, mat: M.grp,   sep:  0.36, k: 1 },
@@ -150,27 +149,7 @@ export function init(opts) {
   let update;                   // (p, time) → pose the model
   let doorL, doorR, coldLight, stripMat, sample;
 
-  if (variant === 'panel') {
-    /* ── single panel ── */
-    const PW = 1.35, PH = 2.3;
-    sample = buildSample(PW, PH);
-    sample.g.position.set(0, PH / 2 + 0.1, 0);
-    root.add(sample.g);
-    box(root, PW + 0.5, 0.1, 0.7, M.steel, 0, 0.05, 0);
-    box(root, PW + 0.56, 0.012, 0.76, M.alu, 0, 0.106, 0);
-    sample.slabs.forEach((s, i) => anchors.push({ obj: s, local: new Vector3(-PW / 2 + 0.16, PH / 2 - 0.3 - i * 0.34, 0) }));
-    ground(0.0, 4.2, 3.4);
-    frames = [
-      { az: 30, el: 9,  t: [0, 1.2, 0],    fw: 2.3, fh: 2.9 },
-      { az: 66, el: 10, t: [0, 1.2, 0],    fw: 2.3, fh: 2.9 },
-      { az: 50, el: 13, t: [0.1, 1.2, 0.05], fw: 3.3, fh: 3.0 }
-    ];
-    update = (p) => {
-      const e2 = easeIO(smooth(0.50, 0.80, p));
-      sample.slabs.forEach(s => { s.position.z = s.userData.z0 + s.userData.sep * e2 * 0.9; s.position.x = -s.userData.k * e2 * 0.3 + e2 * 0.45; });
-      return { pin: smooth(0.72, 0.84, p) };
-    };
-  } else {
+  {
     /* ── refrigerated body ── */
     const L = 5.0, H = 2.3, W = 2.3, T = 0.12;
     const hx = L / 2, hz = W / 2, wallH = H - 2 * T;

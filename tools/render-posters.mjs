@@ -1,4 +1,4 @@
-// Renders the flat hero fallbacks (assets/img/hero-1..3.webp, panel-1..3.webp) from the real 3D scene.
+// Renders the flat hero fallbacks (assets/img/hero-1..3.webp) from the real 3D scene.
 // Usage: node render-posters.mjs [--preview]   (preview also writes dark-background PNGs to /tmp)
 import { chromium } from 'playwright-core';
 import { start } from './serve.mjs';
@@ -16,7 +16,7 @@ const page = await browser.newPage({ viewport: { width: 1600, height: 1100 }, de
 page.on('console', m => { if (m.type() === 'error') console.log('console:', m.text()); });
 page.on('pageerror', e => console.log('pageerror:', e.message));
 mkdirSync('/tmp/posters', { recursive: true });
-const sets = { body: { name: 'hero', at: [0, 0.46, 0.92] }, panel: { name: 'panel', at: [0, 0.4, 0.92] } };
+const sets = { body: { name: 'hero', at: [0, 0.46, 0.92] } };
 for (const [variant, set] of Object.entries(sets)) {
   if (only && only !== variant) continue;
   await page.goto(`http://127.0.0.1:4199/tools/poster.html?variant=${variant}`);

@@ -17,7 +17,8 @@ const section = t => console.log('\n■ ' + t);
 
 /* ───────── 1. static: every internal link and asset resolves ───────── */
 section('Static link check');
-const pages = ['index.html', 'shop/index.html', 'privacy/index.html', 'terms/index.html', '404.html'];
+const NEW = ['cargotuff', 'pulse', 'safarituff', 'cargocool', 'deco', 'cold-chain', 'partners', 'contact', 'downloads'];
+const pages = ['index.html', 'shop/index.html', 'privacy/index.html', 'terms/index.html', '404.html', ...NEW.map(n => n + '/index.html')];
 const externals = new Set();
 for (const pg of pages) {
   const html = readFileSync(join(ROOT, pg), 'utf8');
@@ -128,7 +129,7 @@ for (const dev of ['desktop', 'ipad', 'phone']) {
   let side = true;
   for (const f of [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]) { await scrollToFrac(page, f, 250); side = side && await noSideScroll(page); }
   ok(side, 'no sideways scroll at 11 positions down the page');
-  for (const [id, n] of [['sectors', '04'], ['capabilities', '05'], ['next', '06'], ['shop', '07'], ['enquiry', '08']]) {
+  for (const [id, n] of [['sectors', '04'], ['brands', '05'], ['next', '06'], ['shop', '07'], ['enquiry', '08']]) {
     await page.evaluate(id => { const el = document.getElementById(id); scrollTo(0, el.getBoundingClientRect().top + scrollY - 40); }, id);
     await page.waitForTimeout(1500);
     await page.screenshot({ path: `${SHOTS}/${dev}-${n}-${id}.jpg`, type: 'jpeg', quality: 72 });
@@ -141,18 +142,18 @@ for (const dev of ['desktop', 'ipad', 'phone']) {
 
   /* navigation */
   if (dev === 'desktop') {
-    for (const id of ['story', 'sectors', 'capabilities', 'next', 'enquiry']) {
-      await page.evaluate(() => scrollTo(0, 0)); await page.waitForTimeout(300);
-      await page.click(id === 'enquiry' ? '.nav__cta' : `.nav__links a[href="#${id}"]`);
-      await page.waitForTimeout(2300);
-      const top = await page.evaluate(id => Math.round(document.getElementById(id).getBoundingClientRect().top), id);
-      ok(Math.abs(top) < 60, `nav link → #${id} lands on the section`, 'top=' + top);
-    }
-    ok((await page.getAttribute('.nav__links a[href="/shop/"]', 'href')) === '/shop/', 'nav Shop link → /shop/');
-    /* capability row pre-selects enquiry topic */
-    await page.evaluate(() => { const el = document.getElementById('capabilities'); scrollTo(0, el.getBoundingClientRect().top + scrollY); }); await page.waitForTimeout(900);
-    await page.click('#capsList a[data-topic="Coldrooms"]'); await page.waitForTimeout(2200);
-    ok(await page.evaluate(() => document.getElementById('enqTopic').value === 'Coldrooms'), 'capability row pre-selects the enquiry topic');
+    /* header: five items plus the quote button; brands live in one menu */
+    ok(await page.evaluate(() => document.querySelectorAll('.nav__links > a').length === 4 && document.querySelectorAll('#navBrands a').length === 5), 'header is Brands + 4 links, with 5 brand pages inside the menu');
+    await page.evaluate(() => scrollTo(0, 0)); await page.waitForTimeout(300);
+    await page.click('#navDdBtn'); await page.waitForTimeout(500);
+    ok(await page.evaluate(() => { const p = document.getElementById('navBrands'), r = p.getBoundingClientRect(); return getComputedStyle(p).visibility === 'visible' && r.right <= innerWidth && document.getElementById('navDdBtn').getAttribute('aria-expanded') === 'true'; }), 'Brands menu opens inside the screen');
+    await page.screenshot({ path: `${SHOTS}/desktop-12-brands-menu.jpg`, type: 'jpeg', quality: 72 });
+    await page.keyboard.press('Escape'); await page.mouse.move(700, 600); await page.waitForTimeout(500);
+    ok(await page.evaluate(() => getComputedStyle(document.getElementById('navBrands')).visibility === 'hidden'), 'Brands menu closes on Escape');
+    await page.click('.nav__cta'); await page.waitForTimeout(2300);
+    ok(Math.abs(await page.evaluate(() => Math.round(document.getElementById('enquiry').getBoundingClientRect().top))) < 60, 'Request a quote lands on the enquiry form');
+    ok(await page.evaluate(() => document.querySelectorAll('.brands__grid .bc').length === 6 && [...document.querySelectorAll('.brands__grid .bc')].every(a => /^\/(cargotuff|pulse|safarituff|cargocool|deco)\/$/.test(a.getAttribute('href')))), 'six brand cards link to the brand pages');
+    ok(await page.evaluate(() => document.querySelectorAll('main img').length === document.querySelectorAll('main .hero__posters img, main .bc__logo img').length), 'home page carries no photographs (hero render and brand logos only)');
     await page.evaluate(() => { const el = document.getElementById('shop'); scrollTo(0, el.getBoundingClientRect().top + scrollY); }); await page.waitForTimeout(900);
     const x0 = await page.evaluate(() => document.getElementById('rail').scrollLeft); await page.click('#railNext'); await page.waitForTimeout(900);
     ok(await page.evaluate(x0 => document.getElementById('rail').scrollLeft > x0 + 100, x0), 'product rail arrow scrolls the rail');
@@ -173,7 +174,7 @@ for (const dev of ['desktop', 'ipad', 'phone']) {
         return { open: cs.visibility === 'visible' && +cs.opacity > 0.95, links: links.length, allIn: links.every(r => r.top >= 0 && r.bottom <= innerHeight) && cta.bottom <= innerHeight + 1,
           locked: getComputedStyle(document.body).overflow === 'hidden' || getComputedStyle(document.documentElement).overflow === 'hidden', exp: document.getElementById('burger').getAttribute('aria-expanded'),
           top: document.elementFromPoint(innerWidth / 2, innerHeight / 2).closest('#menu') !== null }; });
-      ok(st.open && st.top && st.links === 6 && st.allIn && st.locked && st.exp === 'true', `menu opens fully at ${Math.round(f * 100)}%`, JSON.stringify(st));
+      ok(st.open && st.top && st.links === 9 && st.allIn && st.locked && st.exp === 'true', `menu opens fully at ${Math.round(f * 100)}%`, JSON.stringify(st));
       if (n === 2) await page.screenshot({ path: `${SHOTS}/${dev}-10-menu.jpg`, type: 'jpeg', quality: 72 });
       await page.tap('#burger');
       await page.waitForFunction(() => getComputedStyle(document.getElementById('menu')).visibility === 'hidden', null, { timeout: 4000 }).catch(() => {});
@@ -184,7 +185,7 @@ for (const dev of ['desktop', 'ipad', 'phone']) {
     }
     await page.evaluate(y => scrollTo(0, y), Math.round(total * 0.3)); await page.waitForTimeout(300);
     await page.tap('#burger'); await page.waitForTimeout(600);
-    await page.tap('.menu__links a[href="#enquiry"]'); await page.waitForTimeout(2600);
+    await page.tap('.menu__foot .btn'); await page.waitForTimeout(2600);
     const top = await page.evaluate(() => Math.round(document.getElementById('enquiry').getBoundingClientRect().top));
     ok(Math.abs(top) < 60 && await page.evaluate(() => !document.documentElement.classList.contains('menu-open')), 'menu link closes the menu and goes to the enquiry form', 'top=' + top);
   }
@@ -198,11 +199,11 @@ for (const dev of ['desktop', 'ipad', 'phone']) {
   await page.click('#enqSend'); await page.waitForTimeout(300);
   ok(ctx._posts.length === 0, 'invalid email is stopped before sending');
   await page.fill('#enqForm [name=email]', 'buyer@example.com'); await page.fill('#enqForm [name=phone]', '+971500000000'); await page.fill('#enqForm [name=country]', 'UAE');
-  await page.selectOption('#enqForm [name=sector]', 'Floriculture'); await page.selectOption('#enqTopic', 'Truck bodies');
+  await page.selectOption('#enqForm [name=brand]', 'Pulse'); await page.selectOption('#enqTopic', 'Truck bodies');
   await page.click('#enqSend'); await page.waitForTimeout(900);
   const post = ctx._posts[0] || { url: '', body: '' };
   ok(post.url === 'https://formspree.io/f/meebvwwy' && post.method === 'POST', 'form POSTs to formspree.io/f/meebvwwy', post.url);
-  ok(['name', 'company', 'email', 'phone', 'country', 'sector', 'topic', 'message', '_subject', '_gotcha'].every(k => post.body.includes(`name="${k}"`)) && post.body.includes('Test Farms Ltd') && post.body.includes('Floriculture') && post.body.includes('Truck bodies'), 'all fields are in the submission');
+  ok(['name', 'company', 'email', 'phone', 'country', 'brand', 'topic', 'message', '_subject', '_gotcha'].every(k => post.body.includes(`name="${k}"`)) && post.body.includes('Test Farms Ltd') && post.body.includes('Pulse') && post.body.includes('Truck bodies'), 'all fields are in the submission');
   ok(await page.evaluate(() => document.getElementById('enqStatus').classList.contains('ok') && document.querySelector('#enqForm [name=name]').value === ''), 'success message shown and form cleared');
   await page.screenshot({ path: `${SHOTS}/${dev}-11-form-sent.jpg`, type: 'jpeg', quality: 72 });
   ctx._formStatus = 500;
@@ -276,6 +277,28 @@ for (const dev of ['desktop', 'ipad', 'phone']) {
     if (dev !== 'ipad') await page.screenshot({ path: `${SHOTS}/${dev}-30${path.replace(/\//g, '-')}.jpg`, type: 'jpeg', quality: 70 });
     await page.close();
   }
+  for (const n of NEW) {
+    page = await open(ctx, `/${n}/`, { settle: 900 });
+    let side = true; for (const f of [0, 0.35, 0.7, 1]) { await scrollToFrac(page, f, 200); side = side && await noSideScroll(page); }
+    const info = await page.evaluate(() => ({ h1: !!document.querySelector('h1') && document.querySelector('h1').getBoundingClientRect().height > 20, photos: [...document.querySelectorAll('main img')].filter(i => !i.closest('.bhero__logo, .ob__logo')).length,
+      brand: document.getElementById('enqBrand') ? document.getElementById('enqBrand').value : null }));
+    ok(info.h1 && side && info.photos === 0 && page._errors.length === 0, `/${n}/ renders, no sideways scroll, no photographs, no errors`, JSON.stringify(info) + page._errors.slice(0, 3).join('|'));
+    if (['cargotuff', 'pulse', 'safarituff', 'cargocool'].includes(n)) ok(info.brand && info.brand.toLowerCase() === n, `/${n}/ quote form is pre-set to the brand`, String(info.brand));
+    await page.evaluate(() => scrollTo(0, 0)); await page.waitForTimeout(250);
+    await page.screenshot({ path: `${SHOTS}/${dev}-50-${n}.jpg`, type: 'jpeg', quality: 70 });
+    if (dev === 'desktop' && n === 'cargotuff') { await scrollToFrac(page, 0.3, 900); await page.screenshot({ path: `${SHOTS}/${dev}-51-${n}-range.jpg`, type: 'jpeg', quality: 70 }); }
+    if (dev !== 'desktop') { await page.tap('#burger'); await page.waitForTimeout(700); ok(await page.evaluate(() => getComputedStyle(document.getElementById('menu')).visibility === 'visible'), `/${n}/ phone menu opens`); await page.tap('#burger'); await page.waitForTimeout(400); }
+    await page.close();
+  }
+  if (dev === 'desktop') {
+    page = await open(ctx, '/cargotuff/', { settle: 700 });
+    await page.evaluate(() => { const el = document.getElementById('enqForm'); scrollTo(0, el.getBoundingClientRect().top + scrollY - 90); }); await page.waitForTimeout(600);
+    const n0 = ctx._posts.length;
+    await page.fill('#enqForm [name=name]', 'Brand Test'); await page.fill('#enqForm [name=email]', 'brand@example.com'); await page.fill('#enqForm [name=message]', 'Insulated body, 115 mm.');
+    await page.click('#enqSend'); await page.waitForTimeout(900);
+    ok(ctx._posts.length === n0 + 1 && ctx._posts[n0].url === 'https://formspree.io/f/meebvwwy' && ctx._posts[n0].body.includes('Cargotuff') && await page.evaluate(() => document.getElementById('enqStatus').classList.contains('ok')), 'brand page form posts to the same Formspree form, tagged Cargotuff');
+    await page.close();
+  }
   page = await ctx.newPage(); const resp = await page.goto(BASE + '/does-not-exist'); await page.waitForTimeout(300);
   ok(resp.status() === 404 && (await page.textContent('h1')).includes('gone cold'), '404 page'); await page.close();
   for (const [from, to] of [['/#/shop', '/shop/#/shop'], ['/#/product/hardshell-roof-tent', '/shop/#/product/hardshell-roof-tent'], ['/#/rewards', '/shop/#/rewards'], ['/#/contact', '/#enquiry'], ['/#/about', '/#story']]) {
@@ -305,15 +328,6 @@ section('Reduced motion / flat fallback / no JavaScript');
   const f = await page.evaluate(() => ({ is3d: document.getElementById('top').classList.contains('is-3d'), c: +getComputedStyle(document.querySelector('.p--c')).opacity, loaded: document.querySelector('.p--c').naturalWidth > 0 }));
   ok(!f.is3d && f.c > 0.9 && f.loaded, 'flat fallback: still frames step with the scroll when 3D is off', JSON.stringify(f));
   await page.screenshot({ path: `${SHOTS}/desktop-41-flat-fallback.jpg`, type: 'jpeg', quality: 72 });
-  await ctx.close();
-
-  ctx = await ctxFor('desktop');
-  page = await open(ctx, '/?hero=panel', { settle: 4500 });
-  await page.waitForFunction(() => document.getElementById('top').classList.contains('is-3d'), null, { timeout: 15000 }).catch(() => {});
-  await page.screenshot({ path: `${SHOTS}/desktop-42-option2-panel-a.jpg`, type: 'jpeg', quality: 72 });
-  await page.evaluate(() => { const h = document.getElementById('top'); scrollTo(0, (h.offsetHeight - innerHeight) * 0.92); }); await page.waitForTimeout(2600);
-  await page.screenshot({ path: `${SHOTS}/desktop-42-option2-panel-c.jpg`, type: 'jpeg', quality: 72 });
-  ok(await page.evaluate(() => document.getElementById('top').classList.contains('is-3d')) && page._errors.length === 0, 'hero option 2 (panel) runs', page._errors.join('|'));
   await ctx.close();
 
   ctx = await browser.newContext({ ...VP.desktop, javaScriptEnabled: false });

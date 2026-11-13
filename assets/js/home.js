@@ -26,25 +26,7 @@
   var hero = $("top"), heroSticky = hero.querySelector(".hero__sticky"), heroBar = $("heroBar");
   var heroCanvas = $("heroCanvas"), heroFocus = $("heroFocus"), heroPins = [].slice.call($("heroPins").children);
   var posters = [].slice.call(hero.querySelectorAll(".hero__posters .p"));
-  var variant = (q.get("hero") === "panel" || q.get("hero") === "body") ? q.get("hero") : (hero.getAttribute("data-hero") || "body");
   var hero3d = null, heroP = 0, postersLoaded = false, menuOpen = false;
-
-  if (variant === "panel") {
-    /* Option 2 — a single panel instead of the full body (kept switchable while the hero is being chosen) */
-    posters.forEach(function (im, i) {
-      var u = "/assets/img/panel-" + (i + 1) + ".webp";
-      if (im.getAttribute("src")) im.src = u; else im.setAttribute("data-src", u);
-    });
-    posters[0].alt = "A single insulated fibreglass panel made by Sai Raj.";
-    posters[1].alt = "The same panel turned to show its edge.";
-    var b = hero.querySelector(".hero__copy--b");
-    b.querySelector(".eyebrow").textContent = "Turn it";
-    b.querySelector(".h2").innerHTML = 'One panel.<br><em class="it">Every cold room.</em>';
-    b.querySelector(".lede").textContent = "Every body and coldroom we build starts as a panel like this one: fibreglass skins around an insulated core.";
-    var st = hero.querySelectorAll(".hero__steps .s i");
-    st[0].textContent = "Panel"; st[1].textContent = "Edge";
-    hero.querySelector(".hero__hint span").textContent = "Scroll to open";
-  }
 
   function loadPosters() {
     if (postersLoaded) return; postersLoaded = true;
@@ -70,9 +52,9 @@
     if (RM || q.get("flat") === "1" || !webglOK()) { loadPosters(); return; }
     if (navigator.connection && navigator.connection.saveData) { loadPosters(); return; }
     var go = function () {
-      import("/assets/js/hero3d.js?v=1").then(function (m) {
+      import("/assets/js/hero3d.js?v=2").then(function (m) {
         var ctl = m.init({
-          canvas: heroCanvas, focus: heroFocus, pins: heroPins, variant: variant,
+          canvas: heroCanvas, focus: heroFocus, pins: heroPins,
           onReady: function () { hero.classList.add("is-3d"); },
           onFail: function () { hero.classList.remove("is-3d"); hero3d = null; loadPosters(); }
         });
@@ -339,13 +321,6 @@
       cio.observe(capsList);
     } else capsBuild();
   }
-  /* a capability row pre-selects its topic in the enquiry form */
-  doc.addEventListener("sr:anchor", function (e) {
-    var t = e.detail.link.getAttribute("data-topic"), sel = $("enqTopic");
-    if (!t || !sel) return;
-    for (var i = 0; i < sel.options.length; i++) if (sel.options[i].text === t) { sel.selectedIndex = i; break; }
-  });
-
   /* ════════ PRODUCT RAIL ════════ */
   var railEl = $("rail"), track = $("railTrack"), railBar = $("railBar"), prev = $("railPrev"), next = $("railNext"), railBuilt = false;
   function railBuild() {
@@ -389,41 +364,6 @@
       rio.observe(railEl);
     } else railBuild();
     window.addEventListener("resize", railSync);
-  }
-
-  /* ════════ ENQUIRY FORM (Formspree, same endpoint as before) ════════ */
-  var form = $("enqForm");
-  if (form) {
-    var status = $("enqStatus"), btn = $("enqSend"), btnHTML = btn.innerHTML;
-    var WA = (SRC && SRC.WA) || "https://wa.me/971543256505";
-    form.addEventListener("input", function (e) { var f = e.target.closest(".f"); if (f) f.classList.remove("is-bad"); });
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var bad = null;
-      [].forEach.call(form.querySelectorAll("[required]"), function (el) {
-        var ok = el.value.trim() !== "" && (el.type !== "email" || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(el.value.trim()));
-        el.closest(".f").classList.toggle("is-bad", !ok);
-        if (!ok && !bad) bad = el;
-      });
-      if (bad) {
-        status.className = "form__msg err"; status.textContent = "Please add your name, a valid email and a short message.";
-        bad.focus(); return;
-      }
-      var data = new FormData(form);
-      btn.disabled = true; btn.textContent = "Sending…"; status.className = "form__msg"; status.textContent = "";
-      fetch(form.action, { method: "POST", body: data, headers: { Accept: "application/json" } })
-        .then(function (r) { if (!r.ok) throw new Error("bad status"); return r; })
-        .then(function () {
-          form.reset();
-          status.className = "form__msg ok";
-          status.textContent = "Sent — we'll get back to you within one working day.";
-        })
-        .catch(function () {
-          status.className = "form__msg err";
-          status.innerHTML = 'Couldn\'t send. Please try <a href="' + WA + '" rel="noopener">WhatsApp</a> or email <a href="mailto:info@sairaj.global">info@sairaj.global</a>.';
-        })
-        .then(function () { btn.disabled = false; btn.innerHTML = btnHTML; });
-    });
   }
 
   /* nothing animates behind the open menu */

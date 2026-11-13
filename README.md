@@ -6,10 +6,14 @@ Static site for Sai Raj (Sai Raj Trading FZCO, Dubai · Sai Raj Ltd, Nairobi). N
 
 | Path | What it is |
 |---|---|
-| `/` | The story: preloader, 3D hero, 1975 Kenya → the Gulf, sectors, capabilities, what's next, shop band, enquiry |
-| `/shop/` | The shop app carried over from the previous site: 12 products, cart, Shopify checkout, brands, range, Sai Raj Club, Desert Dash |
+| `/` | Group home: preloader, 3D hero, 1975 Kenya → the Gulf, sectors, the six brands, what's next, shop band, partners, enquiry |
+| `/cargotuff/` `/pulse/` `/safarituff/` `/cargocool/` `/deco/` | Brand pages, one shared layout, each with its own accent colour and a quote form tagged with the brand |
+| `/cold-chain/` | The cold chain across the brands |
+| `/partners/` `/contact/` `/downloads/` | Partner brands, the Dubai and Nairobi locations, profile and catalogues |
+| `/shop/` | The shop app carried over from the previous site: 12 products, cart, Shopify checkout, range, Sai Raj Club, Desert Dash |
 | `/privacy/`, `/terms/` | **Drafts for a lawyer.** Yellow highlights mark what still needs confirming |
-| `404.html` | Not-found page |
+
+Main pages carry no photographs. Drawings are inline SVG line art; product photos live only in the shop.
 
 Links from the old single-page site (`/#/shop`, `/#/product/…`, `/#/contact`) redirect to their new homes.
 
@@ -17,7 +21,8 @@ Links from the old single-page site (`/#/shop`, `/#/product/…`, `/#/contact`) 
 
 - **Products, prices, Shopify variant IDs, photo crops, brands:** `assets/js/catalog.js`. One file feeds both the home page and the shop.
 - **Enquiry form:** posts to Formspree form `meebvwwy` (the `action` on the form in `index.html`; the club form in `assets/js/shop.js` uses the same ID from `catalog.js`).
-- **Copy:** straight in the HTML files.
+- **Nav, footer, brand pages, cold chain, partners, contact, downloads:** all come from `tools/build_pages.py`. Edit the data there and run `python3 tools/build_pages.py`; it rewrites those pages and re-injects the shared nav and footer into every other page.
+- **Home page copy:** straight in `index.html` (the brands, partners and enquiry blocks are injected by the generator).
 - **Colours and fonts:** tokens at the top of `assets/css/base.css`. Fonts are self-hosted in `assets/fonts/` (Playfair Display, Poppins — SIL Open Font License).
 - After changing a CSS or JS file, bump the `?v=1` on its `<link>`/`<script>` tag so browsers pick it up straight away.
 
@@ -25,12 +30,7 @@ Links from the old single-page site (`/#/shop`, `/#/product/…`, `/#/contact`) 
 
 The 3D hero is `assets/js/hero3d.js`, loaded only after the page is up, only where WebGL works, and never for visitors who ask for reduced motion or data saving. Everyone else gets three still frames (`assets/img/hero-1..3.webp`) that step with the scroll.
 
-Two hero options exist while one is being chosen:
-
-- default — the refrigerated body
-- `/?hero=panel` — a single insulated panel
-
-Other switches for checking: `/?flat=1` forces the still frames.
+Switch for checking: `/?flat=1` forces the still frames.
 
 ## Tools (not deployed)
 
