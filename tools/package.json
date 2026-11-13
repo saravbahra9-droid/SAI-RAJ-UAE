@@ -10,6 +10,7 @@
     "build:posters": "node render-posters.mjs",
     "build:og": "node render-og.mjs",
     "build:pdfs": "python3 build_profile.py && node render-pdf.mjs profile && python3 build_catalogue.py && node render-pdf.mjs cargotuff && python3 build_pages.py",
+    "build:parts": "python3 build_parts.py && node measure-parts.mjs && python3 build_parts.py && node render-pdf.mjs parts && python3 parts_verify.py && python3 build_pages.py",
     "test": "node test-site.mjs"
   },
   "devDependencies": {

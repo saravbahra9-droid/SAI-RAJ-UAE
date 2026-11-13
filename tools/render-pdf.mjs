@@ -3,7 +3,7 @@
 import { chromium } from 'playwright-core';
 import { start } from './serve.mjs';
 import { fileURLToPath } from 'node:url';
-const DOCS = { profile: 'sai-raj-company-profile-2026.pdf', cargotuff: 'cargotuff-cold-chain-catalogue-2026.pdf' };
+const DOCS = { profile: 'sai-raj-company-profile-2026.pdf', cargotuff: 'cargotuff-cold-chain-catalogue-2026.pdf', parts: 'sai-raj-product-catalogue-2026.pdf' };
 const name = process.argv[2];
 if (!DOCS[name]) { console.error('usage: node render-pdf.mjs <' + Object.keys(DOCS).join('|') + '>'); process.exit(2); }
 const server = await start(4196);

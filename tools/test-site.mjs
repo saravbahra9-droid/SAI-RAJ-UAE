@@ -58,15 +58,16 @@ const dl = readFileSync(join(ROOT, 'downloads/index.html'), 'utf8');
 ok(!shipped.some(f => readFileSync(f, 'utf8').includes('2024-25.pdf')), 'nothing links the retired 2024-25 PDF');
 const PDFS = [
   ['assets/docs/sai-raj-company-profile-2026.pdf', 20, ['Innovation is in our', 'Jebel Ali Freezone (JAFZA)', 'Baba Dogo Rd', '10,000+', 'Thermo King', 'Cargotuff', 'Safarituff', 'Cargocool', 'Decoroof', 'Decoglaze', '+971 543 256 505', 'info@sairaj.global']],
+  ['assets/docs/sai-raj-product-catalogue-2026.pdf', 275, ['Product and parts', 'Accessories by', 'Toyota Hilux', 'Ford Ranger', 'Isuzu DMAX', 'Changan Hunter', 'BBCD076', 'IAWNING2.5MROOM', 'SR-BS-RBWTH-TH-15', 'WWB9500SR'], 30e6],
   ['assets/docs/cargotuff-cold-chain-catalogue-2026.pdf', 22, ['Built to', 'Rigicore fibreglass', '65, 90, 115 or 165 mm', 'Ferrotuff', 'Precise canopy', 'Thermo King', 'Official dealer', 'Rivacold', 'KEBS approved', 'Sherp carriers', 'Jebel Ali Freezone (JAFZA)', '+971 543 256 505', 'info@sairaj.global', '+254 708 771 100']],
 ];
-for (const [PDF, pagesWanted, facts] of PDFS) {
+for (const [PDF, pagesWanted, facts, maxBytes = 3e6] of PDFS) {
   const short = PDF.split('/').pop();
   ok(dl.includes(`href="/${PDF}" download`), `Downloads links ${short}`);
   const info = execFileSync('pdfinfo', [join(ROOT, PDF)]).toString();
   ok(new RegExp(`Pages:\\s+${pagesWanted}\\b`).test(info), `${short} has ${pagesWanted} pages`, (info.match(/Pages:.*/) || [''])[0]);
   ok(/Page size:\s+59[45](\.\d+)? x 84[12](\.\d+)? pts \(A4\)/.test(info), `${short} is A4`, (info.match(/Page size:.*/) || [''])[0]);
-  ok(statSync(join(ROOT, PDF)).size < 3e6, `${short} is under 3 MB`, String(statSync(join(ROOT, PDF)).size));
+  ok(statSync(join(ROOT, PDF)).size < maxBytes, `${short} is under ${maxBytes / 1e6} MB`, String(statSync(join(ROOT, PDF)).size));
   ok(dl.includes(`PDF, ${pagesWanted} pages, ${(statSync(join(ROOT, PDF)).size / 1e6).toFixed(1)} MB`), `Downloads shows the real page count and size of ${short}`);
   const fonts = execFileSync('pdffonts', [join(ROOT, PDF)]).toString();
   const fontRows = fonts.split('\n').slice(2).filter(l => l.trim()).map(l => l.trim().split(/\s+/));
@@ -76,9 +77,19 @@ for (const [PDF, pagesWanted, facts] of PDFS) {
   ok(!/over 40 years/i.test(ptxt), `${short} never says "over 40 years"`);
   ok(ptxt.split('\f').filter(x => x.trim()).length === pagesWanted, `every page of ${short} carries text`);
 }
-// the catalogue's contents page must point at the right pages
+// the product catalogue: every row and part number of the original must be in the new PDF (needs the local extraction output)
+if (existsSync(join(ROOT, 'tools/out/parts-map.json'))) {
+  let res = ''; try { res = execFileSync('python3', [join(ROOT, 'tools/parts_verify.py')]).toString(); } catch (e) { res = String(e.stdout || e); }
+  ok(/RESULT: all checks pass/.test(res), 'product catalogue matches the original: all rows and part numbers carried over', res.split('\n').slice(-6).join(' | '));
+  ok(/3490 table rows/.test(res) && /1578 in the original, 1578 found/.test(res), 'product catalogue carries 3,490 rows and 1,578 distinct part numbers');
+  const pt = execFileSync('pdftotext', ['-layout', join(ROOT, PDFS[1][0]), '-'], { maxBuffer: 2e8 }).toString().split('\f');
+  const tc = [...pt[1].matchAll(/^\s*0\d\s+(.+?)\s{2,}(\d{2,3})\s*$/gm)].map(m => [m[1].trim(), +m[2]]);
+  ok(tc.length === 6, 'product catalogue contents lists 6 parts', String(tc.length));
+  for (const [title, n] of tc) ok(/PART 0\d/i.test(pt[n - 1] || '') && (pt[n - 1] || '').replace(/\s+/g, ' ').toLowerCase().includes(title.split(' ')[0].toLowerCase()), `product catalogue contents: "${title}" opens on page ${n}`);
+}
+// the Cargotuff catalogue's contents page must point at the right pages
 {
-  const pagesTxt = execFileSync('pdftotext', ['-layout', join(ROOT, PDFS[1][0]), '-'], { maxBuffer: 1e8 }).toString().split('\f');
+  const pagesTxt = execFileSync('pdftotext', ['-layout', join(ROOT, PDFS[2][0]), '-'], { maxBuffer: 1e8 }).toString().split('\f');
   const toc = [...pagesTxt[1].matchAll(/^\s*0\d\s+(.+?)\s{2,}(\d{2})\s*$/gm)].map(m => [m[1].trim(), +m[2]]);
   ok(toc.length === 7, 'catalogue contents lists 7 sections', String(toc.length));
   for (const [title, n] of toc) ok(new RegExp(`0\\d · ${title.split(' ')[0]}`, 'i').test(pagesTxt[n - 1] || ''), `contents: "${title}" starts on page ${n}`);
