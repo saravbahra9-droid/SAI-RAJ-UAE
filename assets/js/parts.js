@@ -9,6 +9,7 @@
   if (!D || !app) return;
   var doc = document, root = doc.documentElement, V = D.v, byId = {};
   V.forEach(function (v) { byId[v.id] = v; v.n = v.c.reduce(function (s, c) { return s + c[1].length; }, 0); });
+  byId.range = { id: "range", mk: "", md: "From the shop (tell us your vehicle)", va: [], c: [], n: 0 };      // items added in the shop that fit several vehicles
   var $ = function (id) { return doc.getElementById(id); };
   var q = $("pfQ"), bar = $("pfBar"), countEl = $("pfCount"), sheet = $("pfSheet"), listEl = $("pfList"), form = $("pfForm"),
       status = $("pfStatus"), send = $("pfSend"), wa = $("pfWa"), msg = $("pfMessage"), sendHTML = send.innerHTML;
@@ -18,8 +19,9 @@
               '<svg class="i-in" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7.500-8"/></svg>';
   var I_X = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 2l12 12M14 2 2 14"/></svg>';
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
-  var title = function (v) { return v.id === "general" ? v.md : v.mk + " " + v.md; };
-  var full = function (v) { return v.id === "general" ? v.md : title(v) + " (" + v.va.join(" · ") + ")"; };
+  var plain = function (v) { return v.id === "general" || v.id === "range"; };
+  var title = function (v) { return plain(v) ? v.md : v.mk + " " + v.md; };
+  var full = function (v) { return plain(v) ? v.md : title(v) + " (" + v.va.join(" · ") + ")"; };
   var plural = function (n, w) { return n + " " + w + (n === 1 ? "" : "s"); };
 
   /* ── the list ── */
@@ -140,9 +142,10 @@
   function route() {
     var h = location.hash.replace(/^#\/?/, ""), m;
     try { h = decodeURIComponent(h); } catch (e) {}
-    if ((m = h.match(/^v\/(.+)$/)) && byId[m[1]]) { q.value = ""; vehicle(byId[m[1]]); }
+    if ((m = h.match(/^v\/(.+)$/)) && byId[m[1]] && !plain(byId[m[1]]) || h === "v/general") { q.value = ""; vehicle(byId[h.slice(2)]); }
     else if ((m = h.match(/^q\/(.+)$/))) { if (doc.activeElement !== q) q.value = m[1]; search(m[1]); }
     else if ((m = h.match(/^m\/(.+)$/))) { q.value = ""; home(m[1]); }
+    else if (h === "list") { home(""); sync(); openSheet($("pfOpen")); first = false; return; }      // #/list: straight to the list (the shop links here)
     else { if (doc.activeElement !== q) q.value = ""; home(""); }
     sync();
     if (!first && doc.activeElement !== q) {       // a new view starts at its top, not wherever the last one was scrolled to

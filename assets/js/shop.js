@@ -19,7 +19,7 @@ function cardHTML(p){
       <h3>${p.title}</h3>
       <p class="sub">${p.sub}</p>
       <div class="row">
-        <span class="price">${p.was ? `<span class="was">${money(p.was)}</span>` : ""}<small>AED</small> ${money(p.price)}</span>
+        <span class="price">${p.was ? `<span class="was">${money(conv(p.was))}</span>` : ""}${priceHTML(p.price)}</span>
         <span class="go">View →</span>
       </div>
     </div>
@@ -36,18 +36,9 @@ function pageShop(filterCat){
     <h1>${landing ? "Gear your 4x4. Protect your load." : filterCat}</h1>
     <p class="sub">Canopies, drawer systems, cooler boxes and camping gear — engineered in fibreglass since 1975. Priced in AED, delivered across the Gulf, checkout by Shopify.</p>
   </div>
-  ${landing ? `<section class="section" style="padding:36px 0 0"><div class="wrap">
-    <div class="sec-head"><h2>Shop by Category</h2></div>
-    <div class="tiles">
-      ${CATS.map(([key,label,im]) => `
-        <a class="tile" href="#/shop/${key}">
-          ${bim(im, label)}
-          <span class="lab">${label}<span>Shop now →</span></span>
-        </a>`).join("")}
-    </div>
-  </div></section>` : ""}
+  ${landing && window.SRR ? SRR.landing() : ""}
   <section class="section" style="padding-top:56px"><div class="wrap">
-    <div class="sec-head"><h2>${landing ? "All Products" : "Products"}</h2><a href="#/range">Need custom work? →</a></div>
+    <div class="sec-head"><h2>${landing ? "Buy online" : "Products"}</h2><a href="#/range">Need custom work? →</a></div>
     <div class="toolbar">
       <div class="search">
         <input type="search" id="q" placeholder="Search products…" aria-label="Search products">
@@ -104,7 +95,10 @@ function pageShop(filterCat){
     const b = e.target.closest(".chip"); if (!b) return;
     active = b.dataset.cat; draw();
   });
-  q.addEventListener("input", draw);
+  /* the same search also looks through the full range (price on request) */
+  const hits = document.createElement("div"); hits.id = "rangeHits"; grid.parentNode.appendChild(hits);
+  function drawRange(){ if (window.SRR) { hits.innerHTML = SRR.searchHTML(q.value); SRR.refresh(); } }
+  q.addEventListener("input", () => { draw(); drawRange(); });
   sort.addEventListener("change", draw);
   draw();
 }
@@ -127,7 +121,7 @@ function pageProduct(id){
       <div>
         <span class="cat">${p.cat}</span>
         <h1>${p.title}</h1>
-        <p class="price">${p.was ? `<span class="was">AED ${money(p.was)}</span> ` : ""}<small>AED</small> ${money(p.price)}</p>
+        <p class="price">${p.was ? `<span class="was">${price(p.was)}</span> ` : ""}${priceHTML(p.price)}</p>
         <p class="desc">${p.desc}</p>
         <div class="specs">${p.specs.map(([k,v]) => `<div><b>${k}</b><span>${v}</span></div>`).join("")}</div>
         <div class="qtyrow">
@@ -513,9 +507,11 @@ function route(){
   else if (page === "brand")   pageBrand(param);
   else if (page === "game")    pageGame();
   else if (page === "rewards") pageRewards();
+  else if (page === "cat" && window.SRR)  SRR.pageCat(app, param);
+  else if (page === "item" && window.SRR) SRR.pageItem(app, param);
   else                         pageShop(decodeURIComponent(param || ""));
 
-  const active = (page === "product" || page === "brand" || !page) ? "shop" : page;
+  const active = (page === "product" || page === "brand" || page === "cat" || page === "item" || !page) ? "shop" : page;
   document.querySelectorAll("[data-nav]").forEach(a =>
     a.classList.toggle("active", a.dataset.nav === active));
   window.scrollTo(0,0);
@@ -540,14 +536,19 @@ function renderCart(){
   const go = document.getElementById("cartCheckout");
   const b1 = document.getElementById("cartBadge1");
   const b2 = document.getElementById("cartBadge2");
-  const n = cartCount();
+  const n = cartCount() + (window.SRR ? SRR.getList().length : 0);
   b1.textContent = n; b2.textContent = n;
   b1.classList.toggle("on", n > 0);
   b2.style.display = n ? "grid" : "none";
 
+  const req = window.SRR ? SRR.cartBlock() : "";
+  let note = document.getElementById("cartNote");
+  if (!note) { note = document.createElement("p"); note.id = "cartNote"; note.className = "cart-note"; go.parentNode.insertBefore(note, go); }
+  note.textContent = getCur() === "AED" || !CART.length ? "" : `Shown in ${getCur()} for reference. Checkout is in AED.`;
+  go.parentNode.hidden = !CART.length && !!req;   // only price-on-request lines: no subtotal, no checkout
   if (!CART.length){
-    box.innerHTML = `<p class="cart-empty">Your cart is empty.<br><a href="#/shop" style="color:var(--red-deep);font-weight:600" onclick="closeCart()">Browse the shop →</a></p>`;
-    total.textContent = "AED 0";
+    box.innerHTML = (req ? "" : `<p class="cart-empty">Your cart is empty.<br><a href="#/shop" style="color:var(--red-deep);font-weight:600" onclick="closeCart()">Browse the shop →</a></p>`) + req;
+    total.textContent = price(0);
     go.style.opacity = ".5"; go.style.pointerEvents = "none";
     return;
   }
@@ -559,7 +560,7 @@ function renderCart(){
       <div class="ci-im">${p.img ? bim(p.img, p.title) : `<div class="ph2" style="border-radius:8px"><span style="font-size:9px;border-width:2px;padding-bottom:3px">${p.cat}</span></div>`}</div>
       <div class="ci-b">
         <h4>${p.title}</h4>
-        <p class="ci-p">AED ${money(p.price)}</p>
+        <p class="ci-p">${price(p.price)}</p>
       </div>
       <div class="cqty">
         <button data-act="minus" aria-label="Decrease">−</button>
@@ -568,8 +569,8 @@ function renderCart(){
       </div>
       <button class="ci-x" data-act="remove" aria-label="Remove">✕</button>
     </div>`;
-  }).join("");
-  total.textContent = "AED " + money(sum);
+  }).join("") + req;
+  total.textContent = price(sum);
   go.style.opacity = "1"; go.style.pointerEvents = "auto";
   go.href = `https://${SHOPIFY.domain}/cart/` +
     CART.map(l => `${PRODUCTS.find(x => x.id === l.id).variantId}:${l.qty}`).join(",");
@@ -584,6 +585,7 @@ function closeCart(){
 }
 document.getElementById("cartItems").addEventListener("click", e => {
   const btn = e.target.closest("[data-act]"); if (!btn) return;
+  if (!btn.closest(".citem")) return;
   const id = btn.closest(".citem").dataset.id;
   const line = CART.find(i => i.id === id); if (!line) return;
   if (btn.dataset.act === "plus")  line.qty = Math.min(99, line.qty + 1);
@@ -596,6 +598,27 @@ document.getElementById("cartTab").addEventListener("click", e => { e.preventDef
 document.getElementById("cartClose").addEventListener("click", closeCart);
 document.getElementById("cartOv").addEventListener("click", closeCart);
 renderCart();
+
+/* ── Display currency (for show; checkout stays in AED) ── */
+const curBar = document.createElement("div");
+curBar.className = "curbar";
+curBar.innerHTML = `<div class="wrap curbar__in"><span class="curbar__l">Show prices in</span><div class="cur" role="group" aria-label="Show prices in">${
+  Object.keys(CURRENCY.rates).map(c => `<button type="button" data-cur="${c}">${c}</button>`).join("")}</div><span class="curbar__n" id="curNote"></span></div>`;
+app.parentNode.insertBefore(curBar, app);
+function drawCur(){
+  const c = getCur();
+  curBar.querySelectorAll("[data-cur]").forEach(b => b.setAttribute("aria-pressed", b.dataset.cur === c ? "true" : "false"));
+  document.getElementById("curNote").textContent = c === "AED" ? "UAE dirhams. Checkout by Shopify."
+    : c === "USD" ? "Approximate, at AED 3.6725 to US$ 1. Checkout is in AED."
+    : `Approximate, at KSh ${CURRENCY.rates.KES} to AED 1 (${CURRENCY.asOf}). Checkout is in AED.`;
+}
+curBar.addEventListener("click", e => {
+  const b = e.target.closest("[data-cur]"); if (!b) return;
+  setCur(b.dataset.cur); drawCur();
+  const y = window.scrollY; route(); renderCart(); window.scrollTo(0, y);
+});
+drawCur();
+window.SRShop = { renderCart, openCart, cardHTML };
 
 window.addEventListener("hashchange", route);
 route();

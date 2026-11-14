@@ -109,6 +109,16 @@ section('Parts finder data');
   const wantG = src.pages.filter(p => p.type === 'products').flatMap(p => p.tables.flatMap(t => t.rows.filter(x => x.desc).map(x => [x.desc, x.part, x.uom].join(' | '))));
   const gotG = flat(SR.v[39]);
   ok(wantG.length === gotG.length && wantG.every((w, k) => w === gotG[k]), 'general accessories carry every product-page row word for word', wantG.length + '/' + gotG.length);
+  /* shop categories and photos built from the same data */
+  const heads = new Set(SR.v.flatMap(v => v.c.map(c => c[0]))), mapped = SR.sc.flatMap(c => c[2]);
+  ok(SR.sc.length === 11 && new Set(SR.sc.map(c => c[0])).size === 11, 'shop range has 11 categories', String(SR.sc.length));
+  ok([...heads].every(h => mapped.includes(h)) && new Set(mapped).size === mapped.length, 'every catalogue heading sits in exactly one shop category', [...heads].filter(h => !mapped.includes(h)).join(', '));
+  const noPhoto = SR.sc.map(c => c[0]).filter(k => !existsSync(join(ROOT, 'assets/img/shop/cat-' + k + '.webp')));
+  ok(noPhoto.join() === 'interior', 'ten shop categories have a catalogue photo (seats and interior has none)', noPhoto.join());
+  const noVeh = SR.v.filter(v => v.id !== 'general' && !existsSync(join(ROOT, 'assets/img/shop/veh/' + v.id + '.webp'))).map(v => v.id);
+  ok(noVeh.length === 0, 'all 39 vehicles have a photo for the shop', noVeh.join());
+  const cat = readFileSync(join(ROOT, 'assets/js/catalog.js'), 'utf8');
+  ok(/USD: 1 \/ 3\.6725/.test(cat) && /KES: 35\.2\b/.test(cat) && /asOf: "November 2026"/.test(cat), 'display currency rates: USD at the dirham peg, KES 35.2, dated');
   const srcNums = new Set(src.pages.flatMap(p => p.tables.flatMap(t => t.rows.filter(x => x.desc && x.part).map(x => x.part))));
   const gotNums = new Set(SR.v.flatMap(v => v.c.flatMap(c => c[1].map(r => r[1]).filter(Boolean))));
   ok(srcNums.size === gotNums.size && [...srcNums].every(n => gotNums.has(n)), 'every part number of the catalogue is in the parts finder', srcNums.size + ' vs ' + gotNums.size);
@@ -325,6 +335,71 @@ for (const dev of ['desktop', 'ipad', 'phone']) {
   ok(await page.evaluate(() => JSON.parse(localStorage.getItem('srcart')).length === 2 && document.getElementById('cartBadge1').textContent === '3'), 'cart survives a reload');
   const allLinks = await page.evaluate(() => window.SR.PRODUCTS.map(p => window.SR.cartHref(p, 1)));
   ok(allLinks.length === 12 && allLinks.every(l => /^https:\/\/sai-raj-uae\.myshopify\.com\/cart\/\d{14}:1$/.test(l)), 'all 12 products produce a Shopify cart link');
+
+  /* ─── shop: the full range, one basket, display currency ─── */
+  await page.goto(BASE + '/shop/'); await page.waitForTimeout(700);
+  const rg = await page.evaluate(() => ({ items: SRR.items.length, cats: SRR.cats.length, sum: SRR.cats.reduce((s, c) => s + c.items.length, 0), keys: new Set(SRR.items.map(i => i.k)).size,
+    tiles: document.querySelectorAll('.rtile').length, vehs: document.querySelectorAll('.rveh').length, vhref: document.querySelector('.rveh').getAttribute('href'), grid: document.querySelectorAll('#grid .card').length }));
+  ok(rg.items === 1739 && rg.sum === 1739 && rg.keys === 1739 && rg.cats === 11, 'range index: 1,739 distinct products in 11 categories, each with its own key', JSON.stringify(rg));
+  ok(rg.tiles === 11 && rg.vehs === 39 && /^\/parts\/#\/v\//.test(rg.vhref) && rg.grid === 12, 'shop front shows 11 category tiles, 39 vehicles and the 12 buy-online products');
+  await page.click('.rmakes [data-make="Ford"]'); await page.waitForTimeout(200);
+  ok(await page.evaluate(() => { const v = [...document.querySelectorAll('.rveh')].filter(a => !a.hidden); return v.length > 0 && v.length < 39 && v.every(a => a.dataset.mk === 'Ford'); }), 'shop by vehicle filters by make');
+  await page.fill('#q', 'winch'); await page.waitForTimeout(300);
+  ok(await page.evaluate(() => document.querySelectorAll('#rangeHits .rr').length > 3 && [...document.querySelectorAll('#rangeHits .rr')].every(r => /winch/i.test(r.textContent))), 'shop search also finds range products');
+  await page.fill('#q', ''); await page.waitForTimeout(200);
+  ok(await page.evaluate(() => document.querySelector('#rangeHits').children.length === 0), 'clearing the search clears the range results');
+  await page.goto(BASE + '/shop/#/cat/bull-bars'); await page.waitForTimeout(600);
+  const cp = await page.evaluate(() => ({ h1: document.querySelector('.rhead h1').textContent, count: document.getElementById('rcount').textContent, want: SRR.cats.find(c => c.k === 'bull-bars').items.length, rows: document.querySelectorAll('#rlist .rr').length, chips: document.querySelectorAll('#rsubs .chip').length }));
+  ok(cp.h1 === 'Bull bars and protection' && cp.count === cp.want + ' products' && cp.rows > 0 && cp.rows <= cp.want && cp.chips > 2 && await noSideScroll(page), 'category page lists its products with sub-category chips, no sideways scroll', JSON.stringify(cp));
+  await page.screenshot({ path: `${SHOTS}/${dev}-22-shop-category.jpg`, type: 'jpeg', quality: 72 });
+  await page.fill('#rq', 'snorkel'); await page.waitForTimeout(250);
+  ok(await page.evaluate(() => { const r = [...document.querySelectorAll('#rlist .rr')]; return r.length > 0 && r.every(x => /snorkel/i.test(x.textContent)) && /^\d+ products?$/.test(document.getElementById('rcount').textContent); }), 'category search narrows the list');
+  await page.fill('#rq', ''); await page.waitForTimeout(200);
+  const first = await page.evaluate(() => { const it = SRR.cats.find(c => c.k === 'bull-bars').items[0]; return { k: it.k, d: it.d, p: it.p }; });
+  await page.click('#rlist .rr__add'); await page.waitForTimeout(300);
+  ok(await page.evaluate(f => { const l = JSON.parse(localStorage.getItem('sr-parts-list')); return l.length === 1 && l[0].d === f.d && l[0].p === f.p && document.querySelector('#rlist .rr__add').getAttribute('aria-pressed') === 'true' && document.getElementById('cartBadge1').textContent === '4'; }, first),
+    'adding a range product puts it on the enquiry list and in the basket count');
+  await page.evaluate(() => SRShop.openCart()); await page.waitForTimeout(500);
+  ok(await page.evaluate(f => { const li = document.querySelectorAll('#cartItems .creq li'); return document.querySelectorAll('#cartItems .citem').length === 2 && li.length === 1 && li[0].textContent.includes(f.d) && document.querySelector('.creq__go').getAttribute('href') === '/parts/#/list' && !document.querySelector('.cart-foot').hidden; }, first)
+    && await page.getAttribute('#cartCheckout', 'href') === href, 'one basket: priced lines check out by Shopify, request lines go to the enquiry, checkout link unchanged');
+  await page.screenshot({ path: `${SHOTS}/${dev}-23-shop-basket.jpg`, type: 'jpeg', quality: 72 });
+  await page.click('#cartClose'); await page.goto(BASE + '/shop/#/item/' + first.k); await page.waitForTimeout(600);
+  const ip = await page.evaluate(() => ({ h1: document.querySelector('.ritem h1').textContent, odoo: document.querySelector('[data-odoo]').href, blank: document.querySelector('[data-odoo]').target === '_blank' && /noopener/.test(document.querySelector('[data-odoo]').rel),
+    on: document.querySelector('.ritem [data-rr]').getAttribute('aria-pressed'), fits: [...document.querySelectorAll('.ritem__fits a')].every(a => /^\/parts\/#\/v\//.test(a.getAttribute('href'))), price: document.querySelector('.ritem__dl').textContent }));
+  ok(ip.h1 === first.d && ip.on === 'true' && ip.fits && /On request/.test(ip.price) && !/AED|US\$|KSh/.test(ip.price) && await noSideScroll(page), 'range product page: name, fitment links, price on request and no invented price', JSON.stringify(ip));
+  ok(ip.odoo === 'https://sairaj.com/shop?search=' + encodeURIComponent(first.p) && ip.blank, 'range product links to a part-number search on sairaj.com in a new tab', ip.odoo);
+  ok(await page.evaluate(k => { window.SR_ODOO_LINKS = { [k]: 'https://sairaj.com/shop/example-123' }; return SRR.odooLink(SRR.byKey[k]) === 'https://sairaj.com/shop/example-123'; }, first.k), 'an exact Odoo link, once supplied, replaces the search link');
+  await page.screenshot({ path: `${SHOTS}/${dev}-24-shop-item.jpg`, type: 'jpeg', quality: 72 });
+  await page.goto(BASE + '/parts/#/list'); await page.waitForTimeout(900);
+  ok(await page.evaluate(f => { const s = document.querySelector('.pf-sheet, #pfSheet, [role="dialog"]'); return !!s && s.textContent.includes(f.d) && s.getBoundingClientRect().width > 0; }, first), 'the enquiry link opens the parts list with the shop item in it');
+  await page.goto(BASE + '/shop/#/cat/bull-bars'); await page.waitForTimeout(600);
+  await page.click('#rlist .rr__add'); await page.waitForTimeout(300);
+  ok(await page.evaluate(() => JSON.parse(localStorage.getItem('sr-parts-list')).length === 0 && document.getElementById('cartBadge1').textContent === '3'), 'tapping again takes it off the list');
+  await page.evaluate(() => { const it = SRR.cats.find(c => c.k === 'care').items[0]; document.querySelector('#rq').value = ''; location.hash = '#/item/' + it.k; }); await page.waitForTimeout(500);
+  await page.click('.ritem [data-rr]'); await page.evaluate(() => SRShop.openCart()); await page.waitForTimeout(400);
+  await page.click('#cartItems [data-rr-rm]'); await page.waitForTimeout(300);
+  ok(await page.evaluate(() => JSON.parse(localStorage.getItem('sr-parts-list')).length === 0 && !document.querySelector('#cartItems .creq') && document.querySelector('.ritem [data-rr]').getAttribute('aria-pressed') === 'false'), 'a request line can be removed from the basket');
+  await page.click('#cartClose');
+  /* currency: for show only */
+  await page.goto(BASE + '/shop/#/product/frp-pickup-canopy'); await page.waitForTimeout(600);
+  const priceOf = () => page.evaluate(() => document.querySelector('.pdp .price').textContent.replace(/\s+/g, ' ').trim());
+  const aed0 = await priceOf();
+  await page.click('.curbar [data-cur="USD"]'); await page.waitForTimeout(300);
+  const usd = await priceOf();
+  await page.click('.curbar [data-cur="KES"]'); await page.waitForTimeout(300);
+  const kes = await priceOf();
+  ok(/AED 4,750/.test(aed0) && !/≈/.test(aed0) && /≈ ?US\$ 1,293/.test(usd) && /≈ ?KSh 167,200/.test(kes), 'currency switch: AED 4,750 → ≈ US$ 1,293 → ≈ KSh 167,200', [aed0, usd, kes].join(' | '));
+  ok(await page.evaluate(() => /35\.2/.test(document.getElementById('curNote').textContent) && /AED/.test(document.getElementById('curNote').textContent) && document.querySelector('.curbar [data-cur="KES"]').getAttribute('aria-pressed') === 'true'), 'the bar says the rate and that checkout is in AED');
+  await page.evaluate(() => SRShop.openCart()); await page.waitForTimeout(400);
+  ok(await page.getAttribute('#cartCheckout', 'href') === href && await page.evaluate(() => /KSh/.test(document.getElementById('cartTotal').textContent) && /Checkout is in AED/.test(document.getElementById('cartNote').textContent)), 'in KES the Shopify checkout link is unchanged and the basket says checkout is in AED');
+  await page.click('#cartClose'); await page.reload(); await page.waitForTimeout(700);
+  ok(/KSh 167,200/.test(await priceOf()), 'the chosen currency is remembered');
+  await page.goto(BASE + '/shop/'); await page.waitForTimeout(600);
+  ok(await page.evaluate(() => [...document.querySelectorAll('#grid .card')].every(c => /≈\s*KSh/.test(c.textContent))) && await noSideScroll(page), 'all 12 cards show the KES estimate, no sideways scroll');
+  await page.screenshot({ path: `${SHOTS}/${dev}-25-shop-kes.jpg`, type: 'jpeg', quality: 72 });
+  await page.click('.curbar [data-cur="AED"]'); await page.waitForTimeout(300);
+  await page.goto(BASE + '/shop/#/product/frp-pickup-canopy'); await page.waitForTimeout(500);
+  ok(await priceOf() === aed0 && await page.evaluate(() => localStorage.getItem('sr-cur') === 'AED' && document.getElementById('cartNote').textContent === ''), 'back to AED shows the real price exactly as before');
   for (const [route, sel, label] of [['#/range', '.range-grid .rcard', 'range page (12 lines)'], ['#/brand/cargocool', '.bhero h1', 'brand page'], ['#/rewards', '#clubForm', 'Sai Raj Club page'], ['#/game', 'canvas#dd', 'Desert Dash']]) {
     await page.goto(BASE + '/shop/' + route); await page.waitForTimeout(500);
     ok(await page.locator(sel).count() >= 1 && await noSideScroll(page), `${label} renders, no sideways scroll`);

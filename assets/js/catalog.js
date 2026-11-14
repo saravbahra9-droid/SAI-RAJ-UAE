@@ -148,9 +148,29 @@ const BRANDS = [
 
 /* ── Shared helpers ── */
 const money = n => n.toLocaleString("en-US");
+
+/* ════════════════════════════════════════════════════════════
+   DISPLAY CURRENCIES — for show only. AED is the real price and
+   the currency Shopify charges. USD uses the fixed dirham peg;
+   KES uses the rate below: update it (and asOf) when it drifts.
+   ════════════════════════════════════════════════════════════ */
+const CURRENCY = { rates: { AED: 1, USD: 1 / 3.6725, KES: 35.2 }, label: { AED: "AED", USD: "US$", KES: "KSh" }, asOf: "November 2026" };
+function getCur(){ try { const c = localStorage.getItem("sr-cur"); return CURRENCY.rates[c] ? c : "AED"; } catch(e) { return "AED"; } }
+function setCur(c){ try { localStorage.setItem("sr-cur", c); } catch(e) {} }
+function conv(aed, c = getCur()){ if (c === "AED") return aed; const v = aed * CURRENCY.rates[c]; return c === "KES" ? Math.round(v / 50) * 50 : Math.round(v); }
+function price(aed){ const c = getCur(); return (c === "AED" ? "" : "≈ ") + CURRENCY.label[c] + " " + money(conv(aed, c)); }
+function priceHTML(aed){ const c = getCur(); return `<small>${c === "AED" ? "" : "≈ "}${CURRENCY.label[c]}</small> ${money(conv(aed, c))}`; }
+
+/* ODOO — the Kenya shop on sairaj.com. Range products link there by part number until each has its own link. */
+const ODOO = { base: "https://sairaj.com", search: "/shop?search=" };
+
+/* Which range category each priced product also appears under (keys from tools/build_pages.py SHOP_CATS). */
+const SHOP_CAT_OF = { "frp-pickup-canopy": "canopies", "bedliner-lid-cover": "canopies", "safarituff-drawer-system": "camping", "full-length-roof-rack": "racks",
+  "recovery-kit-8pc": "recovery", "led-driving-lights-9in": "lighting", "alloy-wheels-17-set": "wheels", "hardshell-roof-tent": "camping", "side-awning-25m": "camping",
+  "cargocool-cooler-box-45l": "camping", "cargocool-cooler-box-90l": "camping", "portable-fridge-freezer-45l": "camping" };
 function cartHref(p, qty = 1){
   if (p.variantId) return `https://${SHOPIFY.domain}/cart/${p.variantId}:${qty}`;
   if (p.handle)    return `https://${SHOPIFY.domain}/products/${p.handle}`;
   return WA;
 }
-window.SR = { SHOPIFY, FORMSPREE, WA, PIC, PRODUCTS, CATS, RANGE, BRANDS, bim, money, cartHref };
+window.SR = { SHOPIFY, FORMSPREE, WA, PIC, PRODUCTS, CATS, RANGE, BRANDS, bim, money, cartHref, CURRENCY, getCur, setCur, conv, price, priceHTML, ODOO, SHOP_CAT_OF };
