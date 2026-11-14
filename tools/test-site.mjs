@@ -235,6 +235,9 @@ for (const dev of ['desktop', 'ipad', 'phone']) {
     await page.evaluate(() => scrollTo(0, 0)); await page.waitForTimeout(300);
     await page.click('#navDdBtn'); await page.waitForTimeout(500);
     ok(await page.evaluate(() => { const p = document.getElementById('navBrands'), r = p.getBoundingClientRect(); return getComputedStyle(p).visibility === 'visible' && r.right <= innerWidth && document.getElementById('navDdBtn').getAttribute('aria-expanded') === 'true'; }), 'Brands menu opens inside the screen');
+    ok(await page.evaluate(() => { const pn = document.getElementById('navBrands').getBoundingClientRect(); return [...document.querySelectorAll('#navBrands a')].every(a => { const r = a.getBoundingClientRect(); return r.right <= pn.right + .5 && a.scrollWidth <= a.clientWidth + 1 && [...a.children].every(c => c.getBoundingClientRect().right <= r.right + .5); }); }), 'every line in the Brands menu stays inside the panel');
+    for (const w of [1024, 1180]) { const np = await ctx.newPage(); await np.setViewportSize({ width: w, height: 700 }); await np.goto(BASE + '/parts/', { waitUntil: 'load' }); await np.waitForTimeout(500); await np.click('#navDdBtn'); await np.waitForTimeout(450);
+      ok(await np.evaluate(() => { const pn = document.getElementById('navBrands').getBoundingClientRect(); return pn.right <= innerWidth && [...document.querySelectorAll('#navBrands a')].every(a => a.getBoundingClientRect().right <= pn.right + .5 && a.scrollWidth <= a.clientWidth + 1); }), `Brands menu fits and wraps at ${w}px`); await np.close(); }
     await page.screenshot({ path: `${SHOTS}/desktop-12-brands-menu.jpg`, type: 'jpeg', quality: 72 });
     await page.keyboard.press('Escape'); await page.mouse.move(700, 600);
     ok(await page.evaluate(() => document.getElementById('navDdBtn').getAttribute('aria-expanded') === 'false'), 'Escape marks the Brands menu closed straight away');

@@ -13,7 +13,7 @@ sairaj.global. Main pages carry no photographs: drawings are inline SVG line art
 """
 import os, re, html
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-V = "3"
+V = "4"
 ARR = '<svg class="arr" viewBox="0 0 16 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M0 5h14M10 1l4 4-4 4"/></svg>'
 CDN = "https://cdn.shopify.com/s/files/1/1025/4549/0307/files/"
 

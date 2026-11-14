@@ -277,13 +277,14 @@ html.js [data-reveal="line"].is-in{transform:none}
 }
 .nav__ddbtn svg{width:10px;height:7px;transition:transform .35s var(--ease)}
 .nav__dd.is-open .nav__ddbtn svg{transform:rotate(180deg)}
-.nav__panel{position:absolute;left:-10px;top:calc(100% + 14px);width:min(600px,84vw);display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:10px;
+.nav__panel{position:absolute;left:-10px;top:calc(100% + 14px);width:min(680px,84vw);display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:10px;
   background:var(--ivory);border:1px solid var(--line);border-radius:16px;box-shadow:0 34px 70px -24px rgba(0,0,0,.5);
   opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .25s var(--ease),transform .35s var(--ease),visibility 0s .25s}
 .nav__panel::before{content:"";position:absolute;left:0;right:0;top:-18px;height:18px}
 .nav__dd.is-open .nav__panel{opacity:1;visibility:visible;transform:none;transition:opacity .25s var(--ease),transform .35s var(--ease),visibility 0s}
 .nav__links .nav__panel a{display:grid;gap:3px;padding:13px 14px;border-radius:11px;color:var(--ink);opacity:1;text-transform:none;letter-spacing:0;
   transition:background-color .25s}
+.nav__links .nav__panel a{white-space:normal;min-width:0}
 .nav__links .nav__panel a::after{display:none}
 .nav__links .nav__panel a:hover,.nav__links .nav__panel a[aria-current]{background:var(--champagne)}
 .nav__panel b{font-family:var(--serif);font-weight:500;font-size:19px;line-height:1.2}
