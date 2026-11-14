@@ -17,7 +17,7 @@ const section = t => console.log('\n■ ' + t);
 
 /* ───────── 1. static: every internal link and asset resolves ───────── */
 section('Static link check');
-const NEW = ['cargotuff', 'pulse', 'safarituff', 'cargocool', 'deco', 'cold-chain', 'partners', 'contact', 'downloads'];
+const NEW = ['cargotuff', 'pulse', 'safarituff', 'cargocool', 'deco', 'cold-chain', 'partners', 'contact', 'downloads', 'parts'];
 const pages = ['index.html', 'shop/index.html', 'privacy/index.html', 'terms/index.html', '404.html', ...NEW.map(n => n + '/index.html')];
 const externals = new Set();
 for (const pg of pages) {
@@ -93,6 +93,27 @@ if (existsSync(join(ROOT, 'tools/out/parts-map.json'))) {
   const toc = [...pagesTxt[1].matchAll(/^\s*0\d\s+(.+?)\s{2,}(\d{2})\s*$/gm)].map(m => [m[1].trim(), +m[2]]);
   ok(toc.length === 7, 'catalogue contents lists 7 sections', String(toc.length));
   for (const [title, n] of toc) ok(new RegExp(`0\\d · ${title.split(' ')[0]}`, 'i').test(pagesTxt[n - 1] || ''), `contents: "${title}" starts on page ${n}`);
+}
+
+/* ───────── 1c. parts finder data ───────── */
+section('Parts finder data');
+{
+  const src = JSON.parse(readFileSync(join(ROOT, 'tools/data/parts.json'), 'utf8'));
+  const SR = new Function('window', readFileSync(join(ROOT, 'assets/js/parts-data.js'), 'utf8') + '; return window.SR_PARTS;')({});
+  const flat = v => v.c.flatMap(c => c[1].map(r => r.join(' | ')));
+  ok(SR.v.length === 40 && SR.v[39].id === 'general' && new Set(SR.v.map(v => v.id)).size === 40, 'data has 39 vehicles plus general accessories, with unique ids', String(SR.v.length));
+  let wrong = [];
+  src.vehicles.forEach((v, i) => { const want = v.tables.filter(t => t.rows).flatMap(t => t.rows.filter(x => x.desc).map(x => [x.desc, x.part, x.uom].join(' | '))); const got = flat(SR.v[i]);
+    if (want.length !== got.length || want.some((w, k) => w !== got[k]) || SR.v[i].mk !== v.make || SR.v[i].md !== v.model) wrong.push(v.make + ' ' + v.model + ' ' + want.length + '/' + got.length); });
+  ok(wrong.length === 0, 'every vehicle carries its catalogue rows word for word, in order', wrong.join(', '));
+  const wantG = src.pages.filter(p => p.type === 'products').flatMap(p => p.tables.flatMap(t => t.rows.filter(x => x.desc).map(x => [x.desc, x.part, x.uom].join(' | '))));
+  const gotG = flat(SR.v[39]);
+  ok(wantG.length === gotG.length && wantG.every((w, k) => w === gotG[k]), 'general accessories carry every product-page row word for word', wantG.length + '/' + gotG.length);
+  const srcNums = new Set(src.pages.flatMap(p => p.tables.flatMap(t => t.rows.filter(x => x.desc && x.part).map(x => x.part))));
+  const gotNums = new Set(SR.v.flatMap(v => v.c.flatMap(c => c[1].map(r => r[1]).filter(Boolean))));
+  ok(srcNums.size === gotNums.size && [...srcNums].every(n => gotNums.has(n)), 'every part number of the catalogue is in the parts finder', srcNums.size + ' vs ' + gotNums.size);
+  const pf = readFileSync(join(ROOT, 'parts/index.html'), 'utf8');
+  ok(pf.includes(`<b>${gotNums.size.toLocaleString('en-US')}</b> part numbers`) && pf.includes('<b>39</b> vehicles'), 'the page states the real counts');
 }
 
 /* ───────── 2. shop data is unchanged from main ───────── */
@@ -190,6 +211,17 @@ for (const dev of ['desktop', 'ipad', 'phone']) {
   if (dev === 'desktop') {
     /* header: five items plus the quote button; brands live in one menu */
     ok(await page.evaluate(() => document.querySelectorAll('.nav__links > a').length === 4 && document.querySelectorAll('#navBrands a').length === 5), 'header is Brands + 4 links, with 5 brand pages inside the menu');
+    ok(await page.evaluate(() => [...document.querySelectorAll('.nav__links > a')].map(x => x.getAttribute('href')).join(' ') === '/cold-chain/ /shop/ /parts/ /contact/' && !!document.querySelector('.menu__links a[href="/partners/"]') && !!document.querySelector('.foot a[href="/partners/"]')),
+      'header links are Cold chain, Shop, Parts finder, Contact; Partners stays in the menu and footer');
+    for (const w of [1024, 1180]) {      // iPad landscape, on the page with the widest header (the shop adds a cart button)
+      const np = await ctx.newPage(); await np.setViewportSize({ width: w, height: 700 }); await np.goto(BASE + '/shop/', { waitUntil: 'load' }); await np.waitForTimeout(500);
+      const fit = await np.evaluate(() => { const l = document.querySelector('.nav__links'), c = document.querySelector('.nav__cta'); const oneLine = [...l.querySelectorAll(':scope > a, .nav__ddbtn')].every(a => { const r = document.createRange(); r.selectNodeContents(a); return new Set([...r.getClientRects()].map(x => Math.round(x.top))).size <= 1 || a.matches('.nav__ddbtn'); });
+        const right = Math.max(...[...document.querySelectorAll('.nav__in > *')].filter(e => getComputedStyle(e).display !== 'none').map(e => e.getBoundingClientRect().right)); const boxes = sel => [...document.querySelectorAll(sel)].filter(e => getComputedStyle(e).display !== 'none').map(e => e.getBoundingClientRect()).sort((p, q) => p.left - q.left);
+        const clash = bs => bs.some((b, i) => i > 0 && b.left < bs[i - 1].right - 0.5);       // (the hidden Brands panel makes scrollWidth useless here, so compare the boxes)
+        return { over: clash(boxes('.nav__in > *')) || clash(boxes('.nav__links > *')) ? 2 : 0, cta: c.scrollWidth - c.clientWidth, oneLine, right, w: innerWidth }; });
+      ok(fit.over <= 1 && fit.cta <= 1 && fit.oneLine && fit.right <= fit.w, `header fits on one line at ${w}px with the cart button`, JSON.stringify(fit));
+      await np.close();
+    }
     await page.evaluate(() => scrollTo(0, 0)); await page.waitForTimeout(300);
     await page.click('#navDdBtn'); await page.waitForTimeout(500);
     ok(await page.evaluate(() => { const p = document.getElementById('navBrands'), r = p.getBoundingClientRect(); return getComputedStyle(p).visibility === 'visible' && r.right <= innerWidth && document.getElementById('navDdBtn').getAttribute('aria-expanded') === 'true'; }), 'Brands menu opens inside the screen');
@@ -222,7 +254,7 @@ for (const dev of ['desktop', 'ipad', 'phone']) {
         return { open: cs.visibility === 'visible' && +cs.opacity > 0.95, links: links.length, allIn: links.every(r => r.top >= 0 && r.bottom <= innerHeight) && cta.bottom <= innerHeight + 1,
           locked: getComputedStyle(document.body).overflow === 'hidden' || getComputedStyle(document.documentElement).overflow === 'hidden', exp: document.getElementById('burger').getAttribute('aria-expanded'),
           top: document.elementFromPoint(innerWidth / 2, innerHeight / 2).closest('#menu') !== null }; });
-      ok(st.open && st.top && st.links === 9 && st.allIn && st.locked && st.exp === 'true', `menu opens fully at ${Math.round(f * 100)}%`, JSON.stringify(st));
+      ok(st.open && st.top && st.links === 10 && st.allIn && st.locked && st.exp === 'true', `menu opens fully at ${Math.round(f * 100)}%`, JSON.stringify(st));
       if (n === 2) await page.screenshot({ path: `${SHOTS}/${dev}-10-menu.jpg`, type: 'jpeg', quality: 72 });
       await page.tap('#burger');
       await page.waitForFunction(() => getComputedStyle(document.getElementById('menu')).visibility === 'hidden', null, { timeout: 4000 }).catch(() => {});
@@ -347,6 +379,91 @@ for (const dev of ['desktop', 'ipad', 'phone']) {
     ok(ctx._posts.length === n0 + 1 && ctx._posts[n0].url === 'https://formspree.io/f/meebvwwy' && ctx._posts[n0].body.includes('Cargotuff') && await page.evaluate(() => document.getElementById('enqStatus').classList.contains('ok')), 'brand page form posts to the same Formspree form, tagged Cargotuff');
     await page.close();
   }
+  /* ─── parts finder ─── */
+  section(`Parts finder — ${dev}`);
+  {
+    const V0 = 'toyota-hilux-revo-rocco-gr-2015-onwards-double-cab';
+    page = await open(ctx, '/parts/', { settle: 500 });
+    await page.evaluate(() => { try { localStorage.removeItem('sr-parts-list'); } catch (e) {} });
+    const home = await page.evaluate(() => ({ cards: document.querySelectorAll('.vc').length, chips: document.querySelectorAll('.pf__makes .chip').length, bar: document.getElementById('pfBar').hidden, wa: getComputedStyle(document.getElementById('wa')).visibility }));
+    ok(home.cards === 40 && home.chips === 9 && home.bar, 'home lists 39 vehicles plus general accessories, with the make filter', JSON.stringify(home));
+    await page.screenshot({ path: `${SHOTS}/${dev}-60-parts-home.jpg`, type: 'jpeg', quality: 70 });
+    await page.evaluate(() => { location.hash = '#/m/Ford'; }); await page.waitForTimeout(250);
+    ok(await page.evaluate(() => document.querySelectorAll('.vc').length === 6 && [...document.querySelectorAll('.vc__mk')].every(e => e.textContent === 'Ford')), 'make filter shows only that make');
+    // a vehicle
+    await page.evaluate(id => { location.hash = '#/v/' + id; }, V0); await page.waitForTimeout(300);
+    const veh = await page.evaluate(id => { const v = SR_PARTS.v.find(x => x.id === id); return { h2: document.querySelector('.pv__head h2').textContent, rows: document.querySelectorAll('.pr').length, want: v.c.reduce((s, c) => s + c[1].length, 0), cats: document.querySelectorAll('.pc').length, wantCats: v.c.length, first: document.querySelector('.pr__pn').textContent }; }, V0);
+    ok(veh.h2 === 'Toyota Hilux' && veh.rows === veh.want && veh.cats === veh.wantCats && veh.first === 'BBCD076', 'a vehicle shows every category and row from the data', JSON.stringify(veh));
+    let side = true; for (const f of [0, 0.3, 0.6, 1]) { await scrollToFrac(page, f, 150); side = side && await noSideScroll(page); }
+    ok(side, 'vehicle view has no sideways scroll at any depth');
+    await page.evaluate(() => scrollTo(0, 0)); await page.waitForTimeout(150);
+    // jump to a category
+    await page.evaluate(() => document.querySelector('[data-jump="5"]').click()); await page.waitForTimeout(350);
+    ok(await page.evaluate(() => { const r = document.getElementById('pc5').getBoundingClientRect(); return r.top > 40 && r.top < innerHeight * 0.6; }), 'category chips jump to their section, clear of the sticky bars');
+    // build a list
+    await page.evaluate(() => { scrollTo(0, 0); [0, 1, 3].forEach(i => document.querySelectorAll('.pr__add')[i].click()); }); await page.waitForTimeout(250);
+    const l1 = await page.evaluate(() => ({ bar: !document.getElementById('pfBar').hidden, count: document.getElementById('pfCount').textContent, pressed: document.querySelectorAll('.pr__add[aria-pressed="true"]').length, stored: JSON.parse(localStorage.getItem('sr-parts-list')).length }));
+    ok(l1.bar && /^3 items/.test(l1.count) && l1.pressed === 3 && l1.stored === 3, 'ticking parts builds the list and shows the bar', JSON.stringify(l1));
+    ok(await page.evaluate(() => { const b = document.querySelector('.pf-bar__in').getBoundingClientRect(); return b.left >= 0 && b.right <= innerWidth && b.height < 70; }), 'list bar fits the screen on one line');
+    await scrollToFrac(page, 0.5, 500);
+    ok(await page.evaluate(() => getComputedStyle(document.getElementById('wa')).visibility === 'hidden'), 'the floating WhatsApp button stays out of the way of the list bar');
+    await page.evaluate(() => scrollTo(0, 0)); await page.waitForTimeout(200);
+    await page.screenshot({ path: `${SHOTS}/${dev}-61-parts-vehicle.jpg`, type: 'jpeg', quality: 70 });
+    await page.evaluate(() => document.querySelectorAll('.pr__add')[1].click()); await page.waitForTimeout(150);
+    ok(await page.evaluate(() => /^2 items/.test(document.getElementById('pfCount').textContent)), 'ticking again removes the part');
+    await page.reload(); await page.waitForTimeout(500);
+    ok(await page.evaluate(() => /^2 items/.test(document.getElementById('pfCount').textContent) && document.querySelectorAll('.pr__add[aria-pressed="true"]').length === 2), 'the list survives a reload');
+    // search
+    const find = async (t) => { await page.evaluate(t => { location.hash = '#/q/' + encodeURIComponent(t); }, t); await page.waitForTimeout(300); return page.evaluate(() => ({ rows: document.querySelectorAll('.pr').length, groups: document.querySelectorAll('.ps__g').length, none: !!document.querySelector('.ps__none'), text: document.getElementById('pfApp').textContent.slice(0, 4000) })); };
+    let s = await find('BBCD076'); ok(s.rows >= 1 && s.text.includes('Toyota Hilux') && s.text.includes('Ironman4x4 Commercial Deluxe Bar'), 'search finds a part number', JSON.stringify({ rows: s.rows, groups: s.groups }));
+    s = await find('mcc707'); ok(s.rows >= 1 && s.text.includes('MCC 707-02'), 'search ignores spaces and dashes in part numbers', String(s.rows));
+    s = await find('snorkel'); ok(s.rows > 10 && s.groups > 10, 'search finds products by name across vehicles', JSON.stringify({ rows: s.rows, groups: s.groups }));
+    s = await find('zzqqxx'); ok(s.none && s.rows === 0, 'search says so when nothing matches');
+    await page.evaluate(() => { location.hash = '#/'; }); await page.waitForTimeout(200);
+    await page.fill('#pfQ', 'tufftop'); await page.waitForTimeout(500);
+    ok(await page.evaluate(() => location.hash === '#/q/tufftop' && document.querySelectorAll('.pr').length > 0), 'typing in the search box searches and updates the link');
+    ok(await noSideScroll(page), 'search view has no sideways scroll');
+    // the sheet
+    await page.evaluate(() => document.getElementById('pfOpen').click()); await page.waitForTimeout(300);
+    const sh = await page.evaluate(() => ({ open: !document.getElementById('pfSheet').hidden, items: document.querySelectorAll('.pf-li').length, locked: document.documentElement.classList.contains('pf-open'), focus: document.activeElement.id,
+      wa: decodeURIComponent(document.getElementById('pfWa').href), inView: (() => { const r = document.getElementById('pfSheetIn').getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth + 1; })() }));
+    ok(sh.open && sh.items === 2 && sh.locked && sh.focus === 'pfClose' && sh.inView, 'the list opens with its items, locks the page and takes focus', JSON.stringify({ ...sh, wa: '' }));
+    ok(sh.wa.startsWith('https://wa.me/971543256505?text=') && sh.wa.includes('BBCD076') && sh.wa.includes('Toyota Hilux (Revo/Rocco/GR · 2015+ onwards · Double cab)'), 'WhatsApp link carries the vehicle and part numbers', sh.wa.slice(0, 200));
+    await page.screenshot({ path: `${SHOTS}/${dev}-62-parts-list.jpg`, type: 'jpeg', quality: 70 });
+    await page.evaluate(() => document.querySelector('.pf-qty [data-q="1"]').click()); await page.waitForTimeout(120);
+    ok(await page.evaluate(() => document.querySelector('.pf-qty output').textContent === '2'), 'quantity can be raised');
+    await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+    ok(await page.evaluate(() => document.getElementById('pfSheet').hidden && !document.documentElement.classList.contains('pf-open') && document.activeElement.id === 'pfOpen'), 'Escape closes the list and returns focus');
+    await page.evaluate(() => document.getElementById('pfOpen').click()); await page.waitForTimeout(250);
+    // sending: never a real email, Formspree is mocked
+    const n0 = ctx._posts.length;
+    await page.evaluate(() => document.getElementById('pfSend').click()); await page.waitForTimeout(300);
+    ok(ctx._posts.length === n0 && await page.evaluate(() => document.getElementById('pfStatus').classList.contains('err')), 'empty form is stopped before sending');
+    await page.fill('#pfForm [name=name]', 'Parts Test'); await page.fill('#pfForm [name=email]', 'not-an-email');
+    await page.evaluate(() => document.getElementById('pfSend').click()); await page.waitForTimeout(300);
+    ok(ctx._posts.length === n0, 'invalid email is stopped before sending');
+    await page.fill('#pfForm [name=email]', 'parts@example.com'); await page.fill('#pfForm [name=note]', 'Deliver to Jebel Ali');
+    ctx._formStatus = 500; await page.evaluate(() => document.getElementById('pfSend').click()); await page.waitForTimeout(700);
+    ok(ctx._posts.length === n0 + 1 && await page.evaluate(() => document.getElementById('pfStatus').classList.contains('err') && document.querySelectorAll('.pf-li').length === 2), 'if sending fails the list is kept and WhatsApp is offered');
+    ctx._formStatus = 200; await page.evaluate(() => document.getElementById('pfSend').click()); await page.waitForTimeout(700);
+    const post = ctx._posts[n0 + 1] || { url: '', body: '' };
+    ok(post.url.endsWith('/f/meebvwwy') && post.method === 'POST' && post.body.includes('BBCD076') && post.body.includes('2 x Ironman4x4 Commercial Deluxe Bar') && post.body.includes('Toyota Hilux (Revo/Rocco/GR') && post.body.includes('Parts enquiry') && post.body.includes('parts@example.com') && post.body.includes('Deliver to Jebel Ali'),
+      'enquiry posts the list, quantities and contact details to Formspree (mocked)', post.body.slice(0, 300).replace(/\s+/g, ' '));
+    const done = await page.evaluate(() => ({ ok: document.getElementById('pfStatus').classList.contains('ok'), msg: document.getElementById('pfStatus').textContent, left: document.querySelectorAll('.pf-li').length, bar: document.getElementById('pfBar').hidden, stored: localStorage.getItem('sr-parts-list') }));
+    ok(done.ok && /Sent: 2 items/.test(done.msg) && done.left === 0 && done.bar && done.stored === '[]', 'after sending, the list is cleared and a confirmation shows', JSON.stringify(done));
+    ok(page._errors.length === 0, 'parts finder runs without errors', page._errors.slice(0, 3).join('|'));
+    await page.close();
+    // a link straight to a vehicle
+    page = await open(ctx, '/parts/#/v/isuzu-dmax-2019-onwards-dcab-model', { settle: 500 });
+    ok(await page.evaluate(() => document.querySelector('.pv__head h2').textContent === 'Isuzu DMAX' && document.querySelectorAll('.pr').length > 20), 'a shared link opens straight on its vehicle');
+    if (dev === 'desktop') {
+      // every vehicle renders exactly its data
+      const all = await page.evaluate(async () => { const bad = []; for (const v of SR_PARTS.v) { location.hash = '#/v/' + v.id; await new Promise(r => setTimeout(r, 30)); const n = document.querySelectorAll('.pr').length, want = v.c.reduce((s, c) => s + c[1].length, 0);
+        if (n !== want || !document.querySelector('.pv__head h2')) bad.push(v.id + ' ' + n + '/' + want); } return { n: SR_PARTS.v.length, bad }; });
+      ok(all.n === 40 && all.bad.length === 0, 'all 40 vehicle views render every row of their data', all.bad.join(', '));
+    }
+    await page.close();
+  }
   page = await ctx.newPage(); const resp = await page.goto(BASE + '/does-not-exist'); await page.waitForTimeout(300);
   ok(resp.status() === 404 && (await page.textContent('h1')).includes('gone cold'), '404 page'); await page.close();
   for (const [from, to] of [['/#/shop', '/shop/#/shop'], ['/#/product/hardshell-roof-tent', '/shop/#/product/hardshell-roof-tent'], ['/#/rewards', '/shop/#/rewards'], ['/#/contact', '/#enquiry'], ['/#/about', '/#story']]) {
@@ -383,6 +500,8 @@ section('Reduced motion / flat fallback / no JavaScript');
   const nojs = await page.evaluate(() => ({ pre: getComputedStyle(document.getElementById('pre')).display, h1: !!document.querySelector('h1') && getComputedStyle(document.querySelector('.hero__copy--a')).opacity,
     form: document.getElementById('enqForm').getAttribute('action'), chapters: [...document.querySelectorAll('.chapter')].filter(c => getComputedStyle(c).visibility === 'visible').length }));
   ok(nojs.pre === 'none' && nojs.h1 === '1' && nojs.form === 'https://formspree.io/f/meebvwwy' && nojs.chapters === 5, 'without JavaScript the content and the form still work', JSON.stringify(nojs));
+  await page.goto(BASE + '/parts/'); await page.waitForTimeout(300);
+  ok(await page.evaluate(() => /needs JavaScript/.test(document.getElementById('pfApp').textContent) && !!document.querySelector('#pfApp a[href$="sai-raj-product-catalogue-2026.pdf"]') && document.getElementById('pfBar').hidden), 'without JavaScript the parts finder points to the PDF catalogue instead');
   await ctx.close();
 }
 

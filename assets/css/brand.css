@@ -92,3 +92,10 @@ body.brand .enq{margin-top:0}
   .bhero__cta .btn{flex:1 1 auto;padding:0 18px;font-size:11.5px;letter-spacing:.12em}
   .bhero__logo img{height:36px;max-width:150px}
 }
+
+/* a way into the parts finder (Safarituff) */
+.pfcta{position:relative;z-index:2;background:var(--champagne);color:var(--ink);padding:clamp(48px,6vw,88px) 0}
+.pfcta__in{display:flex;align-items:flex-end;justify-content:space-between;gap:28px 48px;flex-wrap:wrap}
+.pfcta .h2{margin:16px 0 14px}.pfcta .h2 em{color:var(--red-deep)}
+.pfcta p:not(.eyebrow){max-width:560px;color:#4B4439}
+@media (max-width:640px){.pfcta .btn{width:100%}}

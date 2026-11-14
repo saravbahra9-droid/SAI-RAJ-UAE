@@ -13,7 +13,7 @@ sairaj.global. Main pages carry no photographs: drawings are inline SVG line art
 """
 import os, re, html
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-V = "2"
+V = "3"
 ARR = '<svg class="arr" viewBox="0 0 16 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M0 5h14M10 1l4 4-4 4"/></svg>'
 CDN = "https://cdn.shopify.com/s/files/1/1025/4549/0307/files/"
 
@@ -92,6 +92,8 @@ def head(title, desc, canon, css=(), robots="", theme="#171310"):
 
 def nav(mode="light", enq="/contact/#enquiry", cart=False, current=""):
     """mode: 'light' = always-solid ivory bar (shop, legal); 'auto' = floats over a dark hero and follows the section tone."""
+    # The header holds Brands + four links: a fifth wraps at iPad-landscape widths (1024-1180 px) once the shop's cart button is there.
+    # Partners is in the phone menu, the footer and the home page strip instead.
     cls = "nav nav--light nav--static is-solid" if mode == "light" else "nav"
     cur = lambda k: ' aria-current="page"' if k == current else ""
     panel = "".join(f'<a href="/{b["k"]}/"{cur(b["k"])}><b>{b["name"]}</b><span>{b["short"]}</span></a>' for b in BRANDS)
@@ -108,8 +110,8 @@ def nav(mode="light", enq="/contact/#enquiry", cart=False, current=""):
         <div class="nav__panel" id="navBrands">{panel.replace("Decoroof & Decoglaze","Decoroof &amp; Decoglaze")}</div>
       </div>
       <a href="/cold-chain/"{cur("cold-chain")}>Cold chain</a>
-      <a href="/partners/"{cur("partners")}>Partners</a>
       <a href="/shop/"{cur("shop")}>Shop</a>
+      <a href="/parts/"{cur("parts")}>Parts finder</a>
       <a href="/contact/"{cur("contact")}>Contact</a>
     </nav>
     <a class="btn nav__cta" href="{enq}">Request a quote</a>
@@ -123,7 +125,8 @@ def nav(mode="light", enq="/contact/#enquiry", cart=False, current=""):
 {mlinks}    <a href="/cold-chain/"><span>06</span>Cold chain</a>
     <a href="/partners/"><span>07</span>Partners</a>
     <a href="/shop/"><span>08</span>Shop</a>
-    <a href="/contact/"><span>09</span>Contact</a>
+    <a href="/parts/"><span>09</span>Parts finder</a>
+    <a href="/contact/"><span>10</span>Contact</a>
   </nav>
   <div class="menu__foot">
     <a class="btn" href="{enq}">Request a quote</a>
@@ -159,6 +162,7 @@ def footer(wa_hidden=False):
           <li><a href="/cold-chain/">Cold chain</a></li>
           <li><a href="/partners/">Partners</a></li>
           <li><a href="/downloads/">Downloads</a></li>
+          <li><a href="/parts/">Parts finder</a></li>
           <li><a href="/shop/">Shop</a></li>
           <li><a href="/contact/">Contact</a></li>
         </ul>
@@ -295,6 +299,13 @@ def write(path, s):
 # ═════════════════════════════ brand pages ═════════════════════════════
 B = {b["k"]: b for b in BRANDS}
 CSS = ("home", "brand")
+PF_CTA = f'''<section class="pfcta" data-nav-theme="light">
+  <div class="wrap pfcta__in">
+    <div><p class="eyebrow" data-reveal>Parts finder</p><h2 class="h2" data-reveal="clip"><span>Find the parts for your <em class="it">vehicle.</em></span></h2>
+    <p data-reveal style="--d:.1s">Pick your vehicle, see every accessory we list for it with its part number, and send your list as one enquiry.</p></div>
+    <a class="btn btn--dark" href="/parts/" data-reveal style="--d:.15s">Open the parts finder {ARR}</a>
+  </div>
+</section>'''
 
 write("cargotuff/index.html", head("Cargotuff by Sai Raj — Truck Bodies, Conversions, Trailers &amp; Cold Rooms",
   "Cargotuff by Sai Raj: insulated and dry freight fibreglass, steel and aluminium truck bodies, pick-up bodies, speciality conversions, trailers, boats and cold rooms.",
@@ -363,7 +374,7 @@ write("safarituff/index.html", head("Safarituff by Sai Raj — Game Vehicles, 4x
    ("Steel accessories", "Protection and utility for working and touring 4x4s.", [
       ("Bull bars and nudge bars", ""), ("Rear bars and tow hooks", ""), ("Roof racks, roll bars and side steps", ""), ("Hard lids and soft covers", "Lockable, weather-sealed"),
       ("Awnings and door visors", "")], "bullbar", '<a class="tlink" href="/shop/#/shop/4x4">Shop 4x4 accessories ' + ARR + '</a>'),
-  ], "4x4 accessories"))
+  ], "4x4 accessories", extra=PF_CTA))
 
 write("cargocool/index.html", head("Cargocool by Sai Raj — Portable Fridge-Freezers &amp; Cooler Boxes",
   "Cargocool by Sai Raj: DC portable fridge-freezers and cooler boxes for the road, the camp and the job site.",
@@ -530,11 +541,100 @@ write("downloads/index.html", head("Downloads — Sai Raj", "Download the Sai Ra
       {dl_row("Catalogue", 275, "Product and parts catalogue", "assets/docs/sai-raj-product-catalogue-2026.pdf")}
       {dl_row("Catalogue", 22, "Cargotuff and cold chain catalogue", "assets/docs/cargotuff-cold-chain-catalogue-2026.pdf")}
     </ul>
-    <p style="margin-top:40px">Need a specific catalogue now? <a class="tlink" href="/contact/#enquiry">Ask us {ARR}</a></p>
+    <p style="margin-top:40px">Looking for one part? <a class="tlink" href="/parts/">Use the parts finder {ARR}</a></p>
   </div>
 </main>
 {footer()}
 <script src="/assets/js/site.js?v={V}" defer></script>
+</body>
+</html>
+''')
+
+# ═════════════════════════════ parts finder ═════════════════════════════
+# Data comes from tools/data/parts.json (the original product catalogue, read by tools/parts_extract.py).
+# Rows are verbatim; only empty template rows (no description) are left out, because there is nothing to show.
+import json
+from parts_common import HEAD_FIX, TITLE_FROM_SECTION
+PDATA = json.load(open(os.path.join(ROOT, "tools", "data", "parts.json"), encoding="utf-8"))
+def slug(t): return re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")
+def prow(x): return [x["desc"], x["part"], x["uom"]]
+pv = []
+for v in PDATA["vehicles"]:
+    cats = []
+    for t in v["tables"]:
+        if "note" in t:
+            if cats:
+                if len(cats[-1]) == 2: cats[-1].append(t["note"])
+                else: cats[-1][2] += " " + t["note"]
+            continue
+        rows = [prow(x) for x in t["rows"] if x["desc"]]
+        if rows: cats.append([HEAD_FIX.get(t["cat"], t["cat"]) or "", rows])
+    pv.append(dict(id=slug(f'{v["make"]} {v["model"]} {" ".join(v["variant"])}'), mk=v["make"], md=v["model"], va=v["variant"], c=cats))
+assert len({v["id"] for v in pv}) == len(pv), "vehicle ids must be unique"
+general = []
+for p in PDATA["pages"]:
+    if p["type"] != "products": continue
+    title = p["section"] if (p["n"] in TITLE_FROM_SECTION or not p["title"]) else p["title"]
+    for t in p["tables"]:
+        rows = [prow(x) for x in t["rows"] if x["desc"]]
+        if not rows: continue
+        name = HEAD_FIX.get(t["cat"] or title, t["cat"] or title)
+        if general and general[-1][0] == name: general[-1][1] += rows
+        else: general.append([name, rows])
+pv.append(dict(id="general", mk="All vehicles", md="General accessories", va=["Recovery, camping, lighting, storage, rims, brakes and car care"], c=general))
+P_ROWS = sum(len(c[1]) for v in pv for c in v["c"]); P_NUMS = len({r[1] for v in pv for c in v["c"] for r in c[1] if r[1]})
+open(os.path.join(ROOT, "assets", "js", "parts-data.js"), "w", encoding="utf-8").write(
+    "/* Generated by tools/build_pages.py from tools/data/parts.json. Do not edit by hand. */\nwindow.SR_PARTS=" + json.dumps(dict(v=pv), ensure_ascii=False, separators=(",", ":")) + ";\n")
+print(f"parts-data.js: {len(pv) - 1} vehicles + general, {P_ROWS} rows, {P_NUMS} part numbers")
+SEARCH_SVG = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8.6" cy="8.6" r="6.1"/><path d="M13.2 13.2 18 18"/></svg>'
+write("parts/index.html", head("Parts Finder — Sai Raj | 4x4 Accessories by Vehicle", f"Find 4x4 accessories for your vehicle: {len(pv) - 1} vehicles from Toyota, Ford, Isuzu, Mitsubishi, Nissan, Mahindra and Changan, with the part number for every item.",
+    "https://sairaj.global/parts/", ("parts",)) + f'''<body>
+{nav("light", current="parts")}
+<main id="main" class="page pf" data-wa-off>
+  <div class="wrap">
+    <header class="page__head"><p class="eyebrow">Parts finder</p><h1>Find the parts for your <em class="it">vehicle.</em></h1>
+      <p>Pick your vehicle or search a part number. Tick what you need and send it to us as one enquiry.</p></header>
+    <div class="pf__bar">
+      <label class="pf__search"><span class="sr-only">Search a part number or product</span>{SEARCH_SVG}
+        <input id="pfQ" type="search" placeholder="Part number or product name" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search"></label>
+      <p class="pf__stats"><b>{len(pv) - 1}</b> vehicles <i>·</i> <b>{P_NUMS:,}</b> part numbers</p>
+    </div>
+    <div id="pfApp" class="pf__app">
+      <noscript><p class="pf__nojs">The parts finder needs JavaScript. You can <a class="tlink" href="/assets/docs/sai-raj-product-catalogue-2026.pdf">download the full catalogue (PDF)</a> instead, or <a class="tlink" href="/contact/#enquiry">ask us for a part</a>.</p></noscript>
+    </div>
+    <p class="pf__pdf">Prefer the printed layout? <a class="tlink" href="/assets/docs/sai-raj-product-catalogue-2026.pdf" download>Download the full catalogue {ARR}</a></p>
+  </div>
+</main>
+<div class="pf-bar" id="pfBar" hidden><div class="pf-bar__in"><span id="pfCount" role="status" aria-live="polite"></span><button type="button" class="btn" id="pfOpen">Review and send {ARR}</button></div></div>
+<div class="pf-sheet" id="pfSheet" role="dialog" aria-modal="true" aria-labelledby="pfSheetT" hidden>
+  <div class="pf-sheet__in" id="pfSheetIn">
+    <header class="pf-sheet__head"><div><p class="eyebrow">Parts enquiry</p><h2 id="pfSheetT">Your list</h2></div><button type="button" class="pf-x" id="pfClose" aria-label="Close your list"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 2l12 12M14 2 2 14"/></svg></button></header>
+    <div id="pfList" class="pf-list"></div>
+    <form class="pf-form" id="pfForm" action="https://formspree.io/f/meebvwwy" method="POST" novalidate>
+      <div class="pf-form__grid">
+        <label class="pff"><span>Name *</span><input name="name" autocomplete="name" required></label>
+        <label class="pff"><span>Email *</span><input name="email" type="email" autocomplete="email" inputmode="email" required></label>
+        <label class="pff"><span>Phone / WhatsApp</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel"></label>
+        <label class="pff"><span>Country</span><input name="country" autocomplete="country-name" placeholder="e.g. UAE, Kenya, KSA"></label>
+        <label class="pff pff--full"><span>Anything else?</span><textarea name="note" rows="2" placeholder="Delivery place, fitting, timeline…"></textarea></label>
+      </div>
+      <input type="hidden" name="topic" value="Parts enquiry">
+      <input type="hidden" name="message" id="pfMessage">
+      <input type="hidden" name="_subject" value="Parts enquiry — sairaj.global">
+      <input type="text" name="_gotcha" class="pf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="pf-form__foot">
+        <button class="btn" type="submit" id="pfSend">Send enquiry {ARR}</button>
+        <a class="btn btn--line" id="pfWa" href="https://wa.me/971543256505" target="_blank" rel="noopener">Send on WhatsApp</a>
+      </div>
+      <p class="pf-form__legal">By sending this you agree to our <a href="/privacy/">privacy notice</a>.</p>
+      <p class="pf-msg" id="pfStatus" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
+{footer(wa_hidden=True)}
+<script src="/assets/js/site.js?v={V}" defer></script>
+<script src="/assets/js/parts-data.js?v={V}" defer></script>
+<script src="/assets/js/parts.js?v={V}" defer></script>
 </body>
 </html>
 ''')
@@ -616,7 +716,7 @@ open(p, "w", encoding="utf-8").write(s); print("home blocks injected")
 LASTMOD = "2026-11-13"
 SITEMAP = [("", "monthly", "1.0"), ("cargotuff/", "monthly", "0.9"), ("cold-chain/", "monthly", "0.9"), ("pulse/", "monthly", "0.8"), ("safarituff/", "monthly", "0.8"),
            ("cargocool/", "monthly", "0.8"), ("deco/", "monthly", "0.8"), ("shop/", "weekly", "0.8"), ("partners/", "monthly", "0.6"), ("contact/", "monthly", "0.7"),
-           ("downloads/", "monthly", "0.5"), ("privacy/", "yearly", "0.2"), ("terms/", "yearly", "0.2")]
+           ("parts/", "monthly", "0.8"), ("downloads/", "monthly", "0.5"), ("privacy/", "yearly", "0.2"), ("terms/", "yearly", "0.2")]
 open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(
     f"  <url><loc>https://sairaj.global/{u}</loc><lastmod>{LASTMOD}</lastmod><changefreq>{c}</changefreq><priority>{pr}</priority></url>\n" for u, c, pr in SITEMAP) + "</urlset>\n")
 print("sitemap.xml", len(SITEMAP), "urls")

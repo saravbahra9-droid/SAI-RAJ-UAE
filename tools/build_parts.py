@@ -18,15 +18,7 @@ HPATH = os.path.join(OUT, "parts-heights.json")       # real row heights from to
 HEIGHTS = json.load(open(HPATH)) if os.path.exists(HPATH) else {}
 out_map = dict(vehicles=[], pages={})         # where each original page / vehicle lands, for tools/parts_verify.py
 
-# headings only: three slips in the original's headings, and one page whose heading was left over from another page
-HEAD_FIX = {"BULLBAR LGHTS & LED WORK LIGHTS": "BULLBAR LIGHTS & LED WORK LIGHTS", "LIGHT ACCESSOIRES": "LIGHT ACCESSORIES", "CARGGOTUFF CONVERSIONS": "CARGOTUFF CONVERSIONS"}
-TITLE_FROM_SECTION = {81}
-KEEP = {"led": "LED", "sr": "SR", "upvc": "uPVC", "riv": "RIV", "atms": "ATMs", "cargotuff": "Cargotuff", "decoroof": "Decoroof", "atlas": "Atlas", "diamondbrite": "Diamondbrite",
-        "ironman4x4": "Ironman 4x4", "pulse": "Pulse", "nitrogas": "Nitro Gas", "foamcell": "Foam Cell", "pro": "Pro", "roofracks": "roof racks", "roofrack": "roof rack",
-        "rollbars": "roll bars", "roofrails,": "Roof rails,", "leafsprings": "leaf springs", "coldrooms": "cold rooms", "firetruck": "fire truck", "pickup": "pick-up"}
-def nice(s):
-    s = HEAD_FIX.get(s, s); words = [KEEP.get(w.lower(), w.lower()) for w in s.split()]
-    t = " ".join(words); return t[:1].upper() + t[1:]
+from parts_common import HEAD_FIX, TITLE_FROM_SECTION, nice      # headings only; rows are never edited
 
 def hdr(eyebrow, title, right=""):
     return f'<header class="ph"><div><p class="eb">{esc(eyebrow)}</p><h2>{esc(title)}</h2></div>{right}</header>'
